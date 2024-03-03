@@ -1,0 +1,340 @@
+<div class="hero-content mb-3">
+    <div class="content-1">
+        <div class="left bg-warning p-4">
+            <h4 class="text-light">Track Your Parcel Here!</h4>
+            <div class="mb-3">
+                <form id="searchForm">
+                    @csrf
+                    <input type="text" class="form-control mb-2" name="tracking_id" placeholder="Tracking ID....." />
+                    <button type="button" class="btn btn-light" id="trackBtn">Track</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="right p-4">
+            <h4 class="text-dark">Calculate Charge</h4>
+            <div class="boxes d-md-flex d-sm-block gap-2">
+                <select id="fromLocation" name="from_location" class="form-control">
+                    <option value="Dhaka">From</option>
+                    @foreach ($fromLocations as $location)
+                        <option value="{{ $location->from_location }}">{{ $location->from_location }}</option>
+                    @endforeach
+                </select>
+                <select id="destination" name="destination" class="form-control">
+                    <option value="Dhaka">Destination</option>
+                </select>
+                <select id="serviceId" name="service" class="form-control">
+                    <option value="1">Delivery Type</option>
+                </select>
+                <div class="">
+                    <input type="text" id="weightId" name="weight" value="1" placeholder="Parcel's Weight"
+                        class="form-control">
+                </div>
+            </div>
+            <div class="price-text d-flex justify-content-center align-items-center">
+                <input type="text" id="valueId" class="form-control w-25 py-3 text-dark inputsearch"
+                    value="50TK">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="content-2">
+        <div class="left">
+            <video width="100%" muted loop autoplay>
+                <source src="/frontend/video/nature.mp4" type="video/mp4" />
+            </video>
+
+            <div class="video-descriptions p-3 text-center">
+                <img src="/frontend/img/24-hours.png" alt="" width="80" />
+                <h6 class="mt-2">Real Time Support</h6>
+            </div>
+        </div>
+        <div class="right">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/frontend/img/1.jpg" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/frontend/img/2.jpg" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/frontend/img/3.jpg" class="d-block w-100" alt="..." />
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+<div class="modal" id="trackingModal" tabindex="-1" role="dialog" aria-labelledby="trackingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="trackingModalLabel">Tracking Wizard</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Your wizard structure -->
+                <section class="step-wizard">
+                    <ul class="step-wizard-list py-5">
+                        <li class="step-wizard-item">
+                            <span class="progress-count">1</span>
+                            <span class="progress-label">Pending</span>
+                        </li>
+                        <li class="step-wizard-item current-item">
+                            <span class="progress-count">2</span>
+                            <span class="progress-label">On the way</span>
+                        </li>
+                        <li class="step-wizard-item">
+                            <span class="progress-count">3</span>
+                            <span class="progress-label">Checkout</span>
+                        </li>
+                        <li class="step-wizard-item">
+                            <span class="progress-count">4</span>
+                            <span class="progress-label">Success</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+
+{{-- for the calculate delivery charge --}}
+<script>
+    $(document).ready(function() {
+        $('.form-control.w-25.py-3').prop('disabled', true).prop('readonly', false);
+        $('#weightId').on('input', function() {
+            var weightValue = parseFloat($(this).val());
+            if (weightValue || weightValue === 0) {
+                showLoadingIcon();
+                setTimeout(function() {
+                    updateDeliveryCharge();
+                    hideLoadingIcon();
+                }, 1000);
+            } else {
+                hideLoadingIcon();
+            }
+        });
+        $('#fromLocation, #destination, #serviceId').on('change', function() {
+            showLoadingIcon();
+            setTimeout(function() {
+                updateDeliveryCharge();
+                hideLoadingIcon();
+            }, 1000);
+        });
+
+        function updateDeliveryCharge() {
+            let fromLocation = $('#fromLocation').val();
+            let destination = $('#destination').val();
+            let service = $('#serviceId').val();
+            var weight = parseFloat($('#weightId').val());
+            $('.form-control.w-25.py-3').val('');
+
+            $.ajax({
+                url: '/calculate_delivery_charge',
+                type: 'POST',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'from_location': fromLocation,
+                    'destination': destination,
+                    'service': service,
+                    'weight': weight,
+                },
+                success: function(data) {
+                    console.log(data.deliveryCharge.cost);
+                    if (data && data.deliveryCharge && data.deliveryCharge.cost !== undefined) {
+                        $('#valueId').val(data.deliveryCharge.cost + 'TK');
+                        $('.form-control.w-25.py-3').prop('disabled', false).prop('readonly', true);
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function showLoadingIcon() {
+            $('.inputsearch').after(
+                '<span class="loading-icon spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+            );
+        }
+
+        function hideLoadingIcon() {
+            $('.loading-icon').remove();
+        }
+
+        var fromLocation;
+        var destination;
+        var selectedCategory;
+        $('#fromLocation').change('change', function() {
+            fromLocation = $(this).val();
+            console.log("Updated fromLocation value:", fromLocation);
+            $.ajax({
+                url: '/get-destinations',
+                type: 'GET',
+                data: {
+                    from_location: fromLocation
+                },
+                success: function(data) {
+                    var destinationDropdown = $('#destination');
+                    destinationDropdown.empty();
+                    $.each(data, function(index, destination) {
+                        destinationDropdown.append('<option value="' + destination
+                            .destination + '">' + destination.destination +
+                            '</option>');
+                    });
+                    $('#category').empty();
+                    $('#category').append(
+                        '<option value="" selected>Select Category</option>');
+                    $('#serviceId').empty();
+                    $('#serviceId').append(
+                        '<option value="" selected>Select Category</option>');
+                }
+            });
+        });
+
+        $('#destination').on('click', function() {
+            var destination = $(this).val();
+            console.log("Updated destination value:", destination);
+            $.ajax({
+                url: '/get-categories',
+                type: 'GET',
+                data: {
+                    destination: destination
+                },
+                success: function(data) {
+                    var categoryDropdown = $('#category');
+                    console.log(data);
+                    categoryDropdown.empty();
+                    $.each(data, function(index, category) {
+                        categoryDropdown.append('<option value="' + category
+                            .category + '">' + category.category + '</option>');
+                    });
+                }
+            });
+
+            $.ajax({
+                url: '/get-services',
+                type: 'GET',
+                data: {
+                    destination: destination
+                },
+                success: function(serviceData) {
+                    var serviceDropdown2 = $('#serviceId');
+                    serviceDropdown2.empty();
+                    $.each(serviceData, function(index, service) {
+                        serviceDropdown2.append('<option value="' + service
+                            .delivery_type + '">' + service.delivery_type +
+                            '</option>');
+                    });
+                }
+            });
+        });
+        $('#category').on('click', function() {
+            var selectedCategory = $(this).val();
+            console.log("Selected Category:", selectedCategory);
+        });
+    });
+</script>
+
+
+{{-- for the tracking --}}
+<script>
+    $(document).ready(function() {
+        $('.step-wizard').hide();
+
+        function performAjaxCall(trackingId) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('search.delivery') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'tracking_id': trackingId
+                },
+                success: function(data) {
+                    var is_active = parseInt(data.delivery.is_active, 10);
+                    progressCountValue = is_active + 1;
+                    console.log(progressCountValue)
+                    updateActiveStep(progressCountValue);
+                    $('.step-wizard').show();
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        $('#searchForm input[name="tracking_id"]').on('input', function(e) {
+            var trackingId = $(this).val();
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length < 6) {
+                $('.step-wizard').hide();
+                $('#trackingModal').modal('hide');
+                return;
+            }
+
+            if (trackingId.length === 6) {
+                performAjaxCall(trackingId);
+                $('#trackingModal').modal('show');
+            } else {
+                $('.step-wizard').hide();
+                $('#trackingModal').modal('hide');
+            }
+        });
+
+        $('#trackBtn').on('click', function(e) {
+            e.preventDefault();
+            var trackingId = $('#searchForm input[name="tracking_id"]').val();
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        function updateActiveStep(progressCountValue) {
+            $('.step-wizard-item').removeClass('current-item');
+            $('.step-wizard-item').each(function() {
+                var stepValue = parseInt($(this).find('.progress-count').text());
+
+                if (stepValue == progressCountValue) {
+                    $(this).addClass('current-item');
+                }
+            });
+        }
+    });
+    $(document).ready(function() {
+        $('#trackingModal').on('show.bs.modal', function() {});
+
+        $('#trackingModal').on('hide.bs.modal', function() {
+            $('.step-wizard').hide();
+            $('#searchForm input[name="tracking_id"]').val('');
+        });
+
+        $('#trackingModal').on('hidden.bs.modal', function() {});
+    });
+</script>
