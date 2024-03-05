@@ -45,7 +45,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+
         $request->validate([
             'product_category' => 'required|string',
             'customer_name' => 'required|string|max:255',
@@ -74,7 +74,6 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-
         return view('marchant.pages.delivery-show', compact('product'));
     }
 

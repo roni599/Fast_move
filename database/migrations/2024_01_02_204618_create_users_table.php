@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('business_name');
             $table->string('merchant_name');
+            $table->string('district');
             $table->string('pick_up_location');
             $table->string('phone');
             $table->string('email')->unique();

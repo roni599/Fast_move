@@ -82,10 +82,10 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
                     <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-                            <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
-                            <a href="{{ route('service') }}" class="nav-item nav-link">Services</a>
-                            <a href="{{route('tracking')}}" class="nav-item nav-link">Tracking</a>
-                            {{-- <div class="nav-item dropdown">
+                    <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
+                    <a href="{{ route('service') }}" class="nav-item nav-link">Services</a>
+                    <a href="{{ route('tracking') }}" class="nav-item nav-link">Tracking</a>
+                    {{-- <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tracking</a>
                                 <div class="dropdown-menu m-0">
                                     <a href="team.html" class="dropdown-item">Our Team</a>
@@ -93,7 +93,7 @@
                                     <a href="comparison.html" class="dropdown-item">Comparison</a>
                                 </div>
                             </div> --}}
-                            <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+                    <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
                 </div>
                 <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
                     data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
@@ -116,9 +116,8 @@
 
         <h2 class="text-center mb-3">Become a Merchant</h2>
 
-
-
-        <form action="{{ route('register') }}" method="post" class="text-center p-2 d-flex" enctype="multipart/form-data">
+        <form action="{{ route('register') }}" method="post" class="text-center p-2 d-flex"
+            enctype="multipart/form-data">
             @csrf
 
             <div class="w-50 left text-light">
@@ -132,13 +131,19 @@
                 </span>
 
 
-                <input type="text" class="form-control w-75 mx-auto" name="merchant_name" value="{{ old('merchant_name') }}"
-                    placeholder="Merchant Name">
+                <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
+                    value="{{ old('merchant_name') }}" placeholder="Merchant Name">
                 <span class="text-danger mb-3 d-block">
                     @error('merchant_name')
                         {{ $message }}
                     @enderror
                 </span>
+                <select name="district" class="form-control" id="product_category">
+                    <option value="Dhaka">From</option>
+                    @foreach ($deliveryChargeData as $location)
+                        <option value="{{ $location->from_location }}">{{ $location->from_location }}</option>
+                    @endforeach
+                </select>
 
                 <input type="text" class="form-control w-75 mx-auto" name="pick_up_location"
                     value="{{ old('pick_up_location') }}" placeholder="Pick Up Location">

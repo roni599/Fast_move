@@ -22,6 +22,7 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'business_name' => ['required', 'string', 'max:255'],
             'merchant_name' => ['required', 'string', 'max:255'],
+            'district' => ['required', 'string', 'max:255'],
             'pick_up_location' => ['required', 'string', 'max:255'],
             'phone' => ['required'],
             'email' => [
@@ -40,6 +41,7 @@ class CreateNewUser implements CreatesNewUsers
         $user = User::create([
             'business_name' => $input['business_name'],
             'merchant_name' => $input['merchant_name'],
+            'district' => $input['district'],
             'pick_up_location' => $input['pick_up_location'],
             'phone' => $input['phone'],
             'email' => $input['email'],

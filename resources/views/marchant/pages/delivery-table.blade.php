@@ -136,11 +136,11 @@
 
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="{{ route('delivery.show', $delivery->id) }}"
+                                            <a href="{{ route('product.show', $delivery->id) }}"
                                                 class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('delivery.edit', $delivery->id) }}"
+                                            <a href="{{ route('product.edit', $delivery->id) }}"
                                                 class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a>
-                                            <form action="{{ route('delivery.destroy', $delivery->id) }}" method="post">
+                                            <form action="{{ route('product.destroy', $delivery->id) }}" method="post">
                                                 @csrf
                                                 @method ('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger"
@@ -201,10 +201,10 @@
     {{-- declear route for input --}}
     <script>
         var routeUrls = {
-            show: '{{ route('delivery.show', ':id') }}',
-            edit: '{{ route('delivery.edit', ':id') }}',
-            destroy: '{{ route('delivery.destroy', ':id') }}',
-        };
+            show: '{{ route('product.show', ':id') }}',
+            edit: '{{ route('product.edit', ':id') }}',
+            destroy: '{{ route('product.destroy', ':id') }}',
+        }
     </script>
 
     {{-- for input --}}
