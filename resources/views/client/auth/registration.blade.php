@@ -32,6 +32,9 @@
     <link href="/frontend/img/delivery-bike.png" rel="icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 
 <body>
@@ -62,11 +65,11 @@
     </div>
 
     <div class="form-box  w-50">
-        <div class="text-center mt-1">
+        <div class="text-center mt-0">
             <img src="/frontend/img/delivery-bike.png" style="width: 70px" alt="logo" />
         </div>
 
-        <h2 class="text-center mb-3">Become a Merchant</h2>
+        <h2 class="text-center mb-1">Become a Merchant</h2>
         <form action="{{ route('register') }}" method="post" class="text-center" enctype="multipart/form-data">
             @csrf
             <div class="input_content d-flex justify-content-center align-items-center">
@@ -95,8 +98,8 @@
                         @enderror
                     </span>
 
-                    <input type="email" class="form-control w-75 mx-auto" name="email" value="{{ old('email') }}"
-                        placeholder="Email">
+                    <input type="email" class="form-control w-75 mx-auto" name="email"
+                        value="{{ old('email') }}" placeholder="Email">
                     <span class="text-danger mb-2 d-block">
                         @error('email')
                             {{ $message }}
@@ -119,97 +122,78 @@
                     </span>
                 </div>
                 <div class="w-100 left text-light input_content" id="content2">
-                    <input type="text" class="form-control d-block mx-auto w-75" name="business_name"
-                        value="{{ old('business_name') }}" placeholder="sdklfjsdlkfj">
+                    <select name="district" class="form-control w-75 mx-auto mb-2" id="product_category">
+                        <option value="Dhaka">Select your District</option>
+                        @foreach ($deliveryChargeData as $location)
+                            <option value="{{ $location->from_location }}">{{ $location->from_location }}</option>
+                        @endforeach
+                    </select>
+                    
+                    @if($errors->has('district'))
+                        <span class="text-danger mb-2 d-block">
+                            {{ $errors->first('district') }}
+                        </span>
+                    @endif
+
+                    <input type="text" class="form-control w-75 mx-auto mb-1" name="pickup_location"
+                        placeholder="pickup_location">
                     <span class="text-danger mb-2 d-block">
-                        @error('business_name')
+                        @error('pickup_location')
                             {{ $message }}
                         @enderror
                     </span>
 
-                    <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
-                        value="{{ old('merchant_name') }}" placeholder="Merchant Name">
+                    <div id="hiddenDiv" class="mb-1 ms-2">
+                        <img id="selectedImage" src="/frontend/img/user.png" alt="Selected Image" width="150PX"
+                            height="130px">
+                    </div>
+                    <div class="container text-center mb-2">
+                        <i id="icon" class="" onclick="showImageInput()"></i>
+                        <div class="d-flex justify-content-center">
+                            <input type="file" name="profile_picture" id="fileInput" class="w-25 ms-5"
+                                onchange="handleFileSelect()">
+                        </div>
+                    </div>
                     <span class="text-danger mb-2 d-block">
-                        @error('merchant_name')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="phone" class="form-control w-75 mx-auto" name="phone"
-                        value="{{ old('phone') }}" placeholder="Phone Number">
-                    <span class="text-danger mb-2 d-block">
-                        @error('phone')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="email" class="form-control w-75 mx-auto" name="email"
-                        value="{{ old('email') }}" placeholder="Email">
-                    <span class="text-danger mb-2 d-block">
-                        @error('email')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="password" class="form-control w-75 mx-auto" name="password" placeholder="Password">
-                    <span class="text-danger mb-2 d-block">
-                        @error('password')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="password" class="form-control w-75 mx-auto" name="password_confirmation"
-                        placeholder="Confirm Password">
-                    <span class="text-danger mb-2 d-block">
-                        @error('password_confirmation')
+                        @error('image')
                             {{ $message }}
                         @enderror
                     </span>
                 </div>
+
                 <div class="w-100 left text-light input_content" id="content3">
-                    <input type="text" class="form-control d-block mx-auto w-75" name="business_name"
-                        value="{{ old('business_name') }}" placeholder="oke">
-                    <span class="text-danger mb-2 d-block">
-                        @error('business_name')
+                    <input class="form-control w-75 mx-auto text-center mb-1" placeholder="NID_Front_Part" readonly>
+                    <div id="hiddenDivFront" class="mb-0 ms-2">
+                        <img id="selectedImageFront" src="/frontend/img/front.jpg" alt="Selected Image"
+                            width="150PX" height="70px">
+                    </div>
+                    <div class="container text-center mb-0">
+                        <i id="fronticon" class="" onclick="frontshowImageInput()"></i>
+                        <div class="d-flex justify-content-center">
+                            <input type="file" name="frontNID" id="frontfileInput" class="w-25 ms-5"
+                                onchange="fronthandleFileSelect()">
+                        </div>
+                    </div>
+                    <span class="text-danger mb-1 d-block">
+                        @error('image')
                             {{ $message }}
                         @enderror
                     </span>
 
-                    <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
-                        value="{{ old('merchant_name') }}" placeholder="Merchant Name">
-                    <span class="text-danger mb-2 d-block">
-                        @error('merchant_name')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="phone" class="form-control w-75 mx-auto" name="phone"
-                        value="{{ old('phone') }}" placeholder="Phone Number">
-                    <span class="text-danger mb-2 d-block">
-                        @error('phone')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="email" class="form-control w-75 mx-auto" name="email"
-                        value="{{ old('email') }}" placeholder="Email">
-                    <span class="text-danger mb-2 d-block">
-                        @error('email')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="password" class="form-control w-75 mx-auto" name="password" placeholder="Password">
-                    <span class="text-danger mb-2 d-block">
-                        @error('password')
-                            {{ $message }}
-                        @enderror
-                    </span>
-
-                    <input type="password" class="form-control w-75 mx-auto" name="password_confirmation"
-                        placeholder="Confirm Password">
-                    <span class="text-danger mb-2 d-block">
-                        @error('password_confirmation')
+                    <input class="form-control w-75 mx-auto text-center mb-1" placeholder="NID_Backe_Part" readonly>
+                    <div id="backhiddenDiv" class="mb-0 ms-2">
+                        <img id="backselectedImage" src="/frontend/img/back.jpg" alt="Selected Image" width="150PX"
+                            height="70px">
+                    </div>
+                    <div class="container text-center mb-1">
+                        <i id="backicon" class="" onclick="backshowImageInput()"></i>
+                        <div class="d-flex justify-content-center">
+                            <input type="file" name="backNId" id="backfileInput" class="w-25 ms-5"
+                                onchange="backhandleFileSelect()">
+                        </div>
+                    </div>
+                    <span class="text-danger mb-1 d-block">
+                        @error('image')
                             {{ $message }}
                         @enderror
                     </span>
@@ -308,7 +292,55 @@
             link_home.style.marginRight = '0';
         }
     </script>
+    <script>
+        function showImageInput() {
+            var fileInput = document.getElementById('fileInput');
+            fileInput.click();
+        }
 
+        function handleFileSelect() {
+            var fileInput = document.getElementById('fileInput');
+            var hiddenDiv = document.getElementById('hiddenDiv');
+            var selectedImage = document.getElementById('selectedImage');
+
+            if (fileInput.files && fileInput.files[0]) {
+                selectedImage.src = URL.createObjectURL(fileInput.files[0]);
+                hiddenDiv.style.display = 'block';
+            }
+        }
+
+        function frontshowImageInput() {
+            var frontfileInput = document.getElementById('frontfileInput');
+            frontfileInput.click();
+        }
+
+        function fronthandleFileSelect() {
+            var frontfileInput = document.getElementById('frontfileInput');
+            var hiddenDivFront = document.getElementById('hiddenDivFront');
+            var selectedImageFront = document.getElementById('selectedImageFront');
+
+            if (frontfileInput.files && frontfileInput.files[0]) {
+                selectedImageFront.src = URL.createObjectURL(frontfileInput.files[0]);
+                hiddenDivFront.style.display = 'block';
+            }
+        }
+
+        function backshowImageInput() {
+            var backfileInput = document.getElementById('backfileInput');
+            backfileInput.click();
+        }
+
+        function backhandleFileSelect() {
+            var backfileInput = document.getElementById('backfileInput');
+            var backhiddenDivFront = document.getElementById('backhiddenDiv');
+            var backselectedImage = document.getElementById('backselectedImage');
+
+            if (backfileInput.files && backfileInput.files[0]) {
+                backselectedImage.src = URL.createObjectURL(backfileInput.files[0]);
+                backhiddenDivFront.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 
 </html>

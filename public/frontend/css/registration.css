@@ -7,9 +7,8 @@ body {
 }
 
 .form-box {
-    height: 470px;
     background-color: white;
-    padding: 10px;
+    padding: 20px;
     border-radius: 10px;
     position: absolute;
     margin: 115px 0;
