@@ -7,8 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fast Move</title>
 
-
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,52 +27,19 @@
 
     <!-- Template Stylesheet -->
     <link href="/frontend/css/style.css" rel="stylesheet">
-
-
-
+    <link href="/frontend/css/registration.css" rel="stylesheet">
 
     <link href="/frontend/img/delivery-bike.png" rel="icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
-
-<style>
-    body {
-        /* background: hsl(96, 68%, 88%); */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-    }
-
-    .form-box {
-        /* height: 450px; */
-        background-color: white;
-        padding: 10px;
-        border-radius: 10px;
-        position: absolute;
-        margin: 150px 0;
-        /* top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto; */
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
-    }
-</style>
-
-
-
 <body>
-
     <!-- Navbar & Hero Start -->
     <div class="container-xxl position-relative p-0 bg-light">
         <nav class="navbar navbar-expand-lg px-4 px-lg-5 py-3 ">
             <a href="" class="navbar-brand p-0">
                 <h2 class="m-0"><img src="frontend/img/delivery-bike.png" width="60">Fast Move</h2>
-                <!-- <img src="img/logo.png" alt="Logo"> -->
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
@@ -85,14 +50,6 @@
                     <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
                     <a href="{{ route('service') }}" class="nav-item nav-link">Services</a>
                     <a href="{{ route('tracking') }}" class="nav-item nav-link">Tracking</a>
-                    {{-- <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tracking</a>
-                                <div class="dropdown-menu m-0">
-                                    <a href="team.html" class="dropdown-item">Our Team</a>
-                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                    <a href="comparison.html" class="dropdown-item">Comparison</a>
-                                </div>
-                            </div> --}}
                     <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
                 </div>
                 <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
@@ -100,145 +57,256 @@
 
                 <a href="{{ route('register') }}" class="btn btn-dark py-2 px-4 ms-3">Register</a>
                 <a href="{{ route('login') }}" class="btn btn-dark py-2 px-4 ms-3">Login</a>
-
-
             </div>
         </nav>
     </div>
-    <!-- Navbar & Hero End -->
 
-
-
-    <div class="form-box w-75">
-        <div class="text-center mt-3">
+    <div class="form-box  w-50">
+        <div class="text-center mt-1">
             <img src="/frontend/img/delivery-bike.png" style="width: 70px" alt="logo" />
         </div>
 
         <h2 class="text-center mb-3">Become a Merchant</h2>
-
-        <form action="{{ route('register') }}" method="post" class="text-center p-2 d-flex"
-            enctype="multipart/form-data">
+        <form action="{{ route('register') }}" method="post" class="text-center" enctype="multipart/form-data">
             @csrf
+            <div class="input_content d-flex justify-content-center align-items-center">
+                <div class="w-100 left text-light " id="content1">
+                    <input type="text" class="form-control d-block mx-auto w-75" name="business_name"
+                        value="{{ old('business_name') }}" placeholder="Business Name">
+                    <span class="text-danger mb-2 d-block">
+                        @error('business_name')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
-            <div class="w-50 left text-light">
+                    <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
+                        value="{{ old('merchant_name') }}" placeholder="Merchant Name">
+                    <span class="text-danger mb-2 d-block">
+                        @error('merchant_name')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
-                <input type="text" class="form-control w-75 mx-auto" name="business_name"
-                    value="{{ old('business_name') }}" placeholder="Business Name">
-                <span class="text-danger mb-3 d-block">
-                    @error('business_name')
-                        {{ $message }}
-                    @enderror
-                </span>
+                    <input type="phone" class="form-control w-75 mx-auto" name="phone" value="{{ old('phone') }}"
+                        placeholder="Phone Number">
+                    <span class="text-danger mb-2 d-block">
+                        @error('phone')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
+                    <input type="email" class="form-control w-75 mx-auto" name="email" value="{{ old('email') }}"
+                        placeholder="Email">
+                    <span class="text-danger mb-2 d-block">
+                        @error('email')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
-                <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
-                    value="{{ old('merchant_name') }}" placeholder="Merchant Name">
-                <span class="text-danger mb-3 d-block">
-                    @error('merchant_name')
-                        {{ $message }}
-                    @enderror
-                </span>
-                <select name="district" class="form-control" id="product_category">
-                    <option value="Dhaka">From</option>
-                    @foreach ($deliveryChargeData as $location)
-                        <option value="{{ $location->from_location }}">{{ $location->from_location }}</option>
-                    @endforeach
-                </select>
+                    <input type="password" class="form-control w-75 mx-auto" name="password" placeholder="Password">
+                    <span class="text-danger mb-2 d-block">
+                        @error('password')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
-                <input type="text" class="form-control w-75 mx-auto" name="pick_up_location"
-                    value="{{ old('pick_up_location') }}" placeholder="Pick Up Location">
-                <span class="text-danger mb-3 d-block">
-                    @error('pick_up_location')
-                        {{ $message }}
-                    @enderror
-                </span>
-
-                <div class="d-flex">
-                    <label for="nid_front" class="text-dark">NID Front</label>
-                    <input type="file" class="form-control w-75 mx-auto" name="nid_front">
+                    <input type="password" class="form-control w-75 mx-auto" name="password_confirmation"
+                        placeholder="Confirm Password">
+                    <span class="text-danger mb-2 d-block">
+                        @error('password_confirmation')
+                            {{ $message }}
+                        @enderror
+                    </span>
                 </div>
-                <span class="text-danger mb-3 d-block">
-                    @error('nid_front')
-                        {{ $message }}
-                    @enderror
-                </span>
+                <div class="w-100 left text-light input_content" id="content2">
+                    <input type="text" class="form-control d-block mx-auto w-75" name="business_name"
+                        value="{{ old('business_name') }}" placeholder="sdklfjsdlkfj">
+                    <span class="text-danger mb-2 d-block">
+                        @error('business_name')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
-                <div class="d-flex">
-                    <label for="nid_back" class="text-dark">NID Back</label>
-                    <input type="file" class="form-control w-75 mx-auto" name="nid_back">
+                    <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
+                        value="{{ old('merchant_name') }}" placeholder="Merchant Name">
+                    <span class="text-danger mb-2 d-block">
+                        @error('merchant_name')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="phone" class="form-control w-75 mx-auto" name="phone"
+                        value="{{ old('phone') }}" placeholder="Phone Number">
+                    <span class="text-danger mb-2 d-block">
+                        @error('phone')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="email" class="form-control w-75 mx-auto" name="email"
+                        value="{{ old('email') }}" placeholder="Email">
+                    <span class="text-danger mb-2 d-block">
+                        @error('email')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="password" class="form-control w-75 mx-auto" name="password" placeholder="Password">
+                    <span class="text-danger mb-2 d-block">
+                        @error('password')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="password" class="form-control w-75 mx-auto" name="password_confirmation"
+                        placeholder="Confirm Password">
+                    <span class="text-danger mb-2 d-block">
+                        @error('password_confirmation')
+                            {{ $message }}
+                        @enderror
+                    </span>
                 </div>
-                <span class="text-danger mb-3 d-block">
-                    @error('nid_back')
-                        {{ $message }}
-                    @enderror
-                </span>
+                <div class="w-100 left text-light input_content" id="content3">
+                    <input type="text" class="form-control d-block mx-auto w-75" name="business_name"
+                        value="{{ old('business_name') }}" placeholder="oke">
+                    <span class="text-danger mb-2 d-block">
+                        @error('business_name')
+                            {{ $message }}
+                        @enderror
+                    </span>
 
-                <div class="mb-3">
-                    <a href="/">Go to home</a>
+                    <input type="text" class="form-control w-75 mx-auto" name="merchant_name"
+                        value="{{ old('merchant_name') }}" placeholder="Merchant Name">
+                    <span class="text-danger mb-2 d-block">
+                        @error('merchant_name')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="phone" class="form-control w-75 mx-auto" name="phone"
+                        value="{{ old('phone') }}" placeholder="Phone Number">
+                    <span class="text-danger mb-2 d-block">
+                        @error('phone')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="email" class="form-control w-75 mx-auto" name="email"
+                        value="{{ old('email') }}" placeholder="Email">
+                    <span class="text-danger mb-2 d-block">
+                        @error('email')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="password" class="form-control w-75 mx-auto" name="password" placeholder="Password">
+                    <span class="text-danger mb-2 d-block">
+                        @error('password')
+                            {{ $message }}
+                        @enderror
+                    </span>
+
+                    <input type="password" class="form-control w-75 mx-auto" name="password_confirmation"
+                        placeholder="Confirm Password">
+                    <span class="text-danger mb-2 d-block">
+                        @error('password_confirmation')
+                            {{ $message }}
+                        @enderror
+                    </span>
                 </div>
             </div>
-
-
-            <div class="w-50 right text-light">
-
-                <input type="phone" class="form-control w-75 mx-auto" name="phone" value="{{ old('phone') }}"
-                    placeholder="Phone Number">
-                <span class="text-danger mb-3 d-block">
-                    @error('phone')
-                        {{ $message }}
-                    @enderror
-                </span>
-
-                <input type="email" class="form-control w-75 mx-auto" name="email" value="{{ old('email') }}"
-                    placeholder="Email">
-                <span class="text-danger mb-3 d-block">
-                    @error('email')
-                        {{ $message }}
-                    @enderror
-                </span>
-
-                <input type="password" class="form-control w-75 mx-auto" name="password" placeholder="Password">
-                <span class="text-danger mb-3 d-block">
-                    @error('password')
-                        {{ $message }}
-                    @enderror
-                </span>
-
-                <input type="password" class="form-control w-75 mx-auto" name="password_confirmation"
-                    placeholder="Confirm Password">
-                <span class="text-danger mb-3 d-block">
-                    @error('password_confirmation')
-                        {{ $message }}
-                    @enderror
-                </span>
-
-                <div class="d-flex">
-                    <label for="profile_img" class="text-dark">Profile Photo</label>
-                    <input type="file" class="form-control w-75 mx-auto" name="profile_img">
-                </div>
-                <span class="text-danger mb-3 d-block">
-                    @error('profile_img')
-                        {{ $message }}
-                    @enderror
-                </span>
-
-                <button class="btn btn-success" type="submit">Registration</button>
+            <div class="submit_btn d-flex justify-content-end mt-2">
+                <button class="btn btn-success" id="submit_btn" type="submit">Submit</button>
             </div>
-
-
-
-
         </form>
-
+        <div class="button_content d-flex justify-content-end gap-5" id="button_content">
+            <button type="button" class="btn btn-success" id="previous_btn"
+                style="display: none;">Previous</button>
+            <a href="" class="rr" id="link_home">Go To Home</a>
+            <button type="button" class="btn btn-success" id="next_btn">Next</button>
+        </div>
     </div>
-
-
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
+    <script>
+        let next_btn = document.getElementById('next_btn');
+        let previous_btn = document.getElementById('previous_btn');
+        let submit_btn = document.getElementById('submit_btn');
+        let link_home = document.getElementById('link_home');
+        let button_content = document.getElementById('button_content');
+        let contents = [
+            document.getElementById('content1'),
+            document.getElementById('content2'),
+            document.getElementById('content3')
+        ];
+        let counter = 0;
+
+        submit_btn.style.display = 'none';
+
+        for (let i = 1; i < contents.length; i++) {
+            contents[i].style.transition = 'left 0.5s ease';
+            contents[i].style.left = '-800px';
+            contents[i].style.display = 'none';
+        }
+
+        next_btn.addEventListener("click", function() {
+            if (counter < contents.length - 1) {
+                contents[counter].style.left = '-800px';
+                contents[counter].style.opacity = '0';
+                setTimeout(function() {
+                    contents[counter].style.display = 'none';
+                    counter++;
+                    contents[counter].style.left = '0';
+                    contents[counter].style.opacity = '1';
+                    contents[counter].style.display = 'block';
+
+                    if (counter === 1) {
+                        previous_btn.style.display = 'block';
+                        button_content.classList.add('justify-content-between');
+                    }
+
+                    if (counter === contents.length - 1) {
+                        submit_btn.style.display = 'block';
+                        next_btn.style.display = 'none';
+                        previous_btn.style.marginTop = '-38px';
+                        button_content.classList.add('justify-content-between');
+                        link_home.classList.add('link_home');
+                    }
+                }, 500);
+            }
+        });
+
+        previous_btn.addEventListener("click", function() {
+            if (counter > 0) {
+                contents[counter].style.left = '800px';
+                contents[counter].style.opacity = '0';
+                setTimeout(function() {
+                    contents[counter].style.display = 'none';
+                    counter--;
+                    contents[counter].style.left = '0';
+                    contents[counter].style.opacity = '1';
+                    contents[counter].style.display = 'block';
+
+                    if (counter === 0) {
+                        previous_btn.style.display = 'none';
+                        button_content.classList.remove('justify-content-between');
+                    }
+                    if (counter === contents.length - 2) {
+                        submit_btn.style.display = 'none';
+                        next_btn.style.display = 'block';
+                        previous_btn.style.marginTop = '0';
+                        link_home.style.marginTop = '0';
+                        link_home.style.marginRight = '0';
+                    }
+                }, 500);
+            }
+        });
+        if (submit_btn.style.display === 'block') {
+            link_home.style.marginTop = '0';
+            link_home.style.marginRight = '0';
+        }
     </script>
 
 </body>
