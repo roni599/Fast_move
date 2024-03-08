@@ -472,7 +472,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../marchant/js/address.js"></script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var delivery_charge = $('#delivery_charge');
             // var loadingIcon = $('#loading_icon');
@@ -503,10 +503,107 @@
                         }, 2000);
                     },
                     error: function(error) {
+                        alert('not alowed')
+                        // loadingIcon.addClass('d-none');
+                    }
+                });
+            });
+        });
+    </script> --}}
+    {{-- <script>
+        $(document).ready(function() {
+            var delivery_charge = $('#delivery_charge');
+            // var loadingIcon = $('#loading_icon');
+    
+            $('#distr, #product_weight, #delivery').on('input', function() {
+                var from_location = $('#merchant_location').val();
+                var destination = $('#distr').val();
+                var productWeight = parseFloat($('#product_weight').val()) || 1;
+                var delivery_type = $('#delivery').val();
+    
+                // Show loading icon
+                // loadingIcon.removeClass('d-none');
+    
+                // Clear the delivery_charge.val before making the AJAX request
+                delivery_charge.val('');
+    
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('percel_delivery_charge') }}',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'from_location': from_location,
+                        'destination': destination,
+                        'product_weight': productWeight,
+                        'delivery_type': delivery_type
+                    },
+                    success: function(response) {
+                        if (response.deliveryCharge && response.deliveryCharge.cost !== undefined) {
+                            delivery_charge.val(response.deliveryCharge.cost);
+                        } else {
+                            // Handle the case when delivery charge is not available
+                            delivery_charge.val('Not Available');
+                        }
+                        setTimeout(function() {
+                            // loadingIcon.addClass('d-none');
+                        }, 2000);
+                    },
+                    error: function(error) {
+                        // Handle the case when an error occurs
+                        alert('Not allowed');
+                        // loadingIcon.addClass('d-none');
+                    }
+                });
+            });
+        });
+    </script> --}}
+    <script>
+        $(document).ready(function() {
+            var delivery_charge = $('#delivery_charge');
+            // var loadingIcon = $('#loading_icon');
+    
+            $('#distr, #product_weight, #delivery').on('input', function() {
+                var from_location = $('#merchant_location').val();
+                var destination = $('#distr').val();
+                var productWeight = parseFloat($('#product_weight').val()) || 1;
+                var delivery_type = $('#delivery').val();
+    
+                // Show loading icon
+                // loadingIcon.removeClass('d-none');
+    
+                // Clear the delivery_charge.val before making the AJAX request
+                delivery_charge.val('');
+    
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('percel_delivery_charge') }}',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'from_location': from_location,
+                        'destination': destination,
+                        'product_weight': productWeight,
+                        'delivery_type': delivery_type
+                    },
+                    success: function(response) {
+                        if (response.deliveryCharge && response.deliveryCharge.cost !== undefined) {
+                            delivery_charge.val(response.deliveryCharge.cost);
+                        } else {
+                            // Handle the case when delivery charge is not available
+                            delivery_charge.val('Not Available');
+                        }
+                        setTimeout(function() {
+                            // loadingIcon.addClass('d-none');
+                        }, 2000);
+                    },
+                    error: function(error) {
+                        // Handle the case when an error occurs
+                        alert('We have no delivery work for this place');
                         // loadingIcon.addClass('d-none');
                     }
                 });
             });
         });
     </script>
+    
+    
 @endsection

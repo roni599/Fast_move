@@ -30,10 +30,12 @@ return new class extends Migration
             $table->string('exchange_status');
             $table->decimal('delivery_charge');
             $table->string('is_active')->default(1);
-            $table->unsignedBigInteger('deliveryman_id')->default(0);
-            $table->unsignedBigInteger('pickupman_id')->default(0);
+            $table->unsignedBigInteger('deliveryman_id')->nullable();
+            $table->unsignedBigInteger('pickupman_id')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('deliveryman_id')->references('id')->on('deliverymen')->onDelete('cascade');
+            $table->foreign('pickupman_id')->references('id')->on('pickupmen')->onDelete('cascade');
         });
     }
 

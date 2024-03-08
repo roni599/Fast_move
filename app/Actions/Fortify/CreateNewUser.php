@@ -19,6 +19,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        
         Validator::make($input, [
             'business_name' => ['required', 'string', 'max:255'],
             'merchant_name' => ['required', 'string', 'max:255'],
@@ -65,7 +66,6 @@ class CreateNewUser implements CreatesNewUsers
             $profile_img = $input['profile_img']->move('merchant/profile-photos/'. $user->id, $user->merchant_name.'_'.$input['profile_img']->getClientOriginalName(), '');
             $user->update(['profile_img' => $profile_img]);
         }
-
         return $user;
     }
 }

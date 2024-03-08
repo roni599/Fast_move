@@ -6,7 +6,7 @@
                 <form id="searchForm">
                     @csrf
                     <input type="text" class="form-control mb-2" name="tracking_id" placeholder="Tracking ID....." />
-                    <button type="button" class="btn btn-light" id="trackBtn">Track</button>
+                    <button type="button" class="btn btn-light" id="trackBtn" disabled>Track</button>
                 </form>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 </select>
                 <div class="">
                     <input type="text" id="weightId" name="weight" value="1" placeholder="Parcel's Weight"
-                        class="form-control">
+                        class="form-control" readonly>
                 </div>
             </div>
             <div class="price-text d-flex justify-content-center align-items-center">
@@ -128,9 +128,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 
 {{-- for the calculate delivery charge --}}
+{{-- <script src="/frontend/js/delivey_charge_calculator.js"></script> --}}
+
+
 <script>
     $(document).ready(function() {
         $('.form-control.w-25.py-3').prop('disabled', true).prop('readonly', false);
+
         $('#weightId').on('input', function() {
             var weightValue = parseFloat($(this).val());
             if (weightValue || weightValue === 0) {
@@ -143,6 +147,7 @@
                 hideLoadingIcon();
             }
         });
+
         $('#fromLocation, #destination, #serviceId').on('change', function() {
             showLoadingIcon();
             setTimeout(function() {
@@ -197,6 +202,14 @@
         $('#fromLocation').change('change', function() {
             fromLocation = $(this).val();
             console.log("Updated fromLocation value:", fromLocation);
+
+            // Enable or disable the weightId input based on the fromLocation value
+            if (fromLocation) {
+                $('#weightId').prop('readonly', false);
+            } else {
+                $('#weightId').prop('readonly', true);
+            }
+
             $.ajax({
                 url: '/get-destinations',
                 type: 'GET',
@@ -258,6 +271,7 @@
                 }
             });
         });
+
         $('#category').on('click', function() {
             var selectedCategory = $(this).val();
             console.log("Selected Category:", selectedCategory);
@@ -266,8 +280,9 @@
 </script>
 
 
+
 {{-- for the tracking --}}
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('.step-wizard').hide();
 
@@ -336,5 +351,83 @@
         });
 
         $('#trackingModal').on('hidden.bs.modal', function() {});
+    });
+</script> --}}
+
+{{-- //disable track_button code --}}
+<script>
+    $(document).ready(function () {
+        $('.step-wizard').hide();
+
+        function performAjaxCall(trackingId) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('search.delivery') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'tracking_id': trackingId
+                },
+                success: function (data) {
+                    var is_active = parseInt(data.delivery.is_active, 10);
+                    progressCountValue = is_active + 1;
+                    console.log(progressCountValue);
+                    updateActiveStep(progressCountValue);
+                    $('.step-wizard').show();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        $('#searchForm input[name="tracking_id"]').on('input', function (e) {
+            var trackingId = $(this).val();
+
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length === 0) {
+                $('#trackBtn').prop('disabled', true);
+                return;
+            }
+
+            if (trackingId.length === 6) {
+                // $('#trackBtn').prop('disabled', true);
+                // $('#searchForm input[name="tracking_id"]').val('');
+            } else {
+                $('#trackBtn').prop('disabled', false);
+                return;
+            }
+
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length < 6) {
+                $('.step-wizard').hide();
+                $('#trackingModal').modal('hide');
+                return;
+            }
+
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        $('#trackBtn').on('click', function (e) {
+            e.preventDefault();
+            var trackingId = $('#searchForm input[name="tracking_id"]').val();
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        function updateActiveStep(progressCountValue) {
+            $('.step-wizard-item').removeClass('current-item');
+            $('.step-wizard-item').each(function () {
+                var stepValue = parseInt($(this).find('.progress-count').text());
+
+                if (stepValue == progressCountValue) {
+                    $(this).addClass('current-item');
+                }
+            });
+        }
+
+        $('#trackingModal').on('hide.bs.modal', function () {
+            $('.step-wizard').hide();
+            // $('#searchForm input[name="tracking_id"]').val('');
+            // $('#trackBtn').prop('disabled', true);
+        });
     });
 </script>

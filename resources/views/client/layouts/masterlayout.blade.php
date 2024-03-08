@@ -107,13 +107,13 @@
                                         class="ms-2 fa-solid fa-caret-down"></i>
 
                                     <div class="sub-button">
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Admin
+                                        {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin
+                                            Login</a> --}}
+                                        <a href="{{route('login')}}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant
                                             Login</a>
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Merchant
+                                        <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman
                                             Login</a>
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman
-                                            Login</a>
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman
+                                        <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman
                                             Login</a>
                                     </div>
                                 </button>
@@ -124,7 +124,7 @@
                                         class="ms-2 fa-solid fa-caret-down"></i>
 
                                     <div class="sub-button">
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
+                                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                                             Merchant</a>
                                         <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                                             Pickupman</a>
@@ -143,10 +143,10 @@
                     <i class="me-2 fa-solid fa-user-lock"></i>Login<i class="ms-2 fa-solid fa-caret-down"></i>
 
                     <div class="sub-button">
-                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Admin Login</a>
+                        {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin Login</a> --}}
                         <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a>
-                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
-                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman
+                        <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
+                        <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman
                             Login</a>
                     </div>
                 </button>
@@ -155,11 +155,11 @@
                     <i class="me-2 fa-solid fa-user-pen"></i>Register<i class="ms-2 fa-solid fa-caret-down"></i>
 
                     <div class="sub-button">
-                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
+                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                             Merchant</a>
-                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
+                        <a href="{{ route('pickupman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                             Pickupman</a>
-                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
+                        <a href="{{ route('deliveryman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                             Deliveryman</a>
                     </div>
                 </button>
