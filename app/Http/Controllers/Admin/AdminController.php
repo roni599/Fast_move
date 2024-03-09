@@ -480,7 +480,7 @@ class AdminController extends Controller
     {
 
         $delivery = Product::find($request->id);
-        $delivery->is_active = 2;
+        $delivery->is_active = 3;
 
         $delivery->update();
 
@@ -491,7 +491,7 @@ class AdminController extends Controller
     {
 
         $delivery = Product::find($request->id);
-        $delivery->is_active = 3;
+        $delivery->is_active = 4;
 
         $delivery->update();
 
@@ -512,7 +512,6 @@ class AdminController extends Controller
 
     public function productCancelConfirmation(Request $request)
     {
-
         $delivery = Product::find($request->id);
         $delivery->is_active = 'cancelled';
         $delivery->update();

@@ -93,39 +93,82 @@
                                 <td>{{ $delivery->exchange_status }}</td>
                                 <td>{{ $delivery->delivery_charge }}</td>
                                 @if ($delivery->is_active == 1)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Pending</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Pending</span></td>
                                 @elseif ($delivery->is_active == 2)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">On the way</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product On the way</span></td>
                                 @elseif ($delivery->is_active == 3)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Checkout</span></td>
-                                @elseif ($delivery->is_active === 'cancelled')
-                                    <td><span class="badge bg-label-success me-1 text-dark">Cancelled</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product arrived <br> in the <br>
+                                            ware house</span></td>
+                                @elseif ($delivery->is_active == 4)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product picked <br> by delivery
+                                            man</span></td>
                                 @elseif ($delivery->is_active == 5)
-                                    <td><span class="badge bg-label-success me-1 text-dark">Return</span></td>
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span></td>
+                                @elseif ($delivery->is_active == 6)
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>
                                 @else
-                                    <td><span class="badge bg-label-success me-1 text-dark">Delivered</span></td>
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product canceled</span></td>
                                 @endif
 
                                 <td>
-                                    @if($delivery->is_active == 3)
-                                        <form action="{{ route('deliveryman.product.delivered') }}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                            <button class="btn btn-sm btn-success" type="submit">
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <div class="d-flex justify-center align-items-center gap-2">
+                                        @if ($delivery->is_active == 1)
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+                                        @if ($delivery->is_active == 2)
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+                                        @if ($delivery->is_active == 3)
+                                            <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success" type="submit">
+                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                </button>
+                                            </form>
+                                            {{-- @else
+                                            <span class="badge bg-label-success me-1 text-dark">Product <br> has not <br>
+                                                arrived yet <br>in the stock</span> --}}
+                                        @endif
+                                        @if ($delivery->is_active == 4)
+                                            <form action="{{ route('deliveryman.product.delivered') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success" type="submit">
+                                                    <i class="fas fa-truck"></i>
+                                                </button>
+                                            </form>
+                                        @endif
 
-                                    @if($delivery->is_active == 3)
-                                        <form action="{{ route('deliveryman.product.return') }}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                            <button class="btn btn-sm btn-success" type="submit">
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </button>
-                                        </form>
-                                    @endif
+                                        @if ($delivery->is_active == 4)
+                                            <form action="{{ route('deliveryman.product.return') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success" type="submit">
+                                                    <i class="fa-solid fa-right-left"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        @if ($delivery->is_active == 4)
+                                            <form action="{{ route('deliveryman.product.cancel') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-danger" type="submit">
+                                                    <i class="fa-solid fa-times"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                        @if ($delivery->is_active == 5)
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+                                        @if ($delivery->is_active == 6)
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+                                        @if ($delivery->is_active == 7)
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

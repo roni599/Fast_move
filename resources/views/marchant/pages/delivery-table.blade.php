@@ -1,4 +1,3 @@
-
 @extends('marchant.layouts.masterlayout')
 @section('content')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -123,15 +122,21 @@
                                     <td>{{ $delivery->delivery_charge }}</td>
 
                                     @if ($delivery->is_active === '1')
-                                        <td><span class="badge bg-label-danger me-1 text-dark">Pending</span></td>
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Awaiting response <br> for Pickupman</span></td>
                                     @elseif ($delivery->is_active === '2')
-                                        <td><span class="badge bg-label-danger me-1 text-dark">On the way</span></td>
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product On <br> the
+                                                way</span></td>
                                     @elseif ($delivery->is_active === '3')
-                                        <td><span class="badge bg-label-danger me-1 text-dark">Checkout</span></td>
-                                    @elseif ($delivery->is_active === 'cancelled')
-                                        <td><span class="badge bg-label-success me-1 text-dark">Cancelled</span></td>
-                                    @else
-                                        <td><span class="badge bg-label-success me-1 text-dark">Delivered</span></td>
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product Stocked</span></td>
+                                    @elseif ($delivery->is_active === '4')
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product Shiped</span></td>
+                                    @elseif ($delivery->is_active === '5')
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product Delivered</span></td>
+                                    @elseif ($delivery->is_active === '6')
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product Return</span></td>
+                                    @elseif ($delivery->is_active == 7)
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>
+                                        </td>
                                     @endif
 
                                     <td>
@@ -154,7 +159,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -221,7 +226,7 @@
                 e.preventDefault();
 
                 var searchInput = $('#searchInput').val();
-                
+
 
                 // Include CSRF token in headers
                 $.ajaxSetup({
@@ -254,13 +259,13 @@
                                 if (delivery.is_active == '1') {
                                     statusBadge =
                                         '<span class="badge bg-label-danger me-1 text-dark">pending</span>';
-                                }else if (delivery.is_active === '2') {
+                                } else if (delivery.is_active === '2') {
                                     statusBadge =
                                         '<span class="badge bg-label-success me-1 text-dark">On the way</span>';
                                 } else if (delivery.is_active === '3') {
                                     statusBadge =
                                         '<span class="badge bg-label-success me-1 text-dark">Checkout</span>';
-                                }else if (delivery.is_active === 'canceled') {
+                                } else if (delivery.is_active === 'canceled') {
                                     statusBadge =
                                         '<span class="badge bg-label-success me-1 text-dark">Cancelled</span>';
                                 } else {
@@ -498,7 +503,7 @@
                             // No search results, display a message or handle it as needed
                             resultsBody.html(
                                 '<tr><td colspan="15" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
-                                );
+                            );
                         }
                     },
                     error: function(xhr, status, error) {
@@ -509,7 +514,7 @@
                         var resultsBody = $('#searchResultsBody');
                         resultsBody.html(
                             '<tr><td colspan="4">Error fetching search results. Please try again.</td></tr>'
-                            );
+                        );
                         existingTable.show();
                     }
                 });

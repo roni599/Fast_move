@@ -266,7 +266,7 @@ class DeliveryManController extends Controller
     {
 
         $delivery = Product::find($request->id);
-        $delivery->is_active = 4;
+        $delivery->is_active = 5;
 
         $id = Session::get('loginId');
         // dd($id);
@@ -279,9 +279,22 @@ class DeliveryManController extends Controller
 
     public function productDeliveryReturn(Request $request)
     {
-
         $delivery = Product::find($request->id);
-        $delivery->is_active = 5;
+        $delivery->is_active = 6;
+
+        $id = Session::get('loginId');
+        // dd($id);
+        $delivery->deliveryman_id = $id;
+
+        $delivery->update();
+
+        return redirect('deliveryman/product/table');
+    }
+    public function productDeliveryCancel(Request $request)
+    {
+        
+        $delivery = Product::find($request->id);
+        $delivery->is_active = 7;
 
         $id = Session::get('loginId');
         // dd($id);

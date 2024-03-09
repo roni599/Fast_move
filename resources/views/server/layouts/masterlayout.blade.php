@@ -51,7 +51,8 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="nav-profile-img">
                                 {{-- {{dd($admin->admin_name.'_'. $admin->profile_img)}} --}}
-                                <img src="{{asset('admins/profile_images')}}/{{$admin->profile_img}}" alt="image">
+                                <img src="{{ asset('admins/profile_images') }}/{{ $admin->profile_img }}"
+                                    alt="image">
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
@@ -60,13 +61,13 @@
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
 
-                            <a class="dropdown-item" href="{{ route('admin.edit') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('admin.edit') }}">
                                 <i class="mdi mdi-account-card-details me-2 text-success"></i> Update Profile </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('admin.change.password') }}">
+                            <div class="dropdown-divider text-dark"></div>
+                            <a class="dropdown-item text-dark" href="{{ route('admin.change.password') }}">
                                 <i class="mdi mdi-account-key me-2 text-primary"></i> Change Password </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('admin.delete') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('admin.delete') }}">
                                 <i class="mdi mdi-account-key me-2 text-primary"></i> Delete Account </a>
                             {{-- <form action="{{ route('admin.delete') }}" method="get">
                                 @csrf
@@ -78,7 +79,7 @@
 
                             <form action="{{ route('admin.logout') }}" method="post">
                                 @csrf
-                                <button type="submit" class="dropdown-item"> <i
+                                <button type="submit" class="dropdown-item text-dark"> <i
                                         class="mdi mdi-logout me-2 text-primary"></i> Signout </button>
                             </form>
 
@@ -225,16 +226,17 @@
                     <li class="nav-item nav-profile">
                         <a href="#" class="nav-link">
                             <div class="nav-profile-image">
-                                <img src="{{asset('admins/profile_images')}}/{{$admin->profile_img}}" alt="image">
+                                <img src="{{ asset('admins/profile_images') }}/{{ $admin->profile_img }}"
+                                    alt="image">
                                 <span class="login-status online"></span>
                                 <!--change to offline or busy as needed-->
                             </div>
                             <div class="nav-profile-text d-flex flex-column">
                                 @if ($admin->role == 'super admin')
-                                    <span class="font-weight-bold mb-2">{{$admin->admin_name}}</span>
+                                    <span class="font-weight-bold mb-2">{{ $admin->admin_name }}</span>
                                     <span class="text-secondary text-small">Super Admin</span>
                                 @else
-                                    <span class="font-weight-bold mb-2">{{$admin->admin_name}}</span>
+                                    <span class="font-weight-bold mb-2">{{ $admin->admin_name }}</span>
                                     <span class="text-secondary text-small">Admin</span>
                                 @endif
                             </div>
@@ -258,9 +260,11 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link"
                                         href="{{ route('admin.product.delivery') }}">Delivery Product</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{{ route('admin.pickupman') }}">Pickup
+                                <li class="nav-item"> <a class="nav-link"
+                                        href="{{ route('admin.pickupman') }}">Pickup
                                         Man</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{{ route('admin.deliveryman') }}">Delivery
+                                <li class="nav-item"> <a class="nav-link"
+                                        href="{{ route('admin.deliveryman') }}">Delivery
                                         Man</a></li>
                                 <li class="nav-item"> <a class="nav-link"
                                         href="{{ route('deliverycharge.index') }}">Delivery Charge</a></li>
@@ -284,8 +288,8 @@
                         <div class="collapse" id="general-pages">
                             <ul class="nav flex-column sub-menu">
                                 @if ($admin->role == 'super admin')
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="{{route('admin.register')}}"> Admin </a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{{ route('admin.register') }}">
+                                            Admin </a></li>
                                 @endif
                                 <li class="nav-item"> <a class="nav-link" href="{{ route('addDeliveryCharge') }}">
                                         Delivery Charge </a>

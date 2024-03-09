@@ -119,29 +119,35 @@
                                 <td>{{ $delivery->note }}</td>
                                 <td>{{ $delivery->exchange_status }}</td>
                                 <td>{{ $delivery->delivery_charge }}</td>
-                                @if ($delivery->is_active == 1)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Pending</span></td>
-                                @elseif ($delivery->is_active == 2)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">On the way</span></td>
+                                {{-- @if ($delivery->is_active == 1)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Pending</span></td> --}}
+                                @if ($delivery->is_active == 2)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product On the way</span></td>
                                 @elseif ($delivery->is_active == 3)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Checkout</span></td>
-                                @elseif ($delivery->is_active === 'cancelled')
-                                    <td><span class="badge bg-label-success me-1 text-dark">Cancelled</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Stock</span></td>
+                                @elseif ($delivery->is_active == 4)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Shiped</span></td>
                                 @elseif ($delivery->is_active == 5)
-                                    <td><span class="badge bg-label-success me-1 text-dark">Return</span></td>
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span></td>
+                                @elseif($delivery->is_active == 6)
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>
+                                @elseif ($delivery->is_active ==7)
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span></td>
                                 @else
-                                    <td><span class="badge bg-label-success me-1 text-dark">Delivered</span></td>
+                                    <td><span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br>
+                                            reached yet</span></td>
                                 @endif
 
                                 <td>
-                                    @if ($delivery->is_active == 1)
+                                    @if ($delivery->is_active == 2)
                                         <div class="d-flex justify-center align-items-center gap-2">
-                                            <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
+                                            {{-- <form action="{{ route('admin.product.delivery_confirmation') }}"
+                                                method="post">
                                                 @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                                <button class="btn btn-sm btn-success text-white" type="submit">
-                                                    <i class="fa-solid fa-check"></i>
-                                                </button>
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
+                                            <button class="btn btn-sm btn-success text-white" type="submit">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
                                             </form>
                                             <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
                                                 @csrf
@@ -153,23 +159,30 @@
                                         </div>
                                     @elseif ($delivery->is_active == 'cancelled')
                                         <span class="badge bg-label-success me-1 text-dark">Not accepted</span>
-                                    @elseif ($delivery->is_active == 2)
-                                        <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                    @elseif ($delivery->is_active == 4)
+                                        {{-- <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                            <button class="btn btn-sm btn-success" type="submit">
+                                            <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
+                                        {{-- <button class="btn btn-sm btn-success" type="submit">
                                                 <i class="fas fa-truck"></i>
-                                            </button>
-                                        </form>
+                                            </button> --}}
+                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        {{-- </form> --}}
+                                    @elseif ($delivery->is_active == 5)
+                                        {{-- <span class="badge bg-label-success me-1 text-dark">You have <br> No action <br> because product
+                                            has <br>been delivered</span> --}}
+                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                     @elseif ($delivery->is_active == 3)
-                                        <form action="{{ route('admin.product.delivery_delivered') }}" method="post">
+                                        {{-- <form action="{{ route('admin.product.delivery_delivered') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $delivery->id }}">
                                             <button class="btn btn-sm btn-success" type="submit">
                                                 <i class="fa-solid fa-cart-shopping"></i>
                                             </button>
-                                        </form>
-                                    {{-- @elseif ($delivery->is_active == 4)
+                                        </form> --}}
+                                        <span class="badge bg-label-success me-1 text-dark">Awaiting response <br> for
+                                            deliveryman</span>
+                                        {{-- @elseif ($delivery->is_active == 4)
                                         <form action="{{ route('admin.product.delivery_delivered') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $delivery->id }}">
@@ -177,29 +190,57 @@
                                                 <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </form> --}}
+                                    @else
+                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                     @endif
                                 </td>
 
                                 <td>
-                                    <div class="d-flex justify-content-center gap-2">
-                                        {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
-                                        class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
-                                        <form action="{{ route('admin.product.delivery.edit') }}" method="get">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                            <button class="btn btn-sm btn-success" type="submit"><i
-                                                    class="fas fa-pencil-alt"></i></button>
-                                        </form>
-                                        {{-- <a href="{{ route('admin.delivery.edit') }}"
-                                        class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                        <form action="{{ route('admin.product.delivery.delete') }}" method="get">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                            <button class="btn btn-sm btn-danger" type="submit"
-                                                onclick="return confirm('Are you sure?')"><i
-                                                    class="fa-solid fa-trash-can"></i></button>
-                                        </form>
-                                    </div>
+                                    @if ($delivery->is_active == 4)
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                            {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
+                                            class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
+                                            {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success" type="submit"><i
+                                                        class="fas fa-pencil-alt"></i></button>
+                                            </form> --}}
+                                            {{-- <a href="{{ route('admin.delivery.edit') }}"
+                                            class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
+                                            {{-- <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-danger" type="submit"
+                                                    onclick="return confirm('Are you sure?')"><i
+                                                        class="fa-solid fa-trash-can"></i></button>
+                                            </form> --}}
+                                        </div>
+                                    @elseif($delivery->is_active == 3)
+                                        <div class="d-flex justify-content-center gap-2">
+                                            {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
+                                            class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
+                                            <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success" type="submit"><i
+                                                        class="fas fa-pencil-alt"></i></button>
+                                            </form>
+                                            {{-- <a href="{{ route('admin.delivery.edit') }}"
+                                            class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
+                                            <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-danger" type="submit"
+                                                    onclick="return confirm('Are you sure?')"><i
+                                                        class="fa-solid fa-trash-can"></i></button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                    @endif
+
                                 </td>
                             </tr>
                         @endforeach

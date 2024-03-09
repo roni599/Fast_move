@@ -93,21 +93,26 @@
                                 <td>{{ $delivery->exchange_status }}</td>
                                 <td>{{ $delivery->delivery_charge }}</td>
                                 @if ($delivery->is_active == 1)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Pending</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Pending</span></td>
                                 @elseif ($delivery->is_active == 2)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">On the way</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product On <br> the way</span></td>
                                 @elseif ($delivery->is_active == 3)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Checkout</span></td>
-                                @elseif ($delivery->is_active === 'cancelled')
-                                    <td><span class="badge bg-label-success me-1 text-dark">Cancelled</span></td>
-                                @else
-                                    <td><span class="badge bg-label-success me-1 text-dark">Delivered</span></td>
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Stocked</span></td>
+                                @elseif ($delivery->is_active == 4)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Shiped</span></td>
+                                @elseif ($delivery->is_active == 5)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Delivered</span></td>
+                                @elseif ($delivery->is_active == 6)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Return</span></td>
+                                @elseif ($delivery->is_active == 7)
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Cancel</span></td>
                                 @endif
 
                                 <td>
                                     @if ($delivery->is_active == 1)
                                         <div class="d-flex justify-center align-items-center gap-2">
-                                            <form action="{{ route('pickupman.product.delivery_confirmation') }}" method="post">
+                                            <form action="{{ route('pickupman.product.delivery_confirmation') }}"
+                                                method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 {{-- <input type="hidden" name="pickupman_id" value="{{ $id }}"> --}}
@@ -116,6 +121,9 @@
                                                 </button>
                                             </form>
                                         </div>
+                                    @else
+                                        <span class="badge bg-label-success me-1 text-dark">Your job <br> is done<br>
+                                            Thanks!!</span>
                                     @endif
                                 </td>
                             </tr>

@@ -273,7 +273,7 @@
                         </a>
                         <div class="collapse" id="general-pages">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="#">
+                                <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">
                                         Delivery Product </a></li>
                                 {{-- <li class="nav-item"> <a class="nav-link" href="/marchant/pages/samples/login.html">
                                         Login </a>
