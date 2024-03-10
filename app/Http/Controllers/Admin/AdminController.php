@@ -12,9 +12,7 @@ use App\Imports\DeliverymanImport;
 use App\Imports\PickupmanImport;
 use App\Imports\ProductImport;
 use App\Models\Admin;
-use App\Models\Delivery;
 use App\Models\Deliveryman;
-use App\Models\Pickup;
 use App\Models\Pickupman;
 use App\Models\Product;
 use App\Models\User;
@@ -238,7 +236,38 @@ class AdminController extends Controller
         Admin::find($request->id)->delete();
         return redirect('admin/table')->withSuccess('Admin Deleted');
     }
+    public function searchAdmin(Request $request)
+    {
 
+        $search = $request->input('admin_delivery_search');
+
+        $customers = Product::with(['pickupman:id,pickupman_name', 'deliveryman:id,deliveryman_name', 'user:id,merchant_name'])
+            ->where(function ($query) use ($search) {
+                $query->where('product_category', 'like', '%' . $search . '%')
+                    ->orWhere('customer_name', 'like', '%' . $search . '%')
+                    ->orWhere('customer_phone', 'like', '%' . $search . '%')
+                    ->orWhere('full_address', 'like', '%' . $search . '%')
+                    ->orWhere('divisions', 'like', '%' . $search . '%')
+                    ->orWhere('district', 'like', '%' . $search . '%')
+                    ->orWhere('police_station', 'like', '%' . $search . '%')
+                    ->orWhere('delivery_type', 'like', '%' . $search . '%')
+                    ->orWhere('order_tracking_id', 'like', '%' . $search . '%')
+                    ->orWhere('cod_amount', 'like', '%' . $search . '%')
+                    ->orWhere('invoice', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('user', function ($query) use ($search) {
+                $query->where('merchant_name', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('pickupman', function ($query) use ($search) {
+                $query->where('pickupman_name', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('deliveryman', function ($query) use ($search) {
+                $query->where('deliveryman_name', 'like', '%' . $search . '%');
+            })
+            ->get();
+
+        return response()->json(['customers' => $customers]);
+    }
     // public function searchAdmin(Request $request)
     // {
     //     try {
