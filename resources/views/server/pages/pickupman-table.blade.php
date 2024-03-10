@@ -21,7 +21,8 @@
                     </div>
                 </form>
 
-                <form id="excel" action="{{ route('admin.pickupman.excel.import') }}" method="post" enctype="multipart/form-data">
+                <form id="excel" action="{{ route('admin.pickupman.excel.import') }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">
@@ -96,9 +97,12 @@
                                     <td>{{ $pickupman->police_station }}</td>
                                     <td>{{ $pickupman->district }}</td>
                                     <td>{{ $pickupman->division }}</td>
-                                    <td><img src="{{asset('pickupmen/profile_images')}}/{{$pickupman->profile_img}}" alt="Profile photo"></td>
-                                    <td><img src="{{asset('pickupmen/nid_images')}}/{{$pickupman->nid_front}}" alt="NID Front"></td>
-                                    <td><img src="{{asset('pickupmen/nid_images')}}/{{$pickupman->nid_back}}" alt="NID Back"></td>
+                                    <td><img src="{{ asset('pickupmen/profile_images') }}/{{ $pickupman->profile_img }}"
+                                            alt="Profile photo"></td>
+                                    <td><img src="{{ asset('pickupmen/nid_images') }}/{{ $pickupman->nid_front }}"
+                                            alt="NID Front"></td>
+                                    <td><img src="{{ asset('pickupmen/nid_images') }}/{{ $pickupman->nid_back }}"
+                                            alt="NID Back"></td>
 
                                     @if ($pickupman->is_active == 1)
                                         <td><span class="badge bg-label-danger me-1 text-black">Pending</span></td>
@@ -132,14 +136,14 @@
                                             class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
                                             {{-- <a href="{{ route('pickup.edit', $pickupman->id) }}"
                                                 class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            <form action="{{route('admin.pickupman_destroy')}}" method="get">
-												@csrf
-												<input type="hidden" name="id" value="{{$pickupman->id}}">
-												<button class="btn btn-sm btn-danger" type="submit"
+                                            <form action="{{ route('admin.pickupman_destroy') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $pickupman->id }}">
+                                                <button class="btn btn-sm btn-danger" type="submit"
                                                     onclick="return confirm('Are you sure?')">
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
-						                    </form>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -186,158 +190,171 @@
         </div>
     </div> --}}
 
+
+    <div class="col-lg-12 stretch-card" id="searchResultsSection" style="display: none;">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Search Results</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Pickup Man Name</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Alt Phone</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Full Address</th>
+                                <th scope="col">Police Station</th>
+                                <th scope="col">District</th>
+                                <th scope="col">Division</th>
+                                <th scope="col">Profile Photo</th>
+                                <th scope="col">NID Front</th>
+                                <th scope="col">NID Back</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchResultsBody">
+                            <!-- Use JavaScript to populate this tbody with search results -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination for search results if needed -->
+                <div id="searchResultsPagination">
+                    <!-- Add pagination links here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    {{-- for search btton press --}}
     {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
 
-            // Initial setup: hide search results, show existing table
-            existingTable.show();
-            searchResultsSection.hide();
-
-            // Set route URLs for dynamic actions
-            var routeUrls = {
-                show: '{{ route('delivery.show', ':id') }}',
-                edit: '{{ route('admin.delivery.edit', ':id') }}',
-                destroy: '{{ route('admin.delivery.delete', ':id') }}',
-            };
-
-            $('#searchForm').submit(function(e) {
+            searchForm.submit(function(e) {
                 e.preventDefault();
 
-                var searchInput = $('#searchInput').val();
-                console.log(searchInput)
-                // Include CSRF token in headers
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+                var searchInput = $('#searchInput').val().trim();
+                console.log(searchInput);
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.searchPickup') }}';
+
+                if (searchInput === '') {
+                    // If the input is empty, show existingTable and hide searchResultsSection
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
 
                 $.ajax({
-                    url: '{{ route('admin.searchPickup') }}',
+                    url: searchRoute,
                     type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
                     data: {
-                        '_token': '{{ csrf_token() }}',
-                        search: searchInput,
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInput,
                     },
                     dataType: 'json',
                     success: function(response) {
                         console.log(response);
-
-                        // Show search results, hide existing table
                         existingTable.hide();
                         searchResultsSection.show();
-
-                        if (response.deliveries.length > 0) {
-                            var resultsBody = $('#searchResultsBody');
-                            resultsBody.empty();
-
-                            $.each(response.deliveries, function(index, delivery) {
-                                var statusBadge = '';
-                                if (delivery.is_active == 1) {
-                                    statusBadge =
-                                        '<span class="badge bg-label-danger me-1 text-dark">pending</span>';
-                                } else if (delivery.is_active === 'canceled') {
-                                    statusBadge =
-                                        '<span class="badge bg-label-success me-1 text-dark">Canceled</span>';
-                                } else {
-                                    statusBadge =
-                                        '<span class="badge bg-label-success me-1 text-dark">On the way</span>';
-                                }
-
-                                var actionButtons = '';
-                                if (delivery.is_active == 1) {
-                                    actionButtons =
-                                        '<div class="d-flex justify-center align-items-center gap-2">' +
-                                        '<form action="{{ route('marchant.delivery_confirmation') }}" method="post">' +
-                                        '@csrf' +
-                                        '<input type="hidden" name="id" value="' +
-                                        delivery.id + '">' +
-                                        '<button class="btn btn-sm btn-success" type="submit">' +
-                                        '<i class="fa-solid fa-check"></i>' +
-                                        '</button>' +
-                                        '</form>' +
-                                        '<form action="{{ route('marchant.cancel_confirmation') }}" method="post">' +
-                                        '@csrf' +
-                                        '<input type="hidden" name="id" value="' +
-                                        delivery.id + '">' +
-                                        '<button class="btn btn-sm btn-success" type="submit">' +
-                                        '<i class="fa-solid fa-times"></i>' +
-                                        '</button>' +
-                                        '</form>' +
-                                        '</div>';
-                                } else if (delivery.is_active === 'canceled') {
-                                    actionButtons =
-                                        '<span class="badge bg-label-success me-1 text-dark">Not allowed</span>';
-                                } else {
-                                    actionButtons =
-                                        '<form action="{{ route('marchant.delivery_confirmation') }}" method="post">' +
-                                        '@csrf' +
-                                        '<input type="hidden" name="id" value="' +
-                                        delivery.id + '">' +
-                                        '<button class="btn btn-sm btn-success" type="submit">' +
-                                        '<i class="fas fa-truck"></i>' +
-                                        '</button>' +
-                                        '</form>';
-                                }
-
-                                var actionButtons2 = `
-                            <td>
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a href="${routeUrls.show.replace(':id', delivery.id)}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                    <a href="${routeUrls.edit.replace(':id', delivery.id)}" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i></a>
-                                    <form action="${routeUrls.destroy.replace(':id', delivery.id)}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
-                                    </form>
-                                </div>
-                            </td>
-                        `;
-
-                                // Log fname and lname to the console
-
-                                var fullName = delivery.user ? delivery.user.fname +
-                                    ' ' + delivery.user.lname : '';
-                                // Append a new row to the search results table for each result
+                        var resultsBody = $('#searchResultsBody');
+                        if (response.pickupmen && Array.isArray(response.pickupmen) && response
+                            .pickupmen.length > 0) {
+                            $.each(response.pickupmen, function(index, pickupman) {
                                 resultsBody.append('<tr>' +
-                                    '<td>' + delivery.id + '</td>' +
-                                    '<td>' + fullName + '</td>' +
-                                    '<td>' + delivery.name + '</td>' +
-                                    '<td>' + delivery.phone + '</td>' +
-                                    '<td>' + delivery.address + '</td>' +
-                                    '<td>' + delivery.police_station + '</td>' +
-                                    '<td>' + delivery.district + '</td>' +
-                                    '<td>' + delivery.divisions + '</td>' +
-                                    '<td>' + delivery.category_type + '</td>' +
-                                    '<td>' + delivery.delivery_type + '</td>' +
-                                    '<td>' + delivery.order_tracking_id + '</td>' +
-                                    '<td>' + delivery.invoice + '</td>' +
-                                    '<td>' + delivery.note + '</td>' +
-                                    '<td>' + delivery.exchange_parcel + '</td>' +
-                                    '<td>' + statusBadge + '</td>' +
-                                    '<td>' + actionButtons + '</td>' +
-                                    actionButtons2 +
-                                    // Add more columns as needed
+                                    '<td>' + pickupman.id + '</td>' +
+                                    '<td>' + pickupman.pickupman_name + '</td>' +
+                                    '<td>' + pickupman.phone + '</td>' +
+                                    '<td>' + pickupman.alt_phone + '</td>' +
+                                    '<td>' + pickupman.email + '</td>' +
+                                    '<td>' + pickupman.full_address + '</td>' +
+                                    '<td>' + pickupman.police_station + '</td>' +
+                                    '<td>' + pickupman.district + '</td>' +
+                                    '<td>' + pickupman.division + '</td>' +
+                                    '<td><img src="{{ asset('pickupmen/profile_images') }}/' +
+                                    pickupman.profile_img +
+                                    '" alt="Profile photo"></td>' +
+                                    '<td><img src="{{ asset('pickupmen/nid_images') }}/' +
+                                    pickupman.nid_front +
+                                    '" alt="NID Front"></td>' +
+                                    '<td><img src="{{ asset('pickupmen/nid_images') }}/' +
+                                    pickupman.nid_back +
+                                    '" alt="NID Back"></td>' +
+                                    '<td>' + getStatusBadge(pickupman.is_active) +
+                                    '</td>' +
+                                    '<td>' + getActionButtons(pickupman.is_active,
+                                        pickupman.id) + '</td>' +
                                     '</tr>');
                             });
+
+                            function getStatusBadge(status) {
+                                if (status === 1) {
+                                    return '<span class="badge bg-label-danger me-1 text-black">Pending</span>';
+                                } else if (status === 3) {
+                                    return '<span class="badge bg-label-danger me-1 text-black">Cancelled</span>';
+                                } else {
+                                    return '<span class="badge bg-label-success me-1 text-black">Confirmed</span>';
+                                }
+                            }
+
+                            function getActionButtons(status, pickupmanId) {
+                                if (status === 1) {
+                                    return `
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <form action="{{ route('admin.pickupman_confirmation') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${pickupmanId}">
+                                            <button class="btn btn-sm btn-success" type="submit">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.pickupman_cancel_confirmation') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${pickupmanId}">
+                                            <button class="btn btn-sm btn-danger" type="submit">
+                                                <i class="fa-solid fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </div>`;
+                                } else {
+                                    return `
+                                        <form action="{{ route('admin.pickupman_destroy') }}" method="get">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${pickupmanId}">
+                                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </form>`;
+                                }
+                            }
+
                         } else {
-                            // No search results, handle this case if needed
+                            resultsBody.html(
+                                '<tr><td colspan="14" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
+                            );
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('Error fetching search results:', error);
-                        console.log('Status:', status);
-                        console.log('XHR:', xhr);
 
                         var resultsBody = $('#searchResultsBody');
                         resultsBody.html(
-                            '<tr><td colspan="4">Error fetching search results. Please try again.</td></tr>'
+                            '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
                         );
                         existingTable.show();
                     }
@@ -346,14 +363,143 @@
 
             // Add an event listener for the input to handle clearing
             $('#searchInput').on('input', function() {
-                var searchInput = $(this).val();
+                var searchInput = $(this).val().trim();
 
                 if (searchInput === '') {
-                    // If the input is cleared, hide search results, show existing table
+                    // If the input is cleared, hide searchResultsSection, show existingTable
                     searchResultsSection.hide();
                     existingTable.show();
                 }
             });
         });
     </script> --}}
+
+    {{-- for given input and auto search without press search button --}}
+    <script>
+        $(document).ready(function() {
+            var existingTable = $('#existingTable');
+            var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
+
+            // Add an event listener for the input field
+            $('#searchInput').on('input', function() {
+                var searchInput = $(this).val().trim();
+
+                // If the input is empty, show existingTable and hide searchResultsSection
+                if (searchInput === '') {
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
+
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.searchPickup') }}';
+
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInput,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        existingTable.hide();
+                        searchResultsSection.show();
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.empty();
+
+                        if (response.pickupmen && Array.isArray(response.pickupmen) && response
+                            .pickupmen.length > 0) {
+                            $.each(response.pickupmen, function(index, pickupman) {
+                                resultsBody.append('<tr>' +
+                                    '<td>' + pickupman.id + '</td>' +
+                                    '<td>' + pickupman.pickupman_name + '</td>' +
+                                    '<td>' + pickupman.phone + '</td>' +
+                                    '<td>' + pickupman.alt_phone + '</td>' +
+                                    '<td>' + pickupman.email + '</td>' +
+                                    '<td>' + pickupman.full_address + '</td>' +
+                                    '<td>' + pickupman.police_station + '</td>' +
+                                    '<td>' + pickupman.district + '</td>' +
+                                    '<td>' + pickupman.division + '</td>' +
+                                    '<td><img src="{{ asset('pickupmen/profile_images') }}/' +
+                                    pickupman.profile_img +
+                                    '" alt="Profile photo"></td>' +
+                                    '<td><img src="{{ asset('pickupmen/nid_images') }}/' +
+                                    pickupman.nid_front +
+                                    '" alt="NID Front"></td>' +
+                                    '<td><img src="{{ asset('pickupmen/nid_images') }}/' +
+                                    pickupman.nid_back +
+                                    '" alt="NID Back"></td>' +
+                                    '<td>' + getStatusBadge(pickupman.is_active) +
+                                    '</td>' +
+                                    '<td>' + getActionButtons(pickupman.is_active,
+                                        pickupman.id) + '</td>' +
+                                    '</tr>');
+                            });
+
+                            function getStatusBadge(status) {
+                                if (status === 1) {
+                                    return '<span class="badge bg-label-danger me-1 text-black">Pending</span>';
+                                } else if (status === 3) {
+                                    return '<span class="badge bg-label-danger me-1 text-black">Cancelled</span>';
+                                } else {
+                                    return '<span class="badge bg-label-success me-1 text-black">Confirmed</span>';
+                                }
+                            }
+
+                            function getActionButtons(status, pickupmanId) {
+                                if (status === 1) {
+                                    return `
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <form action="{{ route('admin.pickupman_confirmation') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${pickupmanId}">
+                                            <button class="btn btn-sm btn-success" type="submit">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.pickupman_cancel_confirmation') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${pickupmanId}">
+                                            <button class="btn btn-sm btn-danger" type="submit">
+                                                <i class="fa-solid fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </div>`;
+                                } else {
+                                    return `
+                                        <form action="{{ route('admin.pickupman_destroy') }}" method="get">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${pickupmanId}">
+                                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </form>`;
+                                }
+                            }
+
+                        } else {
+                            resultsBody.html(
+                                '<tr><td colspan="14" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.html(
+                            '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
+                        );
+                        existingTable.show();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

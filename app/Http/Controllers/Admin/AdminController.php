@@ -290,31 +290,21 @@ class AdminController extends Controller
     // }
 
 
-    // public function searchPickup(Request $request)
-    // {
-    //     try {
-    //         $search = $request->input('search');
-    //         $deliveries = Pickup::whereHas('user', function ($query) use ($search) {
-    //             $query->whereRaw("CONCAT(fname, ' ', lname) LIKE ?", ["%{$search}%"]);
-    //         })
-    //             ->orWhere('phone', 'LIKE', "%{$search}%")
-    //             ->orWhere('address', 'LIKE', "%{$search}%")
-    //             ->orWhere('name', 'LIKE', "%{$search}%")
-    //             ->orWhere('alt_phone', 'LIKE', "%{$search}%")
-    //             ->orWhere('ps', 'LIKE', "%{$search}%")
-    //             ->orWhere('district', 'LIKE', "%{$search}%")
-    //             ->orWhere('divisions', 'LIKE', "%{$search}%")
-    //             ->orWhere('email', 'LIKE', "%{$search}%")
-    //             ->with(['user' => function ($query) {
-    //                 // Select the necessary columns from the users table
-    //                 $query->select('id', 'fname', 'lname');
-    //             }])
-    //             ->get(['id', 'name', 'phone', 'ps', 'address', 'alt_phone', 'district', 'divisions', 'user_id', 'email']);
-    //         return response()->json(['deliveries' => $deliveries]);
-    //     } catch (\Throwable $th) {
-    //         return view('marchant.pages.404');
-    //     }
-    // }
+    public function searchPickup(Request $request)
+    {
+        $searchInput = $request->input('admin_delivery_search');
+        $pickupmen = Pickupman::where('pickupman_name', 'like', '%' . $searchInput . '%')
+            ->orWhere('phone', 'like', '%' . $searchInput . '%')
+            ->orWhere('alt_phone', 'like', '%' . $searchInput . '%')
+            ->orWhere('email', 'like', '%' . $searchInput . '%')
+            ->orWhere('full_address', 'like', '%' . $searchInput . '%')
+            ->orWhere('police_station', 'like', '%' . $searchInput . '%')
+            ->orWhere('district', 'like', '%' . $searchInput . '%')
+            ->orWhere('division', 'like', '%' . $searchInput . '%')
+            ->get();
+
+        return response()->json(['pickupmen' => $pickupmen]);
+    }
 
     public function searchMerchant(Request $request)
     {
