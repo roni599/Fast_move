@@ -306,17 +306,33 @@ class AdminController extends Controller
         return response()->json(['pickupmen' => $pickupmen]);
     }
 
+    public function searchDeliveryman(Request $request)
+    {
+        $searchInput = $request->input('admin_delivery_search');
+        $deliverymen = Deliveryman::where('deliveryman_name', 'like', '%' . $searchInput . '%')
+            ->orWhere('phone', 'like', '%' . $searchInput . '%')
+            ->orWhere('alt_phone', 'like', '%' . $searchInput . '%')
+            ->orWhere('email', 'like', '%' . $searchInput . '%')
+            ->orWhere('full_address', 'like', '%' . $searchInput . '%')
+            ->orWhere('police_station', 'like', '%' . $searchInput . '%')
+            ->orWhere('district', 'like', '%' . $searchInput . '%')
+            ->orWhere('division', 'like', '%' . $searchInput . '%')
+            ->get();
+
+        return response()->json(['deliverymen' => $deliverymen]);
+    }
+
     public function searchMerchant(Request $request)
     {
 
         $searchTerm = $request->input('search');
-        $deliveries = User::where('business_name', 'LIKE', "%$searchTerm%")
+        $user = User::where('business_name', 'LIKE', "%$searchTerm%")
             ->orWhere('merchant_name', 'LIKE', "%$searchTerm%")
             ->orWhere('pick_up_location', 'LIKE', "%$searchTerm%")
             ->orWhere('phone', 'LIKE', "%$searchTerm%")
             ->orWhere('email', 'LIKE', "%$searchTerm%")
             ->get();
-        return response()->json(['deliveries' => $deliveries]);
+        return response()->json(['user' => $user]);
     }
 
     public function adminSearch(Request $request)

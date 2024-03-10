@@ -101,9 +101,13 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->pick_up_location }}</td>
                                 {{-- {{dd($user->profile_img)}} --}}
-                                <td><img src="{{$user->profile_img}}" alt="Profile Photo"></td>
-                                <td><img src="{{$user->nid_front}}" alt="NID Front"></td>
-                                <td><img src="{{$user->nid_back}}" alt="NID Back"></td>
+                                {{-- <td><img src="{{$user->profile_img}}" alt="Profile Photo"></td> --}}
+                                <td><img src="{{ asset('merchant/profile-photos') }}/{{ $user->profile_img }}"
+                                        alt="Profile Photo"></td>
+                                <td><img src="{{ asset('merchant/nid-photos') }}/{{ $user->nid_front }}" alt="NID Front">
+                                </td>
+                                <td><img src="{{ asset('merchant/nid-photos') }}/{{ $user->nid_back }}" alt="NID Back">
+                                </td>
                             </tr>
                         @endforeach
 
@@ -114,229 +118,140 @@
         </div>
     </div>
 
-    <div class="col-lg-12 stretch-card">
+
+    <div class="col-lg-12 stretch-card" id="searchResultsSection" style="display: none;">
         <div class="card">
             <div class="card-body">
-                <div id="searchResultsSection" class="table-responsive" style="display: none;">
-                    <h4 class="card-title">Delivery Table</h4>
+                <h4 class="card-title">Search Results</h4>
+                <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Business Name</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
+                                <th scope="col">Merchant Name</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Pick Up Location</th>
+                                <th scope="col">Profile Photo</th>
+                                <th scope="col">NID Front</th>
+                                <th scope="col">NID Back</th>
                             </tr>
                         </thead>
                         <tbody id="searchResultsBody">
-                            <!-- Search results will be dynamically added here -->
+                            <!-- Use JavaScript to populate this tbody with search results -->
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination for search results if needed -->
+                <div id="searchResultsPagination">
+                    <!-- Add pagination links here -->
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    {{-- <script>
+
+    
+    {{-- given or search button press the search is done --}}
+    <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
 
-            // Initial setup: hide search results, show existing table
-            existingTable.show();
-            searchResultsSection.hide();
+            // Function to handle form submission
+            function submitForm() {
+                var inputValue = searchInput.val().trim();
 
-            // Set route URLs for dynamic actions
-            var routeUrls = {
-                show: '{{ route('delivery.show', ':id') }}',
-                edit: '{{ route('admin.delivery.edit', ':id') }}',
-                destroy: '{{ route('admin.delivery.delete', ':id') }}',
-            };
+                // If the input is empty, show existingTable and hide searchResultsSection
+                if (inputValue === '') {
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
 
-            $('#searchForm').submit(function(e) {
-                e.preventDefault();
-
-                var searchInput = $('#searchInput').val();
-                console.log(searchInput)
-                // Include CSRF token in headers
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.searchMerchant') }}';
 
                 $.ajax({
-                    url: '{{ route('admin.searchMerchant') }}',
+                    url: searchRoute,
                     type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
                     data: {
-                        '_token': '{{ csrf_token() }}',
-                        search: searchInput,
+                        '_token': csrfToken,
+                        admin_delivery_search: inputValue,
                     },
                     dataType: 'json',
                     success: function(response) {
                         console.log(response);
-
-                        // Show search results, hide existing table
                         existingTable.hide();
                         searchResultsSection.show();
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.empty();
 
-                        if (response.deliveries.length > 0) {
-                            var resultsBody = $('#searchResultsBody');
-                            resultsBody.empty();
-
-                            $.each(response.deliveries, function(index, delivery) {
-                                // Append a new row to the search results table for each result
+                        if (response.user && Array.isArray(response.user) &&
+                            response.user.length > 0) {
+                            $.each(response.user, function(index, user) {
                                 resultsBody.append('<tr>' +
-                                    '<td>' + delivery.id + '</td>' +
-                                    '<td>' + delivery.business_name + '</td>' +
-                                    '<td>' + delivery.fname + '</td>' +
-                                    '<td>' + delivery.lname + '</td>' +
-                                    '<td>' + delivery.phone + '</td>' +
-                                    '<td>' + delivery.email + '</td>' +
-                                    '<td>' + delivery.pick_up_location + '</td>' +
-                                    // '<td>' + delivery.district + '</td>' +
-                                    // '<td>' + delivery.divisions + '</td>' +
-                                    // '<td>' + delivery.category_type + '</td>' +
-                                    // '<td>' + delivery.delivery_type + '</td>' +
-                                    // '<td>' + delivery.order_tracking_id + '</td>' +
-                                    // '<td>' + delivery.invoice + '</td>' +
-                                    // '<td>' + delivery.note + '</td>' +
-                                    // '<td>' + delivery.exchange_parcel + '</td>' +
-                                    // '<td>' + statusBadge + '</td>' +
-                                    // '<td>' + actionButtons + '</td>' +
-                                    // actionButtons2 +
-                                    // Add more columns as needed
+                                    '<td>' + user.id + '</td>' +
+                                    '<td>' + user.business_name + '</td>' +
+                                    '<td>' + user.merchant_name + '</td>' +
+                                    '<td>' + user.phone + '</td>' +
+                                    '<td>' + user.email + '</td>' +
+                                    '<td>' + user.pick_up_location + '</td>' +
+                                    '<td><img src="{{ asset('merchant/profile-photos') }}/' +
+                                    user.profile_img +
+                                    '" alt="Profile photo"></td>' +
+                                    '<td><img src="{{ asset('merchant/nid-photos') }}/' +
+                                    user.nid_front + '" alt="NID Front"></td>' +
+                                    '<td><img src="{{ asset('merchant/nid-photos') }}/' +
+                                    user.nid_back + '" alt="NID Back"></td>' +
                                     '</tr>');
                             });
                         } else {
                             resultsBody.html(
-                                '<tr><td colspan="8" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
+                                '<tr><td colspan="9" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
                             );
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('Error fetching search results:', error);
-                        console.log('Status:', status);
-                        console.log('XHR:', xhr);
-
                         var resultsBody = $('#searchResultsBody');
                         resultsBody.html(
-                            '<tr><td colspan="4">Error fetching search results. Please try again.</td></tr>'
+                            '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
                         );
                         existingTable.show();
                     }
                 });
+            }
+
+            // Add an event listener for the form submission
+            searchForm.submit(function(e) {
+                e.preventDefault(); // prevent the default form submission
+                submitForm();
             });
 
-            // Add an event listener for the input to handle clearing
-            $('#searchInput').on('input', function() {
-                var searchInput = $(this).val();
+            // Add an event listener for the input field
+            searchInput.on('input', function() {
+                var inputValue = searchInput.val().trim();
 
-                if (searchInput === '') {
-                    // If the input is cleared, hide search results, show existing table
-                    searchResultsSection.hide();
+                // If the input is empty, show existingTable and hide searchResultsSection
+                if (inputValue === '') {
                     existingTable.show();
+                    searchResultsSection.hide();
+                } else {
+                    // Execute the search logic
+                    submitForm();
                 }
             });
         });
-    </script> --}}
-
-
-
-    {{-- <script>
-        $(document).ready(function() {
-            var existingTable = $('#existingTable');
-            var searchResultsSection = $('#searchResultsSection');
-            var resultsBody = $('#searchResultsBody'); // Declare resultsBody outside the success function
-
-            // Initial setup: hide search results, show existing table
-            existingTable.show();
-            searchResultsSection.hide();
-
-            // Set route URLs for dynamic actions
-            var routeUrls = {
-                show: '{{ route('delivery.show', ':id') }}',
-                edit: '{{ route('admin.delivery.edit', ':id') }}',
-                destroy: '{{ route('admin.delivery.delete', ':id') }}',
-            };
-
-            $('#searchForm').submit(function(e) {
-                e.preventDefault();
-
-                var searchInput = $('#searchInput').val();
-                console.log(searchInput)
-
-                // Include CSRF token in headers
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-                $.ajax({
-                    url: '{{ route('admin.searchMerchant') }}',
-                    type: 'POST',
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                        search: searchInput,
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log(response);
-
-                        // Show search results, hide existing table
-                        existingTable.hide();
-                        searchResultsSection.show();
-
-                        if (response.deliveries.length > 0) {
-                            resultsBody.empty();
-
-                            $.each(response.deliveries, function(index, delivery) {
-                                // Append a new row to the search results table for each result
-                                resultsBody.append('<tr>' +
-                                    '<td>' + delivery.id + '</td>' +
-                                    '<td>' + delivery.business_name + '</td>' +
-                                    '<td>' + delivery.fname + '</td>' +
-                                    '<td>' + delivery.lname + '</td>' +
-                                    '<td>' + delivery.phone + '</td>' +
-                                    '<td>' + delivery.email + '</td>' +
-                                    '<td>' + delivery.pick_up_location + '</td>' +
-                                    '</tr>');
-                            });
-                        } else {
-                            // If there are no results, display a message
-                            resultsBody.html('<tr><td colspan="8" class="text-center fw-bold">No data found for the selected inputs.</td></tr>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching search results:', error);
-                        console.log('Status:', status);
-                        console.log('XHR:', xhr);
-
-                        // If there's an error, display an error message
-                        resultsBody.html('<tr><td colspan="4">Error fetching search results. Please try again.</td></tr>');
-                        existingTable.show();
-                    }
-                });
-            });
-
-            // Add an event listener for the input to handle clearing
-            $('#searchInput').on('input', function() {
-                var searchInput = $(this).val();
-
-                if (searchInput === '') {
-                    // If the input is cleared, hide search results, show existing table
-                    searchResultsSection.hide();
-                    existingTable.show();
-                }
-            });
-        });
-
-    </script> --}}
+    </script>
 @endsection

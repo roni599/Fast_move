@@ -89,6 +89,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('admin/delete', 'adminDelete')->name('admin.delete')->middleware('isLoggedIn');
     Route::post('admin/delete', 'adminDeleteAccount')->name('admin.delete.account')->middleware('isLoggedIn');
     Route::post('admin/delivery/search', 'searchAdmin')->name('admin.search');
+    Route::post('admin/delivery/search', 'searchDeliveryman')->name('admin.searchDeliveryman');
     Route::post('admin/pickupman/search', 'searchPickup')->name('admin.searchPickup');
     Route::post('admin/merchant/search', 'searchMerchant')->name('admin.searchMerchant');
     Route::get('admin/destroy', 'adminDestroy')->name('admin.destroy')->middleware('isLoggedIn');
