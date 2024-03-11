@@ -282,6 +282,7 @@
                                     return '<span class="badge bg-label-success me-1 text-black">Confirmed</span>';
                                 }
                             }
+
                             function getActionButtons(status, deliverymanId) {
                                 if (status === 1) {
                                     return `
@@ -345,11 +346,18 @@
                 // Trigger form submission to execute the search logic
                 searchForm.submit();
             });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    // If backspace key is pressed and input is empty, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
+            });
         });
     </script>
 
 
-{{-- for given input and automatic search --}}
+    {{-- for given input and automatic search --}}
     {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');

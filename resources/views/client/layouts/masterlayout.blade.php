@@ -39,7 +39,7 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
 
     <link rel="stylesheet" href="/frontend/css/home.css" />
-
+    <link rel="stylesheet" href="/frontend/css/google_translate_api.css" />
 
 </head>
 
@@ -57,7 +57,9 @@
         <!-- Navbar & Hero Start -->
         <div class="top-header">
             <span class="d-block"><i class="l-icon fa-solid fa-phone-volume"></i>+880-1723-456789</span>
+            {{-- <span class="d-block text-white fw-bold"><i class="l-icon fa-solid fa-phone-volume"></i>{{ __('text.content00') }}</span> --}}
             <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>fastmovebd@gmail.com</span>
+            {{-- <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>{{ __('text.content01') }}</span> --}}
         </div>
         <div class="header">
             <div class="logo">
@@ -65,18 +67,40 @@
                     <img src="/frontend/img/startup.png" alt="logo" />
                 </div>
                 <div class="text">
-                    <span class="d-block head">Fast Move</span>
+                    <span class="d-block head translate" data-en="Fast Move" data-bn="ফাস্ট মুভ"
+                        data-ar="التحرك السريع">Fast Move</span>
+                    {{-- <span class="d-block head">{{ __('text.content') }}</span> --}}
                     <span class="d-block moto">Perfect Way To Your Destination.</span>
+                    {{-- <span class="d-block moto">{{ __('text.content1') }}</span> --}}
                 </div>
             </div>
 
             <div class="nav-bar">
                 <ul>
                     <li><a href="#">Home</a></li>
+                    {{-- <li><a href="#">{{ __('text.content2') }}</a></li> --}}
                     <li><a href="#">About</a></li>
+                    {{-- <li><a href="#">{{ __('text.content3') }}</a></li> --}}
                     <li><a href="#">Services</a></li>
+                    {{-- <li><a href="#">{{ __('text.content4') }}</a></li> --}}
                     <li><a href="#">Tracking</a></li>
+                    {{-- <li><a href="#">{{ __('text.content5') }}</a></li> --}}
                     <li><a href="#">Contact</a></li>
+                    {{-- <li><a href="#">{{ __('text.content6') }}</a></li> --}}
+                    {{-- <li>
+                        <select class="form-control lang-change">
+                            <option value="Select Language">Select Language</option>
+                            <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>English
+                            </option>
+                            <option value="ar" {{ session()->get('lang_code') == 'ar' ? 'selected' : '' }}>عربي
+                            </option>
+                            <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>বাংলা
+                            </option>
+                        </select>
+                    </li> --}}
+                    <li>
+                        <div id="google_translate_element"></div>
+                    </li>
                 </ul>
             </div>
 
@@ -105,16 +129,21 @@
                                 <button class="btn-grp orange-color">
                                     <i class="me-2 fa-solid fa-user-lock"></i>Login<i
                                         class="ms-2 fa-solid fa-caret-down"></i>
+                                    {{-- <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i
+                                        class="ms-2 fa-solid fa-caret-down"></i> --}}
 
                                     <div class="sub-button">
                                         {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin
                                             Login</a> --}}
-                                        <a href="{{route('login')}}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant
-                                            Login</a>
-                                        <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman
-                                            Login</a>
-                                        <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman
-                                            Login</a>
+                                        <a href="{{ route('login') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a>
+                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a> --}}
+                                        <a href="{{ route('pickupman.login') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
+                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a> --}}
+                                        <a href="{{ route('deliveryman.login') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a>
+                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a> --}}
                                     </div>
                                 </button>
                             </li>
@@ -124,12 +153,15 @@
                                         class="ms-2 fa-solid fa-caret-down"></i>
 
                                     <div class="sub-button">
-                                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
-                                            Merchant</a>
+                                        <a href="{{ route('register') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Become a Merchant</a>
+                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a> --}}
                                         <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                                             Pickupman</a>
+                                        {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a> --}}
                                         <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                                             Deliveryman</a>
+                                        {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a> --}}
                                     </div>
                                 </button>
                             </li>
@@ -140,14 +172,20 @@
 
             <div class="button-part">
                 <button class="btn-grp orange-color">
+                    {{-- <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i class="ms-2 fa-solid fa-caret-down"></i> --}}
                     <i class="me-2 fa-solid fa-user-lock"></i>Login<i class="ms-2 fa-solid fa-caret-down"></i>
 
                     <div class="sub-button">
                         {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin Login</a> --}}
-                        <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a>
-                        <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
-                        <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman
+                        <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant
                             Login</a>
+                        {{-- <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a> --}}
+                        <a href="{{ route('pickupman.login') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
+                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a> --}}
+                        <a href="{{ route('deliveryman.login') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a>
+                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a> --}}
                     </div>
                 </button>
 
@@ -157,10 +195,11 @@
                     <div class="sub-button">
                         <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
                             Merchant</a>
-                        <a href="{{ route('pickupman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
-                            Pickupman</a>
-                        <a href="{{ route('deliveryman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
-                            Deliveryman</a>
+                        {{-- <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a> --}}
+                        <a href="{{ route('pickupman.register') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a>
+                        <a href="{{ route('deliveryman.register') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a>
                     </div>
                 </button>
             </div>
@@ -307,6 +346,20 @@
 
     <!-- Template Javascript -->
     <script src="frontend/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                autoDisplay: 'true',
+                includedLanguages: 'hi,en,bn,id,fr,ar',
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+            }, 'google_translate_element');
+        }
+    </script>
+
 </body>
 
 </html>

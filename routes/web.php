@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\PickupController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\Client\ViewController;
 use App\Http\Controllers\Deliveryman\DeliveryManController;
+use App\Http\Controllers\LangController;
 use App\Http\Controllers\Marchant\AllConsignmentController;
 use App\Http\Controllers\Marchant\FraudController as MarchantFraudController;
 use App\Http\Controllers\Marchant\ProductController;
@@ -89,7 +90,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('admin/delete', 'adminDelete')->name('admin.delete')->middleware('isLoggedIn');
     Route::post('admin/delete', 'adminDeleteAccount')->name('admin.delete.account')->middleware('isLoggedIn');
     Route::post('admin/delivery/search', 'searchAdmin')->name('admin.search');
-    Route::post('admin/delivery/search', 'searchDeliveryman')->name('admin.searchDeliveryman');
+    Route::post('admin/delivery/calculatorSearch', 'calculatorSearch')->name('admin.calculatorSearch');
+    Route::post('admin/delivery/searchDelivery', 'searchDeliveryman')->name('admin.searchDeliveryman');
     Route::post('admin/pickupman/search', 'searchPickup')->name('admin.searchPickup');
     Route::post('admin/merchant/search', 'searchMerchant')->name('admin.searchMerchant');
     Route::get('admin/destroy', 'adminDestroy')->name('admin.destroy')->middleware('isLoggedIn');
@@ -122,6 +124,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('admin/product/excel/import', 'productExcelImport')->name('admin.product.excel.import')->middleware('isLoggedIn');
     Route::get('admin/product/excel/export', 'productExcelExport')->name('admin.product.excel.export')->middleware('isLoggedIn');
 });
+
 
 Route::controller(MarchantController::class)->group(function () {
     Route::get('admin/merchant', 'index')->name('admin.merchant')->middleware('isLoggedIn');
@@ -209,7 +212,8 @@ Route::controller(PickupManController::class)->group(function () {
 
 
 
-
+Route::get('lang', [LangController::class, 'lang']);
+Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
 
 
 // require __DIR__ . '/admin.php';

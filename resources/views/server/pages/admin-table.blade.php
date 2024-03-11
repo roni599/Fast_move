@@ -1,20 +1,22 @@
 @extends('server.layouts.masterlayout')
 
 @section('content')
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" --}}
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
     <div class="card mb-3">
         <div class="card-body">
             <nav class="navbar navbar-light bg-light">
                 <form id="searchForm">
-                    @csrf
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">
-                            <input type="search" class="form-control mr-sm-2" placeholder="Search by Phone" id="searchInput">
+                            <input type="search" class="form-control mr-sm-2" placeholder="Search by Phone"
+                                id="searchInput">
                             <div class="form-control-feedback form-control-feedback-lg">
                                 <i class="icon-search4 text-muted"></i>
                             </div>
@@ -79,7 +81,7 @@
                                             <input type="hidden" name="id" value="{{ $admin->id }}">
                                             <button class="btn btn-sm btn-danger" type="submit"
                                                 onclick="return confirm('Are you sure?')">
-                                                <i class="far fa-trash-alt"></i>
+                                                <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
                                     </td>
@@ -90,102 +92,95 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-lg-12 stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div id="searchResultsSection" class="table-responsive" style="display: none;">
-                        <h4 class="card-title">Delivery Table</h4>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Designation</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody id="searchResultsBody">
-                                <!-- Search results will be dynamically added here -->
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="col-lg-12 stretch-card" id="searchResultsSection" style="display: none;">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Search Results</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Designation</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchResultsBody">
+                            <!-- Use JavaScript to populate this tbody with search results -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination for search results if needed -->
+                <div id="searchResultsPagination">
+                    <!-- Add pagination links here -->
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-        </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-        {{-- <script>
+    <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+            var resultsBody = $('#searchResultsBody');
 
-            // Initial setup: hide search results, show existing table
-            existingTable.show();
-            searchResultsSection.hide();
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+                if (searchInputValue === '') {
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
 
-            // Form submission handler
-            $('#searchForm').submit(function(e) {
-                e.preventDefault(); // Prevent the default form submission
-
-                var searchInput = $('#searchInput').val();
-
-                // Include CSRF token in headers
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-                // Determine the route dynamically based on your logic
-                var searchRoute =
-                '{{ route('admin.adminSearch') }}'; // You can modify this based on your requirements
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.adminSearch') }}';
 
                 $.ajax({
                     url: searchRoute,
                     type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
                     data: {
-                        '_token': '{{ csrf_token() }}',
-                        search: searchInput,
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
                     },
                     dataType: 'json',
                     success: function(response) {
                         console.log(response);
 
-                        // Show search results, hide existing table
                         existingTable.hide();
                         searchResultsSection.show();
+                        resultsBody.empty();
 
-                        if (response.deliveries.length > 0) {
-                            var resultsBody = $('#searchResultsBody');
-                            resultsBody.empty();
-
+                        if (response.deliveries && Array.isArray(response.deliveries) && response
+                            .deliveries.length > 0) {
                             $.each(response.deliveries, function(index, delivery) {
-
-                                var statusBadge = `
-                            <td>
-                            <form action="{{ route('admin.destroy') }}" method="get">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $admin->id }}">
-                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
-                            <i class="fa-solid fa-check"></i>
-                            </button>
-                            </form>
-                            </td>`;
-
                                 resultsBody.append('<tr>' +
                                     '<td>' + delivery.id + '</td>' +
                                     '<td>' + delivery.admin_name + '</td>' +
                                     '<td>' + delivery.designation + '</td>' +
                                     '<td>' + delivery.phone + '</td>' +
                                     '<td>' + delivery.email + '</td>' +
-                                    statusBadge +
+                                    '<td>' +
+                                    '<form action="{{ route('admin.destroy') }}" method="get">' +
+                                    '@csrf' +
+                                    '<input type="hidden" name="id" value="' + delivery.id +
+                                    '">' +
+                                    '<button class="btn btn-sm btn-danger" type="submit" onclick="return confirm(\'Are you sure?\')">' +
+                                    '<i class="far fa-trash-alt"></i>' +
+                                    '</button>' +
+                                    '</form>' +
+                                    '</td>' +
                                     '</tr>');
                             });
                         } else {
@@ -196,28 +191,35 @@
                     },
                     error: function(xhr, status, error) {
                         console.error('Error fetching search results:', error);
-                        console.log('Status:', status);
-                        console.log('XHR:', xhr);
 
-                        var resultsBody = $('#searchResultsBody');
                         resultsBody.html(
-                            '<tr><td colspan="4">Error fetching search results. Please try again.</td></tr>'
+                            '<tr><td colspan="6" class="text-center fw-bold">Error fetching search results. Please try again.</td></tr>'
                         );
                         existingTable.show();
                     }
                 });
+            }
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
             });
 
-            // Add an event listener for the input to handle clearing
-            $('#searchInput').on('input', function() {
-                var searchInput = $(this).val();
+            searchInput.on('input', function() {
+                var searchInputValue = $(this).val().trim();
 
-                if (searchInput === '') {
-                    // If the input is cleared, hide search results, show existing table
+                if (searchInputValue === '') {
+                    searchResultsSection.hide();
+                    existingTable.show();
+                } else {
+                    submitForm();
+                }
+            });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
                     searchResultsSection.hide();
                     existingTable.show();
                 }
             });
         });
-    </script> --}}
-    @endsection
+    </script>
+@endsection

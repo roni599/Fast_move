@@ -12,6 +12,7 @@ use App\Imports\DeliverymanImport;
 use App\Imports\PickupmanImport;
 use App\Imports\ProductImport;
 use App\Models\Admin;
+use App\Models\Deliverycharge;
 use App\Models\Deliveryman;
 use App\Models\Pickupman;
 use App\Models\Product;
@@ -232,7 +233,6 @@ class AdminController extends Controller
 
     public function adminDestroy(Request $request)
     {
-
         Admin::find($request->id)->delete();
         return redirect('admin/table')->withSuccess('Admin Deleted');
     }
@@ -268,26 +268,6 @@ class AdminController extends Controller
 
         return response()->json(['customers' => $customers]);
     }
-    // public function searchAdmin(Request $request)
-    // {
-    //     try {
-    //         $search = $request->input('search');
-    //         $deliveries = Delivery::whereHas('user', function ($query) use ($search) {
-    //             $query->whereRaw("CONCAT(fname, ' ', lname) LIKE ?", ["%{$search}%"]);
-    //         })
-    //             ->orWhere('phone', 'LIKE', "%{$search}%")
-    //             ->orWhere('address', 'LIKE', "%{$search}%")
-    //             ->orWhere('order_tracking_id', 'LIKE', "%{$search}%")
-    //             ->with(['user' => function ($query) {
-    //                 // Select the necessary columns from the users table
-    //                 $query->select('id', 'fname', 'lname');
-    //             }])
-    //             ->get(['id', 'name', 'phone', 'address', 'police_station', 'district', 'divisions', 'category_type', 'delivery_type', 'order_tracking_id', 'invoice', 'note', 'is_active', 'user_id']);
-    //         return response()->json(['deliveries' => $deliveries]);
-    //     } catch (\Throwable $th) {
-    //         return view('marchant.pages.404');
-    //     }
-    // }
 
 
     public function searchPickup(Request $request)
@@ -325,7 +305,7 @@ class AdminController extends Controller
     public function searchMerchant(Request $request)
     {
 
-        $searchTerm = $request->input('search');
+        $searchTerm = $request->input('admin_delivery_search');
         $user = User::where('business_name', 'LIKE', "%$searchTerm%")
             ->orWhere('merchant_name', 'LIKE', "%$searchTerm%")
             ->orWhere('pick_up_location', 'LIKE', "%$searchTerm%")
@@ -338,7 +318,7 @@ class AdminController extends Controller
     public function adminSearch(Request $request)
     {
 
-        $searchTerm = $request->input('search');
+        $searchTerm = $request->input('admin_delivery_search');
         $deliveries = Admin::where('designation', 'LIKE', "%$searchTerm%")
             ->orWhere('admin_name', 'like', $searchTerm)  // Use '=' for exact match
             ->orWhere('phone', 'LIKE', "%$searchTerm%")
@@ -348,6 +328,21 @@ class AdminController extends Controller
         return response()->json(['deliveries' => $deliveries]);
     }
 
+    public function calculatorSearch(Request $request)
+    {
+        $searchTerm = $request->input('admin_delivery_search');
+
+        $results = Deliverycharge::where('id', 'LIKE', "%$searchTerm%")
+            ->orWhere('from_location', 'LIKE', "%$searchTerm%")
+            ->orWhere('destination', 'LIKE', "%$searchTerm%")
+            ->orWhere('category', 'LIKE', "%$searchTerm%")
+            ->orWhere('delivery_type', 'LIKE', "%$searchTerm%")
+            ->orWhere('cost', 'LIKE', "%$searchTerm%")
+            ->orWhere('weight', 'LIKE', "%$searchTerm%")
+            ->get();
+
+        return response()->json(['results' => $results]);
+    }
 
     // ******Pickupman controller for admin******
     public function pickupManTable()

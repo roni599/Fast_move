@@ -375,7 +375,7 @@
     </script> --}}
 
     {{-- for given input and auto search without press search button --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -499,6 +499,165 @@
                         existingTable.show();
                     }
                 });
+            });
+        });
+    </script> --}}
+    
+    <script>
+        $(document).ready(function() {
+            var existingTable = $('#existingTable');
+            var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            // Function to handle form submission
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                // If the input is empty, show existingTable and hide searchResultsSection
+                if (searchInputValue === '') {
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
+
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.searchPickup') }}'; // Replace with your actual route
+
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        existingTable.hide();
+                        searchResultsSection.show();
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.empty();
+
+                        if (response.pickupmen.length > 0) {
+                            $.each(response.pickupmen, function(index, pickupman) {
+                                resultsBody.append('<tr>' +
+                                    '<td>' + pickupman.id + '</td>' +
+                                    '<td>' + pickupman.pickupman_name + '</td>' +
+                                    '<td>' + pickupman.phone + '</td>' +
+                                    '<td>' + pickupman.alt_phone + '</td>' +
+                                    '<td>' + pickupman.email + '</td>' +
+                                    '<td>' + pickupman.full_address + '</td>' +
+                                    '<td>' + pickupman.police_station + '</td>' +
+                                    '<td>' + pickupman.district + '</td>' +
+                                    '<td>' + pickupman.division + '</td>' +
+                                    '<td><img src="{{ asset('pickupmen/profile_images') }}/' +
+                                    pickupman.profile_img +
+                                    '" alt="Profile photo"></td>' +
+                                    '<td><img src="{{ asset('pickupmen/nid_images') }}/' +
+                                    pickupman.nid_front +
+                                    '" alt="NID Front"></td>' +
+                                    '<td><img src="{{ asset('pickupmen/nid_images') }}/' +
+                                    pickupman.nid_back +
+                                    '" alt="NID Back"></td>' +
+                                    '<td>' + getStatusBadge(pickupman.is_active) + '</td>' +
+                                    '<td>' + getActionButtons(pickupman.is_active, pickupman
+                                        .id) + '</td>' +
+                                    '</tr>');
+                            });
+
+                            function getStatusBadge(status) {
+                                if (status === 1) {
+                                    return '<span class="badge bg-label-danger me-1 text-black">Pending</span>';
+                                } else if (status === 3) {
+                                    return '<span class="badge bg-label-danger me-1 text-black">Cancelled</span>';
+                                } else {
+                                    return '<span class="badge bg-label-success me-1 text-black">Confirmed</span>';
+                                }
+                            }
+
+                            function getActionButtons(status, pickupmanId) {
+                                if (status === 1) {
+                                    return `
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <form action="{{ route('admin.pickupman_confirmation') }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="${pickupmanId}">
+                                                    <button class="btn btn-sm btn-success" type="submit">
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('admin.pickupman_cancel_confirmation') }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="${pickupmanId}">
+                                                    <button class="btn btn-sm btn-danger" type="submit">
+                                                        <i class="fa-solid fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </div>`;
+                                } else {
+                                    return `
+                                            <form action="{{ route('admin.pickupman_destroy') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="${pickupmanId}">
+                                                <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>`;
+                                }
+                            }
+                        } else {
+                            resultsBody.html(
+                                '<tr><td colspan="14" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
+                                );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.html(
+                            '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
+                            );
+                        existingTable.show();
+                    }
+                });
+            }
+
+            // Update the event listener for the form submission
+            searchForm.submit(function(e) {
+                e.preventDefault(); // prevent the default form submission
+                submitForm();
+                searchResultsSection.hide();
+                existingTable.show();
+            });
+
+            // Add event listener for the input to handle input events
+            searchInput.on('input', function() {
+                var searchInputValue = $(this).val().trim();
+
+                if (searchInputValue === '') {
+                    // If the input is cleared, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                } else {
+                    // Execute the search logic
+                    submitForm();
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
+            });
+
+            // Add event listener for the keyup event to preserve existing styles when cleared
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    // If backspace key is pressed and input is empty, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
             });
         });
     </script>

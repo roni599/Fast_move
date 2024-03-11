@@ -156,7 +156,7 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    
+
     {{-- given or search button press the search is done --}}
     <script>
         $(document).ready(function() {
@@ -237,6 +237,8 @@
             searchForm.submit(function(e) {
                 e.preventDefault(); // prevent the default form submission
                 submitForm();
+                existingTable.show();
+                searchResultsSection.hide();
             });
 
             // Add an event listener for the input field
@@ -245,11 +247,21 @@
 
                 // If the input is empty, show existingTable and hide searchResultsSection
                 if (inputValue === '') {
-                    existingTable.show();
                     searchResultsSection.hide();
+                    existingTable.show();
+
                 } else {
                     // Execute the search logic
                     submitForm();
+                    existingTable.show();
+                    searchResultsSection.hide();
+                }
+            });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    // If backspace key is pressed and input is empty, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
                 }
             });
         });

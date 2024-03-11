@@ -295,10 +295,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    
+
     {{-- for search button submit --}}
     {{-- <script>
         $(document).ready(function() {
@@ -483,7 +484,8 @@
     </script> --}}
 
     {{-- for given input and auto search without press search button --}}
-    <script>
+
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -491,8 +493,7 @@
             $('#searchInput').on('input', function(e) {
                 e.preventDefault();
 
-                var searchInput = $('#searchInput').val().trim();
-                console.log(searchInput);
+                var searchInput = $(this).val().trim();
                 var csrfToken = '{{ csrf_token() }}';
                 var searchRoute = '{{ route('admin.search') }}';
 
@@ -529,7 +530,7 @@
                                     '<td>' + customer.user.merchant_name + '</td>' +
                                     '<td>' + (customer.pickupman ? customer
                                         .pickupman.pickupman_name : 'No one pickup'
-                                        ) + '</td>' +
+                                    ) + '</td>' +
                                     '<td>' + (customer.deliveryman ? customer
                                         .deliveryman.deliveryman_name :
                                         'No one delivered') + '</td>' +
@@ -635,6 +636,7 @@
                             }
 
                         } else {
+                            var resultsBody = $('#searchResultsBody');
                             resultsBody.html(
                                 '<tr><td colspan="21" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
                             );
@@ -658,6 +660,210 @@
 
                 if (searchInput === '') {
                     // If the input is cleared, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
+            });
+        });
+    </script> --}}
+
+
+
+    <script>
+        $(document).ready(function() {
+            var existingTable = $('#existingTable');
+            var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            // Function to handle form submission
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                // If the input is empty, show existingTable and hide searchResultsSection
+                if (searchInputValue === '') {
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
+
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.search') }}'; // Replace with your actual route
+
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        existingTable.hide();
+                        searchResultsSection.show();
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.empty();
+
+                        if (response.customers.length > 0) {
+                            $.each(response.customers, function(index, customer) {
+                                resultsBody.append('<tr>' +
+                                    '<td>' + customer.id + '</td>' +
+                                    '<td>' + customer.user.merchant_name + '</td>' +
+                                    '<td>' + (customer.pickupman ? customer
+                                        .pickupman.pickupman_name : 'No one pickup'
+                                    ) + '</td>' +
+                                    '<td>' + (customer.deliveryman ? customer
+                                        .deliveryman.deliveryman_name :
+                                        'No one delivered') + '</td>' +
+                                    '<td>' + customer.customer_name + '</td>' +
+                                    '<td>' + customer.customer_phone + '</td>' +
+                                    '<td>' + customer.full_address + '</td>' +
+                                    '<td>' + customer.police_station + '</td>' +
+                                    '<td>' + customer.district + '</td>' +
+                                    '<td>' + customer.divisions + '</td>' +
+                                    '<td>' + customer.product_category + '</td>' +
+                                    '<td>' + customer.delivery_type + '</td>' +
+                                    '<td>' + customer.cod_amount + '</td>' +
+                                    '<td>' + customer.order_tracking_id + '</td>' +
+                                    '<td>' + customer.invoice + '</td>' +
+                                    '<td>' + customer.note + '</td>' +
+                                    '<td>' + customer.exchange_status + '</td>' +
+                                    '<td>' + customer.delivery_charge + '</td>' +
+                                    '<td>' + getStatusBadge(customer.is_active) +
+                                    '</td>' +
+                                    '<td>' + getActionButtons(customer.is_active,
+                                        customer.id) + '</td>' +
+                                    '</td>' +
+                                    '<td>' + getUpdateButton(customer.is_active,
+                                        customer.id) + '</td>' +
+                                    '</tr>');
+                            });
+
+                            function getStatusBadge(status) {
+                                switch (status) {
+                                    case '2':
+                                        return '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                                    case '3':
+                                        return '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
+                                    case '4':
+                                        return '<span class="badge bg-label-danger me-1 text-dark">Product Shipped</span>';
+                                    case '5':
+                                        return '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
+                                    case '6':
+                                        return '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
+                                    case '7':
+                                        return '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                                    default:
+                                        return '<span class="badge bg-label-success me-1 text-dark">Product Pickupman has not reached yet</span>';
+                                }
+                            }
+
+                            function getActionButtons(status, deliveryId) {
+                                if (status === '2') {
+                                    return `
+                                    <div class="d-flex justify-center align-items-center gap-2">
+                                        <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${deliveryId}">
+                                            <button class="btn btn-sm btn-success text-white" type="submit">
+                                            <i class="fa-solid fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${deliveryId}">
+                                            <button class="btn btn-sm btn-danger" type="submit">
+                                            <i class="fa-solid fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </div>`;
+                                } else if (status === 'cancelled') {
+                                    return '<span class="badge bg-label-success me-1 text-dark">Not accepted</span>';
+                                } else if (status === '4') {
+                                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                                } else if (status === '5') {
+                                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                                } else if (status === '3') {
+                                    return `
+                                        <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
+                                } else {
+                                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                                }
+                            }
+
+                            function getUpdateButton(isActive, deliveryId) {
+                                if (isActive == 3) {
+                                    return `
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${deliveryId}">
+                                            <button class="btn btn-sm btn-success" type="submit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                                            @csrf
+                                            <input type="hidden" name="id" value="${deliveryId}">
+                                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </form>
+                                    </div>`;
+                                } else {
+                                    // Default update button for other cases
+                                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                                }
+                            }
+                        } else {
+                            var resultsBody = $('#searchResultsBody');
+                            resultsBody.html(
+                                '<tr><td colspan="21" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.html(
+                            '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
+                        );
+                        existingTable.show();
+                    }
+                });
+            }
+
+            // Update the event listener for the form submission
+            searchForm.submit(function(e) {
+                e.preventDefault(); // prevent the default form submission
+                submitForm();
+                searchResultsSection.hide();
+                existingTable.show();
+            });
+
+            // Add event listeners for the input to handle input and keyup events
+            searchInput.on('input keyup', function() {
+                var searchInputValue = $(this).val().trim();
+
+                if (searchInputValue === '') {
+                    // If the input is cleared, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                } else {
+                    // Execute the search logic
+                    submitForm();
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
+            });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    // If backspace key is pressed and input is empty, hide searchResultsSection, show existingTable
                     searchResultsSection.hide();
                     existingTable.show();
                 }
