@@ -94,6 +94,7 @@ class AdminController extends Controller
         ]);
 
         $admin = Admin::where('email', '=', $request->email)->where('role', '=', $request->role)->first();
+        
         if ($admin) {
             if (Hash::check($request->password, $admin->password)) {
                 $request->session()->put('loginId', $admin->id);

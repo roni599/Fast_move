@@ -23,6 +23,7 @@ class MarchantDashboardController extends Controller
         $id = Auth::user()->id;
         $marchant = User::where('id', '=', $id)->get();
         // $marchant = User::all();
+        
         return view('marchant-dashboard', compact('marchant'));
     }
 

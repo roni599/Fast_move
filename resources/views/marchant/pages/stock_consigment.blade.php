@@ -239,66 +239,6 @@
     </script> --}}
 
 
-    {{-- final code --}}
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            var lastClickedButton = localStorage.getItem("lastClickedButton");
-            var lastClickedColor = localStorage.getItem("lastClickedColor");
-
-            if (lastClickedButton && lastClickedColor) {
-                $("#" + lastClickedButton).addClass(lastClickedColor);
-            }
-
-            if (lastClickedButton) {
-                if (lastClickedButton === "buttonListStatus") {
-                    $("#buttonOne").addClass("btn-success");
-                }
-            }
-            $(".btn").click(function() {
-                $(".btn").removeClass("bg-success bg-primary btn-warning btn-danger btn-success");
-                var buttonId = $(this).attr("id");
-                var buttonColor;
-
-                if (buttonId === "buttonOne") {
-                    buttonColor = "btn-success";
-                }
-                //  else if (buttonId === "buttonTwo") {
-                //     buttonColor = "";
-                // }
-                //  else if (buttonId === "buttonThree") {
-                //     buttonColor = "btn-warning";
-                // }
-                //  else if (buttonId === "buttonFour") {
-                //     buttonColor = 'btn-success';
-                // } else if (buttonId === "buttonFive") {
-                //     buttonColor = 'btn-success';
-                // } else if (buttonId === "buttonSix") {
-                //     buttonColor = 'btn-success';
-                // } else if (buttonId === "buttonSeven") {
-                //     buttonColor = 'btn-danger';
-                // }else if (buttonId === "buttonEight") {
-                //     buttonColor = 'btn-success';
-                // }else if (buttonId === "buttonNine") {
-                //     buttonColor = 'btn-success';
-                // }else if (buttonId === "buttonTen") {
-                //     buttonColor = 'btn-success';
-                // }
-
-
-                $(this).addClass(buttonColor);
-
-                // Save button state to localStorage
-                localStorage.setItem("lastClickedButton", buttonId);
-                localStorage.setItem("lastClickedColor", buttonColor);
-
-                // Log a message to the console
-                console.log("Clicked '" + $(this).text() + "' button");
-
-
-            });
-        });
-    </script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {

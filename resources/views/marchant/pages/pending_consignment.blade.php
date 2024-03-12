@@ -37,7 +37,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.partly_delivery_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonSix">Checkout</a>
+                                            id="buttonSix">Stocked</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.cancel_consignment') }}"
@@ -47,8 +47,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.inreview_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonEight">In
-                                            Review</a>
+                                            id="buttonEight">Return</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.latest_entries_consignment') }}"
@@ -59,7 +58,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.pick_n_drop_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonTen">Pick-n-Drop</a>
+                                            id="buttonTen">Shiped</a>
                                     </li>
                                 </ul>
                             </div>
@@ -73,8 +72,8 @@
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-19">Id</th>
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-30">Customer
                                                 Name</th>
-                                            <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
-                                            </th>
+                                            {{-- <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
+                                            </th> --}}
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Charge
                                             </th>
                                             <th scope="col"
@@ -87,17 +86,23 @@
                                         <tr>
                                         <td>{{ $activeData->created_at->format('d-m-Y') }}</td>
                                         <td>{{ $activeData->id }}</td>
-                                        <td>{{ $activeData->name }}</td>
-                                        <td>{{ 'Cash On Delivery' }}</td>
+                                        <td>{{ $activeData->customer_name }}</td>
+                                        {{-- <td>{{ 'Cash On Delivery' }}</td> --}}
                                         <td>{{ $activeData->cod_amount }}</td>
                                         @if($activeData->is_active==='1')
                                         <td>{{ "Pending" }}</td>
                                         @elseif ($activeData->is_active==='2')
                                         <td>{{ "On the way" }}</td>
                                         @elseif ($activeData->is_active==='3')
-                                        <td>{{ "Checkout" }}</td>
+                                        <td>{{ "Stocked" }}</td>
                                         @elseif ($activeData->is_active==='4')
-                                        <td>{{ "Delivered" }}</td>
+                                        <td>{{ "Shiped" }}</td>
+                                        @elseif ($activeData->is_active==='5')
+                                        <td>{{ "Deliverd" }}</td>
+                                        @elseif ($activeData->is_active==='6')
+                                        <td>{{ "Return" }}</td>
+                                        @elseif ($activeData->is_active==='7')
+                                        <td>{{ "Canceled" }}</td>
                                         @endif
                                     </tr>
                                         @endforeach

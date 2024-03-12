@@ -165,6 +165,7 @@ Route::controller(AllConsignmentController::class)->group(function () {
     Route::get('merchant/inreview_consignment', 'inreview_consignment')->name('merchant.inreview_consignment');
     Route::get('merchant/latest_entries_consignment', 'latest_entries_consignment')->name('merchant.latest_entries_consignment');
     Route::get('merchant/pick_n_drop_consignment', 'pick_n_drop_consignment')->name('merchant.pick_n_drop_consignment');
+    Route::get('merchant/stock', 'stock')->name('merchant.stock');
 });
 
 Route::get('/chatbox', [BotManController::class, 'index']);
@@ -178,6 +179,7 @@ Route::controller(DeliveryManController::class)->group(function () {
     Route::get('deliveryman/login', 'loginView')->name('deliveryman.login')->middleware('deliverymanAlreadyLogin');
     Route::post('deliveryman/login', 'loginCheck')->name('deliveryman.login.check');
     // Route::get('admin/table', 'table')->name('admin.table')->middleware('isLoggedIn');
+    Route::post('deliveryman/product/delivery/search', 'searcDeliverymanProductTable')->name('deliveryman.productDeliverySearch');
     Route::post('deliveryman/logout', 'logout')->name('deliveryman.logout')->middleware('deliverymanIsLoggedIn');
     Route::get('deliveryman/edit', 'edit')->name('deliveryman.edit')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/update', 'deliverymanUpdate')->name('deliveryman.update')->middleware('deliverymanIsLoggedIn');
@@ -198,6 +200,7 @@ Route::controller(PickupManController::class)->group(function () {
     Route::post('pickupman/register', 'store')->name('pickupman.store');
     Route::get('pickupman/login', 'loginView')->name('pickupman.login')->middleware('pickupmanAlreadyLogin');
     Route::post('pickupman/login', 'loginCheck')->name('pickupman.login.check');
+    Route::post('pickupman/product/pick/search', 'searchProductPickupmanTable')->name('pickupman.productPickSearch');
     // Route::get('admin/table', 'table')->name('admin.table')->middleware('isLoggedIn');
     Route::post('pickupman/logout', 'logout')->name('pickupman.logout')->middleware('pickupmanIsLoggedIn');
     Route::get('pickupman/edit', 'edit')->name('pickupman.edit')->middleware('pickupmanIsLoggedIn');

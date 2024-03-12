@@ -9,7 +9,7 @@
     <div class="card mb-3">
         <div class="card-body">
             <nav class="navbar navbar-light bg-light">
-                <form id="searchForm" action="{{ route('admin.delivery.search') }}" method="get">
+                <form id="searchForm">
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">
                             <input type="search" name="admin_delivery_search" class="form-control mr-sm-2"
@@ -218,11 +218,242 @@
     </div> --}}
 
 
+    <div class="col-lg-12 stretch-card" id="searchResultsSection" style="display: none;">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Search Results</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Merchant Name</th>
+                                <th scope="col">Customer Name</th>
+                                <th scope="col">Customer Phone</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Police Station</th>
+                                <th scope="col">District</th>
+                                <th scope="col">Division</th>
+                                <th scope="col">Product Category</th>
+                                <th scope="col">Delivery Type</th>
+                                <th scope="col">COD</th>
+                                <th scope="col">Order Tracking Id</th>
+                                <th scope="col">Invoice</th>
+                                <th scope="col">Note</th>
+                                <th scope="col">Exchange Status</th>
+                                <th scope="col">Delivery Charge</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                                {{-- <th scope="col">Update</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody id="searchResultsBody">
+                            <!-- Use JavaScript to populate this tbody with search results -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination for search results if needed -->
+                <div id="searchResultsPagination">
+                    <!-- Add pagination links here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            var existingTable = $('#existingTable');
+            var searchResultsSection = $('#searchResultsSection');
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            // Function to handle form submission
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                // If the input is empty, show existingTable and hide searchResultsSection
+                if (searchInputValue === '') {
+                    existingTable.show();
+                    searchResultsSection.hide();
+                    return;
+                }
+
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute =
+                    '{{ route('deliveryman.productDeliverySearch') }}'; // Replace with your actual route
+
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        existingTable.hide();
+                        searchResultsSection.show();
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.empty();
+                        if (response.customers.length > 0) {
+                            $.each(response.customers, function(index, customer) {
+                                resultsBody.append('<tr>' +
+                                    '<td>' + customer.id + '</td>' +
+                                    '<td>' + customer.user.merchant_name + '</td>' +
+                                    '<td>' + customer.customer_name + '</td>' +
+                                    '<td>' + customer.customer_phone + '</td>' +
+                                    '<td>' + customer.full_address + '</td>' +
+                                    '<td>' + customer.police_station + '</td>' +
+                                    '<td>' + customer.district + '</td>' +
+                                    '<td>' + customer.divisions + '</td>' +
+                                    '<td>' + customer.product_category + '</td>' +
+                                    '<td>' + customer.delivery_type + '</td>' +
+                                    '<td>' + customer.cod_amount + '</td>' +
+                                    '<td>' + customer.order_tracking_id + '</td>' +
+                                    '<td>' + customer.invoice + '</td>' +
+                                    '<td>' + customer.note + '</td>' +
+                                    '<td>' + customer.exchange_status + '</td>' +
+                                    '<td>' + customer.delivery_charge + '</td>' +
+                                    '<td>' + getStatusBadge(customer.is_active) + '</td>' +
+                                    '<td>' + getActionButtons(customer.is_active, customer
+                                        .id) + '</td>' +
+                                    '<td>' +
+                                    '</tr>');
+                            });
+
+                            function getStatusBadge(status) {
+                                if (status === '1') {
+                                    return '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>';
+                                } else if (status === '2') {
+                                    return '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                                } else if (status === '3') {
+                                    return '<span class="badge bg-label-danger me-1 text-dark">Product arrived <br> in the <br> warehouse</span>';
+                                } else if (status === '4') {
+                                    return '<span class="badge bg-label-danger me-1 text-dark">Product picked <br> by delivery man</span>';
+                                } else if (status === '5') {
+                                    return '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
+                                } else if (status === '6') {
+                                    return '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
+                                } else if (status === '7') {
+                                    return '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                                } else {
+                                    return '<span class="badge bg-label-success me-1 text-dark">Product Pickupman has not reached yet</span>';
+                                }
+                            }
+
+
+                            function getActionButtons(status, deliveryId) {
+                                if (status === '1' || status === '2' || status === '5' || status ===
+                                    '6' || status === '7') {
+                                    return `
+                                        <div class="d-flex justify-center align-items-center gap-2">
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        </div>`;
+                                } else if (status === '3') {
+                                    return `
+                                        <div class="d-flex justify-center align-items-center gap-2">
+                                            <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="${deliveryId}">
+                                                <button class="btn btn-sm btn-success" type="submit">
+                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                </button>
+                                            </form>
+                                        </div>`;
+                                } else if (status === '4') {
+                                    return `
+                                        <div class="d-flex justify-center align-items-center gap-2">
+                                            <form action="{{ route('deliveryman.product.delivered') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="${deliveryId}">
+                                                <button class="btn btn-sm btn-success" type="submit">
+                                                    <i class="fas fa-truck"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('deliveryman.product.return') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="${deliveryId}">
+                                                <button class="btn btn-sm btn-success" type="submit">
+                                                    <i class="fa-solid fa-right-left"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('deliveryman.product.cancel') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="${deliveryId}">
+                                                <button class="btn btn-sm btn-danger" type="submit">
+                                                    <i class="fa-solid fa-times"></i>
+                                                </button>
+                                            </form>
+                                        </div>`;
+                                } else {
+                                    // Handle other cases if needed
+                                    return '';
+                                }
+                            }
+
+                        } else {
+                            var resultsBody = $('#searchResultsBody');
+                            resultsBody.html(
+                                '<tr><td colspan="21" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
+                            );
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+
+                        var resultsBody = $('#searchResultsBody');
+                        resultsBody.html(
+                            '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
+                        );
+                        existingTable.show();
+                    }
+                });
+            }
+
+            // Update the event listener for the form submission
+            searchForm.submit(function(e) {
+                e.preventDefault(); // prevent the default form submission
+                submitForm();
+                searchResultsSection.hide();
+                existingTable.show();
+            });
+
+            // Add event listeners for the input to handle input and keyup events
+            searchInput.on('input keyup', function() {
+                var searchInputValue = $(this).val().trim();
+
+                if (searchInputValue === '') {
+                    // If the input is cleared, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                } else {
+                    // Execute the search logic
+                    submitForm();
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
+            });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    // If backspace key is pressed and input is empty, hide searchResultsSection, show existingTable
+                    searchResultsSection.hide();
+                    existingTable.show();
+                }
+            });
+        });
+    </script>
 
     {{-- <script>
         var routeUrls = {

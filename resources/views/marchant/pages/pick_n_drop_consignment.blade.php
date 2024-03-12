@@ -25,11 +25,11 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.pending_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonThree">Pending</a>
+                                            id="buttonThree">On-The-Way</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.approval_pending_consignment') }}"
-                                            class="text-center btn-sm font-15 btn btn btn-secondary text-dark"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
                                             id="buttonFour">Approval-Pending</a>
                                     </li>
                                     <li class="nav-item">
@@ -40,8 +40,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.partly_delivery_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonSix">Partly
-                                            Delivered</a>
+                                            id="buttonSix">Stocked</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.cancel_consignment') }}"
@@ -51,8 +50,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.inreview_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonEight">In
-                                            Review</a>
+                                            id="buttonEight">Return</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.latest_entries_consignment') }}"
@@ -61,8 +59,9 @@
                                             Entries</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.pick_n_drop_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonTen">Pick-n-Drop</a>
+                                        <a href="{{ route('merchant.pick_n_drop_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                            id="buttonTen">Shiped</a>
                                     </li>
                                 </ul>
                             </div>
@@ -76,38 +75,42 @@
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-19">Id</th>
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-30">Customer
                                                 Name</th>
-                                            <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
-                                            </th>
+                                            {{-- <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
+                                            </th> --}}
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Charge
                                             </th>
                                             <th scope="col"
                                                 class="text-center text-color-6 font-15 font-medium px-2 w-18">Assign Status
                                             </th>
                                             <th scope="col"
-                                                class="text-center text-color-6 font-15 font-medium px-2 w-18">Delivery Type</th>
+                                                class="text-center text-color-6 font-15 font-medium px-2 w-18">More</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($activeData as $allConsignment)
-                                        <tr>
-                                        <td>{{ $allConsignment->created_at->format('d-m-Y') }}</td>
-                                            <td>{{ $allConsignment->id }}</td>
-                                            <td>{{ $allConsignment->name }}</td>
-                                            <td>{{ 'Cash On Delivery' }}</td>
-                                            <td>{{ $allConsignment->cod_amount }}</td>
-                                            @if($allConsignment->is_active==='1')
-                                            <td>{{ "Pending" }}</td>
-                                            @elseif ($allConsignment->is_active==='2')
-                                            <td>{{ "On the way" }}</td>
-                                            @elseif ($allConsignment->is_active==='3')
-                                            <td>{{ "Checkout" }}</td>
-                                            @elseif ($allConsignment->is_active==='4')
-                                            <td>{{ "Delivered" }}</td>
-                                            @else
-                                                <td>{{ "Canceled" }}</td> 
-                                            @endif
-                                            <td>{{ $allConsignment->delivery_type }}</td>
-                                        </tr>
+                                        @foreach ($activeData as $activeData)
+                                            <tr>
+                                                <td>{{ $activeData->created_at->format('d-m-Y') }}</td>
+                                                <td>{{ $activeData->id }}</td>
+                                                <td>{{ $activeData->customer_name }}</td>
+                                                {{-- <td>{{ 'Cash On Delivery' }}</td> --}}
+                                                <td>{{ $activeData->cod_amount }}</td>
+                                                @if ($activeData->is_active === '1')
+                                                    <td>{{ 'Pending' }}</td>
+                                                @elseif ($activeData->is_active === '2')
+                                                    <td>{{ 'On the way' }}</td>
+                                                @elseif ($activeData->is_active === '3')
+                                                    <td>{{ 'Stocked' }}</td>
+                                                @elseif ($activeData->is_active === '4')
+                                                    <td>{{ 'Shiped' }}</td>
+                                                @elseif ($activeData->is_active === '5')
+                                                    <td>{{ 'Deliverd' }}</td>
+                                                @elseif ($activeData->is_active === '6')
+                                                    <td>{{ 'Return' }}</td>
+                                                @elseif ($activeData->is_active === '7')
+                                                    <td>{{ 'Canceled' }}</td>
+                                                @endif
+                                                <td>{{ 'No Comment' }}</td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

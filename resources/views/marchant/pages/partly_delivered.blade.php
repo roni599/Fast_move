@@ -13,46 +13,55 @@
                             <div class="d-flex flex-wrap justify-content-around align-items-center mb-5">
                                 <ul id="pills-tab" role="tablist" class="nav nav-pills element-item mx-0 my-2 gap-2">
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.all_consignment') }}" class="text-center font-15 btn btn-sm btn-secondary text-dark"
+                                        <a href="{{ route('merchant.all_consignment') }}"
+                                            class="text-center font-15 btn btn-sm btn-secondary text-dark"
                                             id="buttonOne">All</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('merchant.list_byDate')}}" class="text-center font-15 btn btn-sm btn-secondary text-dark"
+                                        <a href="{{ route('merchant.list_byDate') }}"
+                                            class="text-center font-15 btn btn-sm btn-secondary text-dark"
                                             id="buttonTwo">List By Date</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.pending_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonThree">Pending</a>
+                                        <a href="{{ route('merchant.pending_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                            id="buttonThree">On-The-Way</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.approval_pending_consignment') }}" class="text-center btn-sm font-15 btn btn btn-secondary text-dark"
+                                        <a href="{{ route('merchant.approval_pending_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
                                             id="buttonFour">Approval-Pending</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.delivery_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                        <a href="{{ route('merchant.delivery_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
                                             id="buttonFive">Delivered</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.partly_delivery_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonSix">Checkout</a>
+                                        <a href="{{ route('merchant.partly_delivery_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                            id="buttonSix">Stocked</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.cancel_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                        <a href="{{ route('merchant.cancel_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
                                             id="buttonSeven">Cancelled</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.inreview_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonEight">In
-                                            Review</a>
+                                        <a href="{{ route('merchant.inreview_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                            id="buttonEight">Return</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.latest_entries_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                        <a href="{{ route('merchant.latest_entries_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
                                             id="buttonNine">Latest
                                             Entries</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('merchant.pick_n_drop_consignment') }}" class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonTen">Pick-n-Drop</a>
+                                        <a href="{{ route('merchant.pick_n_drop_consignment') }}"
+                                            class="text-center btn-sm font-15 btn btn-secondary text-dark"
+                                            id="buttonTen">Shiped</a>
                                     </li>
                                 </ul>
                             </div>
@@ -66,8 +75,8 @@
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-19">Id</th>
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-30">Customer
                                                 Name</th>
-                                            <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
-                                            </th>
+                                            {{-- <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
+                                            </th> --}}
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Charge
                                             </th>
                                             <th scope="col"
@@ -79,20 +88,29 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($activeData as $activeData)
-                                        <td>{{ $activeData->created_at->format('d-m-Y') }}</td>
-                                        <td>{{ $activeData->id }}</td>
-                                        <td>{{ $activeData->name }}</td>
-                                        <td>{{ 'Cash On Delivery' }}</td>
-                                        <td>{{ $activeData->cod_amount }}</td>
-                                        @if($activeData->is_active==='1')
-                                        <td>{{ "Pending" }}</td>
-                                        @elseif ($activeData->is_active==='2')
-                                        <td>{{ "On the way" }}</td>
-                                        @elseif ($activeData->is_active==='3')
-                                        <td>{{ "Checkout" }}</td>
-                                        @elseif ($activeData->is_active==='4')
-                                        <td>{{ "Delivered" }}</td>
-                                        @endif
+                                            <tr>
+                                                <td>{{ $activeData->created_at->format('d-m-Y') }}</td>
+                                                <td>{{ $activeData->id }}</td>
+                                                <td>{{ $activeData->customer_name }}</td>
+                                                {{-- <td>{{ 'Cash On Delivery' }}</td> --}}
+                                                <td>{{ $activeData->cod_amount }}</td>
+                                                @if ($activeData->is_active === '1')
+                                                    <td>{{ 'Pending' }}</td>
+                                                @elseif ($activeData->is_active === '2')
+                                                    <td>{{ 'On the way' }}</td>
+                                                @elseif ($activeData->is_active === '3')
+                                                    <td>{{ 'Stocked' }}</td>
+                                                @elseif ($activeData->is_active === '4')
+                                                    <td>{{ 'Shiped' }}</td>
+                                                @elseif ($activeData->is_active === '5')
+                                                    <td>{{ 'Deliverd' }}</td>
+                                                @elseif ($activeData->is_active === '6')
+                                                    <td>{{ 'Return' }}</td>
+                                                @elseif ($activeData->is_active === '7')
+                                                    <td>{{ 'Canceled' }}</td>
+                                                @endif
+                                                <td>{{ 'No Comment' }}</td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -241,14 +259,11 @@
                 console.log('object')
                 if (buttonId === "buttonOne") {
                     buttonColor = "btn-success";
-                }
-                 else if (buttonId === "buttonTwo") {
+                } else if (buttonId === "buttonTwo") {
                     buttonColor = "";
-                }
-                 else if (buttonId === "buttonThree") {
+                } else if (buttonId === "buttonThree") {
                     buttonColor = "btn-warning";
-                }
-                 else if (buttonId === "buttonFour") {
+                } else if (buttonId === "buttonFour") {
                     buttonColor = 'btn-success';
                 } else if (buttonId === "buttonFive") {
                     buttonColor = 'btn-success';
@@ -256,11 +271,11 @@
                     buttonColor = 'btn-success';
                 } else if (buttonId === "buttonSeven") {
                     buttonColor = 'btn-danger';
-                }else if (buttonId === "buttonEight") {
+                } else if (buttonId === "buttonEight") {
                     buttonColor = 'btn-success';
-                }else if (buttonId === "buttonNine") {
+                } else if (buttonId === "buttonNine") {
                     buttonColor = 'btn-success';
-                }else if (buttonId === "buttonTen") {
+                } else if (buttonId === "buttonTen") {
                     buttonColor = 'btn-success';
                 }
 

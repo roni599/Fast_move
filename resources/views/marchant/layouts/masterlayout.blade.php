@@ -51,13 +51,14 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="nav-profile-img">
                                 {{-- {{dd(auth()->user()->profile_img)}} --}}
-                                <img src="{{'/'.auth()->user()->profile_img}}" alt="image">
+                                <img src="{{'merchant/profile-photos/'.auth()->user()->profile_img}}" alt="image">
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
                                 <p class="mb-1 text-black">{{ auth()->user()->merchant_name }}</p>
                             </div>
                         </a>
+                        
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
 
                             <a class="dropdown-item" href="{{ route('profile.update') }}">
@@ -216,7 +217,7 @@
                     <li class="nav-item nav-profile">
                         <a href="#" class="nav-link">
                             <div class="nav-profile-image">
-                                <img src="{{'/'.auth()->user()->profile_img}}" alt="profile">
+                                <img src="{{'merchant/profile-photos/'.auth()->user()->profile_img}}" alt="profile">
                                 <span class="login-status online"></span>
                                 <!--change to offline or busy as needed-->
                             </div>

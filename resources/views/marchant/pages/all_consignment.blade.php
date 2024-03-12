@@ -299,7 +299,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.pending_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonTh">On-The-Way</a>
+                                            id="buttonThree">On-The-Way</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.approval_pending_consignment') }}"
@@ -314,7 +314,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.partly_delivery_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonSix">Checkout</a>
+                                            id="buttonSix">Stocked</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.cancel_consignment') }}"
@@ -324,8 +324,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.inreview_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonEight">In
-                                            Review</a>
+                                            id="buttonEight">Return</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.latest_entries_consignment') }}"
@@ -336,7 +335,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('merchant.pick_n_drop_consignment') }}"
                                             class="text-center btn-sm font-15 btn btn-secondary text-dark"
-                                            id="buttonTen">Pick-n-Drop</a>
+                                            id="buttonTen">Shiped</a>
                                     </li>
                                 </ul>
                             </div>
@@ -350,8 +349,8 @@
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-19">Id</th>
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-30">Customer
                                                 Name</th>
-                                            <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
-                                            </th>
+                                            {{-- <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Payment
+                                            </th> --}}
                                             <th scope="col" class="text-color-6 font-15 font-medium px-2 w-15">Charge
                                             </th>
                                             <th scope="col"
@@ -366,19 +365,23 @@
                                         <tr>
                                         <td>{{ $allConsignment->created_at->format('d-m-Y') }}</td>
                                             <td>{{ $allConsignment->id }}</td>
-                                            <td>{{ $allConsignment->name }}</td>
-                                            <td>{{ 'Cash On Delivery' }}</td>
+                                            <td>{{ $allConsignment->customer_name }}</td>
+                                            {{-- <td>{{ 'Cash On Delivery' }}</td> --}}
                                             <td>{{ $allConsignment->cod_amount }}</td>
                                             @if($allConsignment->is_active==='1')
                                             <td>{{ "Pending" }}</td>
                                             @elseif ($allConsignment->is_active==='2')
                                             <td>{{ "On the way" }}</td>
                                             @elseif ($allConsignment->is_active==='3')
-                                            <td>{{ "Checkout" }}</td>
+                                            <td>{{ "Stocked" }}</td>
                                             @elseif ($allConsignment->is_active==='4')
-                                            <td>{{ "Delivered" }}</td>
-                                            @else
-                                                <td>{{ "Canceled" }}</td> 
+                                            <td>{{ "Shiped" }}</td>
+                                            @elseif ($allConsignment->is_active==='5')
+                                            <td>{{ "Deliverd" }}</td>
+                                            @elseif ($allConsignment->is_active==='6')
+                                            <td>{{ "Return" }}</td>
+                                            @elseif ($allConsignment->is_active==='7')
+                                            <td>{{ "Canceled" }}</td>
                                             @endif
                                         </tr>
                                         @endforeach

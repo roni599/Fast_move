@@ -292,7 +292,7 @@ class DeliveryManController extends Controller
     }
     public function productDeliveryCancel(Request $request)
     {
-        
+
         $delivery = Product::find($request->id);
         $delivery->is_active = 7;
 
@@ -303,5 +303,31 @@ class DeliveryManController extends Controller
         $delivery->update();
 
         return redirect('deliveryman/product/table');
+    }
+
+    public function searcDeliverymanProductTable(Request $request)
+    {
+        $search = $request->input('admin_delivery_search');
+
+        $customers = Product::with(['user:id,merchant_name'])
+            ->where(function ($query) use ($search) {
+                $query->where('product_category', 'like', '%' . $search . '%')
+                    ->orWhere('customer_name', 'like', '%' . $search . '%')
+                    ->orWhere('customer_phone', 'like', '%' . $search . '%')
+                    ->orWhere('full_address', 'like', '%' . $search . '%')
+                    ->orWhere('divisions', 'like', '%' . $search . '%')
+                    ->orWhere('district', 'like', '%' . $search . '%')
+                    ->orWhere('police_station', 'like', '%' . $search . '%')
+                    ->orWhere('delivery_type', 'like', '%' . $search . '%')
+                    ->orWhere('order_tracking_id', 'like', '%' . $search . '%')
+                    ->orWhere('cod_amount', 'like', '%' . $search . '%')
+                    ->orWhere('invoice', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('user', function ($query) use ($search) {
+                $query->where('merchant_name', 'like', '%' . $search . '%');
+            })
+            ->get();
+
+        return response()->json(['customers' => $customers]);
     }
 }

@@ -40,7 +40,7 @@
 
     <link rel="stylesheet" href="/frontend/css/home.css" />
     <link rel="stylesheet" href="/frontend/css/google_translate_api.css" />
-
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 
 <body>
@@ -67,8 +67,7 @@
                     <img src="/frontend/img/startup.png" alt="logo" />
                 </div>
                 <div class="text">
-                    <span class="d-block head translate" data-en="Fast Move" data-bn="ফাস্ট মুভ"
-                        data-ar="التحرك السريع">Fast Move</span>
+                    <span class="d-block head translate" data-key="ফাস্ট মুভ">Fast Move</span>
                     {{-- <span class="d-block head">{{ __('text.content') }}</span> --}}
                     <span class="d-block moto">Perfect Way To Your Destination.</span>
                     {{-- <span class="d-block moto">{{ __('text.content1') }}</span> --}}
@@ -346,11 +345,11 @@
 
     <!-- Template Javascript -->
     <script src="frontend/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-    </script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> --}}
     <script>
         function googleTranslateElementInit() {
+            // Create a new instance of TranslateElement
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
                 autoDisplay: 'true',
