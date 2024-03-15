@@ -94,7 +94,7 @@ class AdminController extends Controller
         ]);
 
         $admin = Admin::where('email', '=', $request->email)->where('role', '=', $request->role)->first();
-        
+
         if ($admin) {
             if (Hash::check($request->password, $admin->password)) {
                 $request->session()->put('loginId', $admin->id);
@@ -474,6 +474,21 @@ class AdminController extends Controller
         return view('server.pages.delivery-table', compact('deliveries', 'admin'));
     }
 
+    public function productTableAjex(Request $request)
+    {
+        if (Session::has('loginId')) {
+            $admin = Admin::find(Session::get('loginId'));
+        }
+
+        // $deliveries = Product::paginate(10);
+        // $deliveries = Product::with('user')->paginate(10);
+        $deliveries = Product::with(['user', 'pickupman', 'deliveryman'])->paginate(10);
+        // $tableContent = view('server.pages.delivery-table', compact('deliveries', 'admin'))->render();
+
+        return response()->json(['deliveries' => $deliveries]);
+    }
+
+
     public function productEdit(Request $request)
     {
 
@@ -549,7 +564,7 @@ class AdminController extends Controller
         return redirect('admin/product/delivery');
     }
 
-    public function productDeliveryDestroy(Request $request)
+    public function productDestroy(Request $request)
     {
 
         Product::find($request->id)->delete();

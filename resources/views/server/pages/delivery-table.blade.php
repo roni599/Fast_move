@@ -52,17 +52,19 @@
             </div>
         </div> --}}
     </div>
+
     <div class="col-lg-12 stretch-card" id="existingTable">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Delivery Table</h4>
+
                 @if (Session::has('success'))
                     <div class="alert alert-success">{{ Session::get('success') }}</div>
                 @endif
                 @if (Session::has('fail'))
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
-                <div class="table-responsive bg-light">
+                <div class="table-responsive bg-light" id="tableContainer">
                     <table class="table table-light table-hover">
                         <thead>
                             <tr>
@@ -89,101 +91,114 @@
                                 <th scope="col">Update</th>
                             </tr>
                         </thead>
-                        @foreach ($deliveries as $delivery)
-                            <tr class="table-info">
-                                <td>{{ $delivery->id }}</td>
-                                <td>{{ $delivery->user->merchant_name }}</td>
-                                {{-- {{dd($delivery->pickupman)}} --}}
-                                @if ($delivery->pickupman_id > 0)
-                                    <td>{{ $delivery->pickupman->pickupman_name }}</td>
-                                @else
-                                    <td>No one pickup</td>
-                                @endif
-                                {{-- {{dd($delivery->deliveryman)}} --}}
-                                @if ($delivery->deliveryman_id > 0)
-                                    <td>{{ $delivery->deliveryman->deliveryman_name }}</td>
-                                @else
-                                    <td>No one delivered</td>
-                                @endif
-                                <td>{{ $delivery->customer_name }}</td>
-                                <td>{{ $delivery->customer_phone }}</td>
-                                <td>{{ $delivery->full_address }}</td>
-                                <td>{{ $delivery->police_station }}</td>
-                                <td>{{ $delivery->district }}</td>
-                                <td>{{ $delivery->divisions }}</td>
-                                <td>{{ $delivery->product_category }}</td>
-                                <td>{{ $delivery->delivery_type }}</td>
-                                <td>{{ $delivery->cod_amount }}</td>
-                                <td>{{ $delivery->order_tracking_id }}</td>
-                                <td>{{ $delivery->invoice }}</td>
-                                <td>{{ $delivery->note }}</td>
-                                <td>{{ $delivery->exchange_status }}</td>
-                                <td>{{ $delivery->delivery_charge }}</td>
-                                {{-- @if ($delivery->is_active == 1)
+                        <tbody id="container">
+                            @foreach ($deliveries as $delivery)
+                                <tr class="table-info">
+                                    <td>{{ $delivery->id }}</td>
+                                    <td>{{ $delivery->user->merchant_name }}</td>
+                                    {{-- {{dd($delivery->pickupman)}} --}}
+                                    @if ($delivery->pickupman_id > 0)
+                                        <td>{{ $delivery->pickupman->pickupman_name }}</td>
+                                    @else
+                                        <td>No one pickup</td>
+                                    @endif
+                                    {{-- {{dd($delivery->deliveryman)}} --}}
+                                    @if ($delivery->deliveryman_id > 0)
+                                        <td>{{ $delivery->deliveryman->deliveryman_name }}</td>
+                                    @else
+                                        <td>No one delivered</td>
+                                    @endif
+                                    <td>{{ $delivery->customer_name }}</td>
+                                    <td>{{ $delivery->customer_phone }}</td>
+                                    <td>{{ $delivery->full_address }}</td>
+                                    <td>{{ $delivery->police_station }}</td>
+                                    <td>{{ $delivery->district }}</td>
+                                    <td>{{ $delivery->divisions }}</td>
+                                    <td>{{ $delivery->product_category }}</td>
+                                    <td>{{ $delivery->delivery_type }}</td>
+                                    <td>{{ $delivery->cod_amount }}</td>
+                                    <td>{{ $delivery->order_tracking_id }}</td>
+                                    <td>{{ $delivery->invoice }}</td>
+                                    <td>{{ $delivery->note }}</td>
+                                    <td>{{ $delivery->exchange_status }}</td>
+                                    <td>{{ $delivery->delivery_charge }}</td>
+                                    {{-- @if ($delivery->is_active == 1)
                                     <td><span class="badge bg-label-danger me-1 text-dark">Pending</span></td> --}}
-                                @if ($delivery->is_active == 2)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Product On the way</span></td>
-                                @elseif ($delivery->is_active == 3)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Stock</span></td>
-                                @elseif ($delivery->is_active == 4)
-                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Shiped</span></td>
-                                @elseif ($delivery->is_active == 5)
-                                    <td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span></td>
-                                @elseif($delivery->is_active == 6)
-                                    <td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>
-                                @elseif ($delivery->is_active == 7)
-                                    <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span></td>
-                                @else
-                                    <td><span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not
-                                            <br>
-                                            reached yet</span></td>
-                                @endif
-
-                                <td>
                                     @if ($delivery->is_active == 2)
-                                        <div class="d-flex justify-center align-items-center gap-2">
-                                            {{-- <form action="{{ route('admin.product.delivery_confirmation') }}"
-                                                method="post">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
-                                            <button class="btn btn-sm btn-success text-white" type="submit">
-                                                <i class="fa-solid fa-check"></i>
-                                            </button>
-                                            </form>
-                                            <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                                <button class="btn btn-sm btn-danger" type="submit">
-                                                    <i class="fa-solid fa-times"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @elseif ($delivery->is_active == 'cancelled')
-                                        <span class="badge bg-label-success me-1 text-dark">Not accepted</span>
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product On the way</span>
+                                        </td>
+                                    @elseif ($delivery->is_active == 3)
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product Stock</span></td>
                                     @elseif ($delivery->is_active == 4)
-                                        {{-- <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Product Shiped</span></td>
+                                    @elseif ($delivery->is_active == 5)
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span>
+                                        </td>
+                                    @elseif($delivery->is_active == 6)
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>
+                                    @elseif ($delivery->is_active == 7)
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>
+                                        </td>
+                                    @elseif ($delivery->is_active == 'cancelled')
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By
+                                                Admin</span>
+                                        </td>
+                                    @else
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has
+                                                not
+                                                <br>
+                                                reached yet</span></td>
+                                    @endif
+
+                                    <td>
+                                        @if ($delivery->is_active == 2)
+                                            <div class="d-flex justify-center align-items-center gap-2">
+                                                <form id="deliveryConfirmationForm"
+                                                    action="{{ route('admin.product.delivery_confirmation') }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                    <button class="btn btn-sm btn-success text-white" type="submit">
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <form id="deliveryCancelConfirmationForm"
+                                                    action="{{ route('admin.product.cancel_confirmation') }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                    <button class="btn btn-sm btn-danger" type="submit">
+                                                        <i class="fa-solid fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @elseif ($delivery->is_active == 'cancelled')
+                                            <span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By
+                                                Admin</span>
+                                        @elseif ($delivery->is_active == 4)
+                                            {{-- <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
-                                        {{-- <button class="btn btn-sm btn-success" type="submit">
+                                            {{-- <button class="btn btn-sm btn-success" type="submit">
                                                 <i class="fas fa-truck"></i>
                                             </button> --}}
-                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
-                                        {{-- </form> --}}
-                                    @elseif ($delivery->is_active == 5)
-                                        {{-- <span class="badge bg-label-success me-1 text-dark">You have <br> No action <br> because product
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                            {{-- </form> --}}
+                                        @elseif ($delivery->is_active == 5)
+                                            {{-- <span class="badge bg-label-success me-1 text-dark">You have <br> No action <br> because product
                                             has <br>been delivered</span> --}}
-                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
-                                    @elseif ($delivery->is_active == 3)
-                                        {{-- <form action="{{ route('admin.product.delivery_delivered') }}" method="post">
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @elseif ($delivery->is_active == 3)
+                                            {{-- <form action="{{ route('admin.product.delivery_delivered') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $delivery->id }}">
                                             <button class="btn btn-sm btn-success" type="submit">
                                                 <i class="fa-solid fa-cart-shopping"></i>
                                             </button>
                                         </form> --}}
-                                        <span class="badge bg-label-success me-1 text-dark">Awaiting response <br> for
-                                            deliveryman</span>
-                                        {{-- @elseif ($delivery->is_active == 4)
+                                            <span class="badge bg-label-success me-1 text-dark">Awaiting response <br> for
+                                                deliveryman</span>
+                                            {{-- @elseif ($delivery->is_active == 4)
                                         <form action="{{ route('admin.product.delivery_delivered') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $delivery->id }}">
@@ -191,60 +206,62 @@
                                                 <i class="fa-solid fa-thumbs-up"></i>
                                             </button>
                                         </form> --}}
-                                    @else
-                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
-                                    @endif
-                                </td>
-
-                                <td>
-                                    @if ($delivery->is_active == 4)
-                                        <div class="d-flex justify-content-center gap-2">
+                                        @else
                                             <span class="badge bg-label-success me-1 text-dark">You have no action</span>
-                                            {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
-                                            class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
-                                            {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                                <button class="btn btn-sm btn-success" type="submit"><i
-                                                        class="fas fa-pencil-alt"></i></button>
-                                            </form> --}}
-                                            {{-- <a href="{{ route('admin.delivery.edit') }}"
-                                            class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            {{-- <form action="{{ route('admin.product.delivery.delete') }}" method="get">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                                <button class="btn btn-sm btn-danger" type="submit"
-                                                    onclick="return confirm('Are you sure?')"><i
-                                                        class="fa-solid fa-trash-can"></i></button>
-                                            </form> --}}
-                                        </div>
-                                    @elseif($delivery->is_active == 3)
-                                        <div class="d-flex justify-content-center gap-2">
-                                            {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
-                                            class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
-                                            <form action="{{ route('admin.product.delivery.edit') }}" method="get">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                                <button class="btn btn-sm btn-success" type="submit"><i
-                                                        class="fas fa-pencil-alt"></i></button>
-                                            </form>
-                                            {{-- <a href="{{ route('admin.delivery.edit') }}"
-                                            class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            <form action="{{ route('admin.product.delivery.delete') }}" method="get">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
-                                                <button class="btn btn-sm btn-danger" type="submit"
-                                                    onclick="return confirm('Are you sure?')"><i
-                                                        class="fa-solid fa-trash-can"></i></button>
-                                            </form>
-                                        </div>
-                                    @else
-                                        <span class="badge bg-label-success me-1 text-dark">You have no action</span>
-                                    @endif
+                                        @endif
+                                    </td>
 
-                                </td>
-                            </tr>
-                        @endforeach
+                                    <td>
+                                        @if ($delivery->is_active == 4)
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <span class="badge bg-label-success me-1 text-dark">You have no
+                                                    action</span>
+                                                {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
+                                            class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
+                                                {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success" type="submit"><i
+                                                        class="fas fa-pencil-alt"></i></button>
+                                            </form> --}}
+                                                {{-- <a href="{{ route('admin.delivery.edit') }}"
+                                            class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
+                                                {{-- <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-danger" type="submit"
+                                                    onclick="return confirm('Are you sure?')"><i
+                                                        class="fa-solid fa-trash-can"></i></button>
+                                            </form> --}}
+                                            </div>
+                                        @elseif($delivery->is_active == 3)
+                                            <div class="d-flex justify-content-center gap-2">
+                                                {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
+                                            class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
+                                                <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                    <button class="btn btn-sm btn-success" type="submit"><i
+                                                            class="fas fa-pencil-alt"></i></button>
+                                                </form>
+                                                {{-- <a href="{{ route('admin.delivery.edit') }}"
+                                            class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
+                                                <form id="productDeleteConformation"
+                                                    action="{{ route('admin.product.delivery.delete') }}" method="get">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                    <button class="btn btn-sm btn-danger" type="submit"
+                                                        onclick="return confirm('Are you sure?')"><i
+                                                            class="fa-solid fa-trash-can"></i></button>
+                                                </form>
+                                            </div>
+                                        @else
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -667,8 +684,7 @@
         });
     </script> --}}
 
-
-
+    {{-- search_button_typue_by_the_admin --}}
     <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
@@ -868,6 +884,499 @@
                     existingTable.show();
                 }
             });
+        });
+    </script>
+
+    {{-- product_accept_conformation_by_the_admin --}}
+    <script>
+        $(document).ready(function() {
+            // Use event delegation for form submission
+            $(document).on('submit', '#deliveryConfirmationForm', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                var formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Reload the table content after successful form submission
+                        reloadTableData();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+            // Function to reload table data
+            function reloadTableData() {
+                $.ajax({
+                    url: '{{ route('admin.product.deliveryAjex') }}', // Replace with the actual route to fetch table data
+                    method: 'GET',
+                    success: function(response) {
+                        // Clear the existing table body
+                        $('#existingTable tbody').empty();
+
+                        // Check if the response is already parsed JSON
+                        var deliveries = response.deliveries.data;
+
+                        console.log(deliveries.merchant_name);
+                        // Loop through each delivery data and append it to the table
+                        deliveries.forEach(function(delivery) {
+                            $('#existingTable tbody').append('<tr>' +
+                                '<td>' + delivery.id + '</td>' +
+                                '<td>' + delivery.user.merchant_name + '</td>' +
+                                '<td>' + (delivery.pickupman_id > 0 ? delivery.pickupman
+                                    .pickupman_name : 'No one pickup') + '</td>' +
+                                '<td>' + (delivery.deliveryman_id > 0 ? delivery.deliveryman
+                                    .deliveryman_name : 'No one delivered') + '</td>' +
+                                '<td>' + delivery.customer_name + '</td>' +
+                                '<td>' + delivery.customer_phone + '</td>' +
+                                '<td>' + delivery.full_address + '</td>' +
+                                '<td>' + delivery.police_station + '</td>' +
+                                '<td>' + delivery.district + '</td>' +
+                                '<td>' + delivery.divisions + '</td>' +
+                                '<td>' + delivery.product_category + '</td>' +
+                                '<td>' + delivery.delivery_type + '</td>' +
+                                '<td>' + delivery.cod_amount + '</td>' +
+                                '<td>' + delivery.order_tracking_id + '</td>' +
+                                '<td>' + delivery.invoice + '</td>' +
+                                '<td>' + delivery.note + '</td>' +
+                                '<td>' + delivery.exchange_status + '</td>' +
+                                '<td>' + delivery.delivery_charge + '</td>' +
+                                '<td>' + getStatusBadge(delivery.is_active) + '</td>' +
+                                '<td>' + getActionButtons(delivery.is_active, delivery.id) +
+                                '</td>' +
+                                '<td>' + getUpdateButton(delivery.is_active, delivery.id) +
+                                '</td>' +
+                                '</tr>');
+                        });
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred while fetching table data:', error);
+                    }
+                });
+            }
+
+            function getStatusBadge(status) {
+                var badge = '';
+                switch (status) {
+                    case '2':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                        break;
+                    case '3':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
+                        break;
+                    case '4':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>';
+                        break;
+                    case '5':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
+                        break;
+                    case '6':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
+                        break;
+                    case '7':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                        break;
+                    default:
+                        badge =
+                            '<span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span>';
+                }
+                return badge;
+            }
+
+            function getActionButtons(status, deliveryId) {
+                if (status === '2') {
+                    return `
+                    <div class="d-flex justify-center align-items-center gap-2">
+                        <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id" value="${deliveryId}">
+                            <button class="btn btn-sm btn-success text-white" type="submit">
+                            <i class="fa-solid fa-check"></i>
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id" value="${deliveryId}">
+                            <button class="btn btn-sm btn-danger" type="submit">
+                            <i class="fa-solid fa-times"></i>
+                            </button>
+                        </form>
+                    </div>`;
+                } else if (status === 'cancelled') {
+                    return '<span class="badge bg-label-success me-1 text-dark">Not accepted</span>';
+                } else if (status === '4') {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } else if (status === '5') {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } else if (status === '3') {
+                    return `
+                    <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
+                } else {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+            }
+
+            function getUpdateButton(isActive, deliveryId) {
+                if (isActive == 3) {
+                    return `
+                    <div class="d-flex justify-content-center gap-2">
+                        <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                            @csrf
+                            <input type="hidden" name="id" value="${deliveryId}">
+                            <button class="btn btn-sm btn-success" type="submit">
+                            <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                            @csrf
+                            <input type="hidden" name="id" value="${deliveryId}">
+                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                            <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </form>
+                    </div>`;
+                } else {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+            }
+        });
+    </script>
+    {{-- product_cancel_conformation_by_the_admin --}}
+    <script>
+        $(document).ready(function() {
+            // Use event delegation for form submission
+            $(document).on('submit', '#deliveryCancelConfirmationForm', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                var formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Reload the table content after successful form submission
+                        reloadTableData();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+            // Function to reload table data
+            function reloadTableData() {
+                $.ajax({
+                    url: '{{ route('admin.product.deliveryAjex') }}', // Replace with the actual route to fetch table data
+                    method: 'GET',
+                    success: function(response) {
+                        // Clear the existing table body
+                        $('#existingTable tbody').empty();
+
+                        // Check if the response is already parsed JSON
+                        var deliveries = response.deliveries.data;
+
+                        console.log(deliveries.merchant_name);
+                        // Loop through each delivery data and append it to the table
+                        deliveries.forEach(function(delivery) {
+                            $('#existingTable tbody').append('<tr>' +
+                                '<td>' + delivery.id + '</td>' +
+                                '<td>' + delivery.user.merchant_name + '</td>' +
+                                '<td>' + (delivery.pickupman_id > 0 ? delivery.pickupman
+                                    .pickupman_name : 'No one pickup') + '</td>' +
+                                '<td>' + (delivery.deliveryman_id > 0 ? delivery.deliveryman
+                                    .deliveryman_name : 'No one delivered') + '</td>' +
+                                '<td>' + delivery.customer_name + '</td>' +
+                                '<td>' + delivery.customer_phone + '</td>' +
+                                '<td>' + delivery.full_address + '</td>' +
+                                '<td>' + delivery.police_station + '</td>' +
+                                '<td>' + delivery.district + '</td>' +
+                                '<td>' + delivery.divisions + '</td>' +
+                                '<td>' + delivery.product_category + '</td>' +
+                                '<td>' + delivery.delivery_type + '</td>' +
+                                '<td>' + delivery.cod_amount + '</td>' +
+                                '<td>' + delivery.order_tracking_id + '</td>' +
+                                '<td>' + delivery.invoice + '</td>' +
+                                '<td>' + delivery.note + '</td>' +
+                                '<td>' + delivery.exchange_status + '</td>' +
+                                '<td>' + delivery.delivery_charge + '</td>' +
+                                '<td>' + getStatusBadge(delivery.is_active) + '</td>' +
+                                '<td>' + getActionButtons(delivery.is_active, delivery.id) +
+                                '</td>' +
+                                '<td>' + getUpdateButton(delivery.is_active, delivery.id) +
+                                '</td>' +
+                                '</tr>');
+                        });
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred while fetching table data:', error);
+                    }
+                });
+            }
+
+            function getStatusBadge(status) {
+                var badge = '';
+                switch (status) {
+                    case '2':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                        break;
+                    case '3':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
+                        break;
+                    case '4':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>';
+                        break;
+                    case '5':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
+                        break;
+                    case '6':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
+                        break;
+                    case '7':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                        break;
+                    case 'cancelled':
+                        badge =
+                            '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> by Admin</span>';
+                        break;
+                    default:
+                        badge =
+                            '<span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span>';
+                }
+                return badge;
+            }
+
+            function getActionButtons(status, deliveryId) {
+                if (status === '2') {
+                    return `
+                <div class="d-flex justify-center align-items-center gap-2">
+                    <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="${deliveryId}">
+                        <button class="btn btn-sm btn-success text-white" type="submit">
+                        <i class="fa-solid fa-check"></i>
+                        </button>
+                    </form>
+                    <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="${deliveryId}">
+                        <button class="btn btn-sm btn-danger" type="submit">
+                        <i class="fa-solid fa-times"></i>
+                        </button>
+                    </form>
+                </div>`;
+                } else if (status === 'cancelled') {
+                    return '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span>';
+                } else if (status === '4') {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } else if (status === '5') {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } else if (status === '3') {
+                    return `
+                <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
+                } else {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+            }
+
+            function getUpdateButton(isActive, deliveryId) {
+                if (isActive == 3) {
+                    return `
+                <div class="d-flex justify-content-center gap-2">
+                    <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                        @csrf
+                        <input type="hidden" name="id" value="${deliveryId}">
+                        <button class="btn btn-sm btn-success" type="submit">
+                        <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </form>
+                    <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                        @csrf
+                        <input type="hidden" name="id" value="${deliveryId}">
+                        <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                        <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>`;
+                } else {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+            }
+        });
+    </script>
+
+    {{-- product_delete_conformation_by_the_admin --}}
+    <script>
+        $(document).ready(function() {
+            // Use event delegation for form submission
+            $(document).on('submit', '#productDeleteConformation', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                var formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'GET',
+                    data: formData,
+                    success: function(response) {
+                        // Reload the table content after successful form submission
+                        reloadTableData();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+            // Function to reload table data
+            function reloadTableData() {
+                $.ajax({
+                    url: '{{ route('admin.product.deliveryAjex') }}', // Replace with the actual route to fetch table data
+                    method: 'GET',
+                    success: function(response) {
+                        // Clear the existing table body
+                        $('#existingTable tbody').empty();
+
+                        // Check if the response is already parsed JSON
+                        var deliveries = response.deliveries.data;
+
+                        console.log(deliveries.merchant_name);
+                        // Loop through each delivery data and append it to the table
+                        deliveries.forEach(function(delivery) {
+                            $('#existingTable tbody').append('<tr>' +
+                                '<td>' + delivery.id + '</td>' +
+                                '<td>' + delivery.user.merchant_name + '</td>' +
+                                '<td>' + (delivery.pickupman_id > 0 ? delivery.pickupman
+                                    .pickupman_name : 'No one pickup') + '</td>' +
+                                '<td>' + (delivery.deliveryman_id > 0 ? delivery.deliveryman
+                                    .deliveryman_name : 'No one delivered') + '</td>' +
+                                '<td>' + delivery.customer_name + '</td>' +
+                                '<td>' + delivery.customer_phone + '</td>' +
+                                '<td>' + delivery.full_address + '</td>' +
+                                '<td>' + delivery.police_station + '</td>' +
+                                '<td>' + delivery.district + '</td>' +
+                                '<td>' + delivery.divisions + '</td>' +
+                                '<td>' + delivery.product_category + '</td>' +
+                                '<td>' + delivery.delivery_type + '</td>' +
+                                '<td>' + delivery.cod_amount + '</td>' +
+                                '<td>' + delivery.order_tracking_id + '</td>' +
+                                '<td>' + delivery.invoice + '</td>' +
+                                '<td>' + delivery.note + '</td>' +
+                                '<td>' + delivery.exchange_status + '</td>' +
+                                '<td>' + delivery.delivery_charge + '</td>' +
+                                '<td>' + getStatusBadge(delivery.is_active) + '</td>' +
+                                '<td>' + getActionButtons(delivery.is_active, delivery.id) +
+                                '</td>' +
+                                '<td>' + getUpdateButton(delivery.is_active, delivery.id) +
+                                '</td>' +
+                                '</tr>');
+                        });
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred while fetching table data:', error);
+                    }
+                });
+            }
+
+            function getStatusBadge(status) {
+                var badge = '';
+                switch (status) {
+                    case '2':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                        break;
+                    case '3':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
+                        break;
+                    case '4':
+                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>';
+                        break;
+                    case '5':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
+                        break;
+                    case '6':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
+                        break;
+                    case '7':
+                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                        break;
+                    case 'cancelled':
+                        badge =
+                            '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> by Admin</span>';
+                        break;
+                    default:
+                        badge =
+                            '<span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span>';
+                }
+                return badge;
+            }
+
+            function getActionButtons(status, deliveryId) {
+                if (status === '2') {
+                    return `
+            <div class="d-flex justify-center align-items-center gap-2">
+                <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="${deliveryId}">
+                    <button class="btn btn-sm btn-success text-white" type="submit">
+                    <i class="fa-solid fa-check"></i>
+                    </button>
+                </form>
+                <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="${deliveryId}">
+                    <button class="btn btn-sm btn-danger" type="submit">
+                    <i class="fa-solid fa-times"></i>
+                    </button>
+                </form>
+            </div>`;
+                } else if (status === 'cancelled') {
+                    return '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span>';
+                } else if (status === '4') {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } else if (status === '5') {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } else if (status === '3') {
+                    return `
+            <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
+                } else {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+            }
+
+            function getUpdateButton(isActive, deliveryId) {
+                if (isActive == 3) {
+                    return `
+            <div class="d-flex justify-content-center gap-2">
+                <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                    @csrf
+                    <input type="hidden" name="id" value="${deliveryId}">
+                    <button class="btn btn-sm btn-success" type="submit">
+                    <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </form>
+                <form action="{{ route('admin.product.delivery.delete') }}" method="get">
+                    @csrf
+                    <input type="hidden" name="id" value="${deliveryId}">
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
+                    <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+            </div>`;
+                } else {
+                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+            }
         });
     </script>
 @endsection

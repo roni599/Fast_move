@@ -114,12 +114,14 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('admin/deliveryman/excel/import', 'deliverymanExcelImport')->name('admin.deliveryman.excel.import')->middleware('isLoggedIn');
 
     Route::get('admin/product/delivery', 'productTable')->name('admin.product.delivery')->middleware('isLoggedIn');
+    Route::get('admin/product/deliveryAjex', 'productTableAjex')->name('admin.product.deliveryAjex')->middleware('isLoggedIn');
     Route::get('admin/product/delivery/edit', 'productEdit')->name('admin.product.delivery.edit')->middleware('isLoggedIn');
     Route::post('admin/product/delivery/edit', 'productUpdate')->name('admin.product.delivery.update')->middleware('isLoggedIn');
     Route::post('admin/product/delivery', 'productDeliveryConfirmation')->name('admin.product.delivery_confirmation')->middleware('isLoggedIn');
     Route::post('admin/product/checkout', 'productDeliveryCheckout')->name('admin.product.delivery_checkout')->middleware('isLoggedIn');
     Route::post('admin/product/delivered', 'productDeliveryDelivered')->name('admin.product.delivery_delivered')->middleware('isLoggedIn');
     Route::post('admin/product/cancel', 'productCancelConfirmation')->name('admin.product.cancel_confirmation')->middleware('isLoggedIn');
+    Route::post('admin/product/cancelAjex', 'productCancelConfirmationAjex')->name('admin.product.cancel_confirmationAjex')->middleware('isLoggedIn');
     Route::get('admin/product/delivery/delete', 'productDestroy')->name('admin.product.delivery.delete')->middleware('isLoggedIn');
     Route::post('admin/product/excel/import', 'productExcelImport')->name('admin.product.excel.import')->middleware('isLoggedIn');
     Route::get('admin/product/excel/export', 'productExcelExport')->name('admin.product.excel.export')->middleware('isLoggedIn');

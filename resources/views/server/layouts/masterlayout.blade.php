@@ -285,6 +285,7 @@
                             <i class="menu-arrow"></i>
                             <i class="mdi mdi-import menu-icon"></i>
                         </a>
+                        
                         <div class="collapse" id="general-pages">
                             <ul class="nav flex-column sub-menu">
                                 @if ($admin->role == 'super admin')
