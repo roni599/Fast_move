@@ -53,6 +53,7 @@
         </div> --}}
     </div>
 
+
     <div class="col-lg-12 stretch-card" id="existingTable">
         <div class="card">
             <div class="card-body">
@@ -65,7 +66,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive bg-light" id="tableContainer">
-                    <table class="table table-light table-hover">
+                    <table class="table table-light table-hover" id="table">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -145,11 +146,8 @@
                                         </td>
                                     @else
                                         <td><span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has
-                                                not
-                                                <br>
-                                                reached yet</span></td>
+                                                not <br> reached yet</span></td>
                                     @endif
-
                                     <td>
                                         @if ($delivery->is_active == 2)
                                             <div class="d-flex justify-center align-items-center gap-2">
@@ -238,12 +236,39 @@
                                             <div class="d-flex justify-content-center gap-2">
                                                 {{-- <a href="{{ route('admin.delivery.show', $delivery->id) }}"
                                             class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
-                                                <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                                {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                     <button class="btn btn-sm btn-success" type="submit"><i
                                                             class="fas fa-pencil-alt"></i></button>
-                                                </form>
+                                                </form> --}}
+
+
+                                                {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
+                                                <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                                    data-bs-target="#updateModal" data-id="{{ $delivery->id }}"
+                                                    data-name="{{ $delivery->customer_name }}"
+                                                    data-phone="{{ $delivery->customer_phone }}"
+                                                    data-address="{{ $delivery->full_address }}"
+                                                    data-division="{{ $delivery->divisions }}"
+                                                    data-dis="{{ $delivery->district }}"
+                                                    data-police="{{ $delivery->police_station }}"
+                                                    data-deliveryproduct="{{ $delivery->product_category }}"
+                                                    data-del="{{ $delivery->delivery_type }}"
+                                                    data-cod="{{ $delivery->cod_amount }}"
+                                                    data-invoice="{{ $delivery->invoice }}"
+                                                    data-note="{{ $delivery->note }}"
+                                                    data-exchangeparcel="{{ $delivery->exchange_status }}"
+                                                    data-weight="{{ $delivery->product_weight }}"
+                                                    data-ordertrack="{{ $delivery->order_tracking_id }}"
+                                                    data-deliverycharge="{{ $delivery->delivery_charge }}"
+                                                    id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>
+                                                {{-- </form> --}}
+
+                                                {{-- <td>{{ $delivery->exchange_status }}</td>
+                                                <td>{{ $delivery->delivery_charge }}</td> --}}
                                                 {{-- <a href="{{ route('admin.delivery.edit') }}"
                                             class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
                                                 <form id="productDeleteConformation"
@@ -269,7 +294,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="col-lg-12 stretch-card">
         <div class="card">
@@ -311,11 +335,290 @@
         </div>
     </div>
 
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <form id="updateDeliveryForm">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateModalLabel">Update Delivery Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- <div class="row w-100">
+                                <div class="col-md-9 grid-margin stretch-card"> --}}
+                        <div class="errMsgContainer"></div>
+                        <div class="card">
+                            <div class="card-body">
+                                @if (Session::has('success'))
+                                    <div class="alert alert-success">{{ Session::get('success') }}</div>
+                                @endif
+                                @if (Session::has('fail'))
+                                    <div class="alert alert-danger">{{ Session::get('fail') }}</div>
+                                @endif
+                                <div class="page-header">
+                                    <h3 class="page-title">
+                                        <span class="page-title-icon bg-gradient-primary text-white me-2">
+                                            <i class="mdi mdi-home"></i>
+                                        </span> Update Parcel Delivery
+                                    </h3>
+                                    <nav aria-label="breadcrumb">
+                                        <ul class="breadcrumb">
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                <span></span>Overview <i
+                                                    class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                {{-- <form id="updateDeliveryForm" action="" class="forms-sample" method="post">
+                                @csrf --}}
+                                <input type="hidden" id="up_id">
+                                <input type="hidden" id="ordertrack">
+                                <input type="hidden" id="deliverycharge">
+                                <div class="form-group row">
+                                    <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="name" class="form-control" id="Customer_name">
+                                    </div>
+                                </div>
+                                {{-- <input type="hidden" name="order_tracking_id" value="{{ $delivery->numericValue }}">
+                                                <input type="hidden" name="user_id" value="{{ $delivery->id }}"> --}}
+                                <div class="form-group row">
+                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">Mobile</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="phone" class="form-control" id="phone">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Address</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="address" class="form-control" id="address">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Division</label>
+                                    <input type="text" name="divisions" class="form-control" id="divisions">
+                                    {{-- <select name="divisions" class="form-control" id="divisions"
+                                        onchange="divisionsList();">
+                                        <option selected></option>
+                                        <option value="Barishal">Barishal</option>
+                                        <option value="Chattogram">Chattogram</option>
+                                        <option value="Dhaka">Dhaka</option>
+                                        <option value="Khulna">Khulna</option>
+                                        <option value="Mymensingh">Mymensingh</option>
+                                        <option value="Rajshahi">Rajshahi</option>
+                                        <option value="Rangpur">Rangpur</option>
+                                        <option value="Sylhet">Sylhet</option>
+                                    </select> --}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">District</label>
+                                    <input type="text" name="district" class="form-control" id="distr">
+                                    {{-- <select name="district" class="form-control" id="distr" onchange="thanaList();">
+                                        <option selected></option>
+                                    </select> --}}
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Police Station</label>
+                                    <input type="text" name="police_station" class="form-control" id="policsta">
+                                    {{-- <select name="police_station" class="form-control" id="polic_sta">
+                                        <option selected></option>
+                                    </select> --}}
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Category Type</label>
+                                    <select name="category_type" class="form-control" id="category">
+                                        <option selected></option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Document">Document</option>
+                                        <option value="Book">Book</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Delevery Type</label>
+                                    <input type="text" name="delivery_type" class="form-control" id="deliverytype">
+                                    {{-- <select name="delivery_type" class="form-control" id="deliverytype">
+                                        <option selected></option>
+                                        <option value="Drop">Drop</option>
+                                        <option value="Pickup & Drop">Pickup & Drop</option>
+                                    </select> --}}
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">COD
+                                        Amount</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="cod_amount" class="form-control" id="cod">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2"
+                                        class="col-sm-3 col-form-label">Invoice</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="invoice" class="form-control" id="invoice">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Note</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="note" class="form-control" id="note">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2"
+                                        class="col-sm-3 col-form-label">Weight</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="weight" class="form-control" id="weight">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Exchange Parcel</label>
+                                    <select name="exchange_parcel" class="form-control" id="exchangeparcel">
+                                        <option selected></option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+
+                                {{-- <button type="submit" class="btn btn-gradient-primary me-2">Save</button> --}}
+                                {{-- <button class="btn btn-light">Cancel</button> --}}
+
+                            </div>
+                        </div>
+                        {{-- </div>
+                            </div> --}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-gradient-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-gradient-primary update_delivery">Update Delivery</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/marchant/js/address.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#updateDeliveryForm').on('click', function() {
+                let id = $(this).data('id');
+                let Customer_name = $(this).data('name');
+                let phone = $(this).data('phone')
+                let address = $(this).data('address')
+                let divisions = $(this).data('division')
+                let district = $(this).data('dis')
+                let police = $(this).data('police')
+                let deliveryproduct = $(this).data('deliveryproduct');
+                let del = $(this).data('del');
+                let cod = $(this).data('cod');
+                let invoice = $(this).data('invoice');
+                let note = $(this).data('note');
+                let exchangeparcel = $(this).data('exchangeparcel');
+                let weight = $(this).data('weight');
+                let ordertrack = $(this).data('ordertrack');
+                let deliverycharge = $(this).data('deliverycharge')
+
+                $('#up_id').val(id);
+                $('#Customer_name').val(Customer_name);
+                $('#phone').val(phone)
+                $('#address').val(address)
+                $('#divisions').val(divisions)
+                $('#distr').val(district);
+                $('#policsta').val(police)
+                $('#category').val(deliveryproduct)
+                $('#deliverytype').val(del)
+                $('#cod').val(cod)
+                $('#invoice').val(invoice)
+                $('#note').val(note)
+                $('#exchangeparcel').val(exchangeparcel)
+                $('#weight').val(weight)
+                $('#ordertrack').val(ordertrack)
+                $('#deliverycharge').val(deliverycharge)
+            });
+
+            $(document).on('click', '.update_delivery', function(e) {
+                e.preventDefault();
+                let up_id = $('#up_id').val();
+                let Customer_name = $('#Customer_name').val();
+                let phone = $('#phone').val();
+                let address = $('#address').val();
+                let divisions = $('#divisions').val();
+                let district = $('#distr').val();
+                let police = $('#policsta').val()
+                let deliveryproduct = $('#category').val();
+                let del = $('#deliverytype').val();
+                let cod = $('#cod').val();
+                let invoice = $('#invoice').val();
+                let note = $('#note').val();
+                let exchangeparcel = $('#exchangeparcel').val();
+                let weight = $('#weight').val();
+                let ordertrack = $('#ordertrack').val();
+                let deliverycharge = $('#deliverycharge').val()
+                var csrfToken = '{{ csrf_token() }}';
+                $.ajax({
+                    url: "{{ route('admin.product.delivery.update') }}",
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        up_id: up_id,
+                        Customer_name: Customer_name,
+                        phone: phone,
+                        address: address,
+                        divisions: divisions,
+                        district: district,
+                        police: police,
+                        deliveryproduct: deliveryproduct,
+                        del: del,
+                        cod: cod,
+                        invoice: invoice,
+                        note: note,
+                        exchangeparcel: exchangeparcel,
+                        weight: weight,
+                        ordertrack: ordertrack,
+                        deliverycharge: deliverycharge
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.status == 'success') {
+                            $('#updateModal').modal('hide');
+                            $('#updateDeliveryForm').trigger('reset');
+                            $('.modal-backdrop').remove();
+                            $('#table').load(location.href + ' #table')
+                        }
+                    },
+                    error: function(err) {
+                        let error = err.responseJSON;
+                        $.each(error.errors, function(index, value) {
+                            $('.errMsgContainer').append('<span class="text-danger">' +
+                                value + '</span>' + '<br>')
+                        })
+                    }
+                })
+            })
+
+        });
+    </script>
+
 
     {{-- for search button submit --}}
     {{-- <script>
@@ -681,8 +984,7 @@
                     existingTable.show();
                 }
             });
-        });
-    </script> --}}
+        });</script> --}}
 
     {{-- search_button_typue_by_the_admin --}}
     <script>
@@ -888,6 +1190,7 @@
     </script>
 
     {{-- product_accept_conformation_by_the_admin --}}
+
     <script>
         $(document).ready(function() {
             // Use event delegation for form submission
@@ -902,152 +1205,17 @@
                     data: formData,
                     success: function(response) {
                         // Reload the table content after successful form submission
-                        reloadTableData();
+                        // reloadTableData();
+                        $('#table').load(location.href + ' #table')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error occurred:', error);
                     }
                 });
             });
-
-            // Function to reload table data
-            function reloadTableData() {
-                $.ajax({
-                    url: '{{ route('admin.product.deliveryAjex') }}', // Replace with the actual route to fetch table data
-                    method: 'GET',
-                    success: function(response) {
-                        // Clear the existing table body
-                        $('#existingTable tbody').empty();
-
-                        // Check if the response is already parsed JSON
-                        var deliveries = response.deliveries.data;
-
-                        console.log(deliveries.merchant_name);
-                        // Loop through each delivery data and append it to the table
-                        deliveries.forEach(function(delivery) {
-                            $('#existingTable tbody').append('<tr>' +
-                                '<td>' + delivery.id + '</td>' +
-                                '<td>' + delivery.user.merchant_name + '</td>' +
-                                '<td>' + (delivery.pickupman_id > 0 ? delivery.pickupman
-                                    .pickupman_name : 'No one pickup') + '</td>' +
-                                '<td>' + (delivery.deliveryman_id > 0 ? delivery.deliveryman
-                                    .deliveryman_name : 'No one delivered') + '</td>' +
-                                '<td>' + delivery.customer_name + '</td>' +
-                                '<td>' + delivery.customer_phone + '</td>' +
-                                '<td>' + delivery.full_address + '</td>' +
-                                '<td>' + delivery.police_station + '</td>' +
-                                '<td>' + delivery.district + '</td>' +
-                                '<td>' + delivery.divisions + '</td>' +
-                                '<td>' + delivery.product_category + '</td>' +
-                                '<td>' + delivery.delivery_type + '</td>' +
-                                '<td>' + delivery.cod_amount + '</td>' +
-                                '<td>' + delivery.order_tracking_id + '</td>' +
-                                '<td>' + delivery.invoice + '</td>' +
-                                '<td>' + delivery.note + '</td>' +
-                                '<td>' + delivery.exchange_status + '</td>' +
-                                '<td>' + delivery.delivery_charge + '</td>' +
-                                '<td>' + getStatusBadge(delivery.is_active) + '</td>' +
-                                '<td>' + getActionButtons(delivery.is_active, delivery.id) +
-                                '</td>' +
-                                '<td>' + getUpdateButton(delivery.is_active, delivery.id) +
-                                '</td>' +
-                                '</tr>');
-                        });
-
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error occurred while fetching table data:', error);
-                    }
-                });
-            }
-
-            function getStatusBadge(status) {
-                var badge = '';
-                switch (status) {
-                    case '2':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
-                        break;
-                    case '3':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
-                        break;
-                    case '4':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>';
-                        break;
-                    case '5':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
-                        break;
-                    case '6':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
-                        break;
-                    case '7':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-                        break;
-                    default:
-                        badge =
-                            '<span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span>';
-                }
-                return badge;
-            }
-
-            function getActionButtons(status, deliveryId) {
-                if (status === '2') {
-                    return `
-                    <div class="d-flex justify-center align-items-center gap-2">
-                        <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
-                            @csrf
-                            <input type="hidden" name="id" value="${deliveryId}">
-                            <button class="btn btn-sm btn-success text-white" type="submit">
-                            <i class="fa-solid fa-check"></i>
-                            </button>
-                        </form>
-                        <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
-                            @csrf
-                            <input type="hidden" name="id" value="${deliveryId}">
-                            <button class="btn btn-sm btn-danger" type="submit">
-                            <i class="fa-solid fa-times"></i>
-                            </button>
-                        </form>
-                    </div>`;
-                } else if (status === 'cancelled') {
-                    return '<span class="badge bg-label-success me-1 text-dark">Not accepted</span>';
-                } else if (status === '4') {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                } else if (status === '5') {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                } else if (status === '3') {
-                    return `
-                    <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
-                } else {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                }
-            }
-
-            function getUpdateButton(isActive, deliveryId) {
-                if (isActive == 3) {
-                    return `
-                    <div class="d-flex justify-content-center gap-2">
-                        <form action="{{ route('admin.product.delivery.edit') }}" method="get">
-                            @csrf
-                            <input type="hidden" name="id" value="${deliveryId}">
-                            <button class="btn btn-sm btn-success" type="submit">
-                            <i class="fas fa-pencil-alt"></i>
-                            </button>
-                        </form>
-                        <form action="{{ route('admin.product.delivery.delete') }}" method="get">
-                            @csrf
-                            <input type="hidden" name="id" value="${deliveryId}">
-                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
-                            <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </form>
-                    </div>`;
-                } else {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                }
-            }
         });
     </script>
+
     {{-- product_cancel_conformation_by_the_admin --}}
     <script>
         $(document).ready(function() {
@@ -1063,154 +1231,14 @@
                     data: formData,
                     success: function(response) {
                         // Reload the table content after successful form submission
-                        reloadTableData();
+                        // reloadTableData();
+                        $('#table').load(location.href + ' #table')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error occurred:', error);
                     }
                 });
             });
-
-            // Function to reload table data
-            function reloadTableData() {
-                $.ajax({
-                    url: '{{ route('admin.product.deliveryAjex') }}', // Replace with the actual route to fetch table data
-                    method: 'GET',
-                    success: function(response) {
-                        // Clear the existing table body
-                        $('#existingTable tbody').empty();
-
-                        // Check if the response is already parsed JSON
-                        var deliveries = response.deliveries.data;
-
-                        console.log(deliveries.merchant_name);
-                        // Loop through each delivery data and append it to the table
-                        deliveries.forEach(function(delivery) {
-                            $('#existingTable tbody').append('<tr>' +
-                                '<td>' + delivery.id + '</td>' +
-                                '<td>' + delivery.user.merchant_name + '</td>' +
-                                '<td>' + (delivery.pickupman_id > 0 ? delivery.pickupman
-                                    .pickupman_name : 'No one pickup') + '</td>' +
-                                '<td>' + (delivery.deliveryman_id > 0 ? delivery.deliveryman
-                                    .deliveryman_name : 'No one delivered') + '</td>' +
-                                '<td>' + delivery.customer_name + '</td>' +
-                                '<td>' + delivery.customer_phone + '</td>' +
-                                '<td>' + delivery.full_address + '</td>' +
-                                '<td>' + delivery.police_station + '</td>' +
-                                '<td>' + delivery.district + '</td>' +
-                                '<td>' + delivery.divisions + '</td>' +
-                                '<td>' + delivery.product_category + '</td>' +
-                                '<td>' + delivery.delivery_type + '</td>' +
-                                '<td>' + delivery.cod_amount + '</td>' +
-                                '<td>' + delivery.order_tracking_id + '</td>' +
-                                '<td>' + delivery.invoice + '</td>' +
-                                '<td>' + delivery.note + '</td>' +
-                                '<td>' + delivery.exchange_status + '</td>' +
-                                '<td>' + delivery.delivery_charge + '</td>' +
-                                '<td>' + getStatusBadge(delivery.is_active) + '</td>' +
-                                '<td>' + getActionButtons(delivery.is_active, delivery.id) +
-                                '</td>' +
-                                '<td>' + getUpdateButton(delivery.is_active, delivery.id) +
-                                '</td>' +
-                                '</tr>');
-                        });
-
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error occurred while fetching table data:', error);
-                    }
-                });
-            }
-
-            function getStatusBadge(status) {
-                var badge = '';
-                switch (status) {
-                    case '2':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
-                        break;
-                    case '3':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
-                        break;
-                    case '4':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>';
-                        break;
-                    case '5':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
-                        break;
-                    case '6':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
-                        break;
-                    case '7':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-                        break;
-                    case 'cancelled':
-                        badge =
-                            '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> by Admin</span>';
-                        break;
-                    default:
-                        badge =
-                            '<span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span>';
-                }
-                return badge;
-            }
-
-            function getActionButtons(status, deliveryId) {
-                if (status === '2') {
-                    return `
-                <div class="d-flex justify-center align-items-center gap-2">
-                    <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="id" value="${deliveryId}">
-                        <button class="btn btn-sm btn-success text-white" type="submit">
-                        <i class="fa-solid fa-check"></i>
-                        </button>
-                    </form>
-                    <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="id" value="${deliveryId}">
-                        <button class="btn btn-sm btn-danger" type="submit">
-                        <i class="fa-solid fa-times"></i>
-                        </button>
-                    </form>
-                </div>`;
-                } else if (status === 'cancelled') {
-                    return '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span>';
-                } else if (status === '4') {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                } else if (status === '5') {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                } else if (status === '3') {
-                    return `
-                <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
-                } else {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                }
-            }
-
-            function getUpdateButton(isActive, deliveryId) {
-                if (isActive == 3) {
-                    return `
-                <div class="d-flex justify-content-center gap-2">
-                    <form action="{{ route('admin.product.delivery.edit') }}" method="get">
-                        @csrf
-                        <input type="hidden" name="id" value="${deliveryId}">
-                        <button class="btn btn-sm btn-success" type="submit">
-                        <i class="fas fa-pencil-alt"></i>
-                        </button>
-                    </form>
-                    <form action="{{ route('admin.product.delivery.delete') }}" method="get">
-                        @csrf
-                        <input type="hidden" name="id" value="${deliveryId}">
-                        <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
-                        <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </form>
-                </div>`;
-                } else {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                }
-            }
         });
     </script>
 
@@ -1229,154 +1257,14 @@
                     data: formData,
                     success: function(response) {
                         // Reload the table content after successful form submission
-                        reloadTableData();
+                        // reloadTableData();
+                        $('#table').load(location.href + ' #table')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error occurred:', error);
                     }
                 });
             });
-
-            // Function to reload table data
-            function reloadTableData() {
-                $.ajax({
-                    url: '{{ route('admin.product.deliveryAjex') }}', // Replace with the actual route to fetch table data
-                    method: 'GET',
-                    success: function(response) {
-                        // Clear the existing table body
-                        $('#existingTable tbody').empty();
-
-                        // Check if the response is already parsed JSON
-                        var deliveries = response.deliveries.data;
-
-                        console.log(deliveries.merchant_name);
-                        // Loop through each delivery data and append it to the table
-                        deliveries.forEach(function(delivery) {
-                            $('#existingTable tbody').append('<tr>' +
-                                '<td>' + delivery.id + '</td>' +
-                                '<td>' + delivery.user.merchant_name + '</td>' +
-                                '<td>' + (delivery.pickupman_id > 0 ? delivery.pickupman
-                                    .pickupman_name : 'No one pickup') + '</td>' +
-                                '<td>' + (delivery.deliveryman_id > 0 ? delivery.deliveryman
-                                    .deliveryman_name : 'No one delivered') + '</td>' +
-                                '<td>' + delivery.customer_name + '</td>' +
-                                '<td>' + delivery.customer_phone + '</td>' +
-                                '<td>' + delivery.full_address + '</td>' +
-                                '<td>' + delivery.police_station + '</td>' +
-                                '<td>' + delivery.district + '</td>' +
-                                '<td>' + delivery.divisions + '</td>' +
-                                '<td>' + delivery.product_category + '</td>' +
-                                '<td>' + delivery.delivery_type + '</td>' +
-                                '<td>' + delivery.cod_amount + '</td>' +
-                                '<td>' + delivery.order_tracking_id + '</td>' +
-                                '<td>' + delivery.invoice + '</td>' +
-                                '<td>' + delivery.note + '</td>' +
-                                '<td>' + delivery.exchange_status + '</td>' +
-                                '<td>' + delivery.delivery_charge + '</td>' +
-                                '<td>' + getStatusBadge(delivery.is_active) + '</td>' +
-                                '<td>' + getActionButtons(delivery.is_active, delivery.id) +
-                                '</td>' +
-                                '<td>' + getUpdateButton(delivery.is_active, delivery.id) +
-                                '</td>' +
-                                '</tr>');
-                        });
-
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error occurred while fetching table data:', error);
-                    }
-                });
-            }
-
-            function getStatusBadge(status) {
-                var badge = '';
-                switch (status) {
-                    case '2':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
-                        break;
-                    case '3':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Stock</span>';
-                        break;
-                    case '4':
-                        badge = '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>';
-                        break;
-                    case '5':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>';
-                        break;
-                    case '6':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Return</span>';
-                        break;
-                    case '7':
-                        badge = '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-                        break;
-                    case 'cancelled':
-                        badge =
-                            '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> by Admin</span>';
-                        break;
-                    default:
-                        badge =
-                            '<span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span>';
-                }
-                return badge;
-            }
-
-            function getActionButtons(status, deliveryId) {
-                if (status === '2') {
-                    return `
-            <div class="d-flex justify-center align-items-center gap-2">
-                <form action="{{ route('admin.product.delivery_confirmation') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="id" value="${deliveryId}">
-                    <button class="btn btn-sm btn-success text-white" type="submit">
-                    <i class="fa-solid fa-check"></i>
-                    </button>
-                </form>
-                <form action="{{ route('admin.product.cancel_confirmation') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="id" value="${deliveryId}">
-                    <button class="btn btn-sm btn-danger" type="submit">
-                    <i class="fa-solid fa-times"></i>
-                    </button>
-                </form>
-            </div>`;
-                } else if (status === 'cancelled') {
-                    return '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span>';
-                } else if (status === '4') {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                } else if (status === '5') {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                } else if (status === '3') {
-                    return `
-            <span class="badge bg-label-success me-1 text-dark">Awaiting response for deliveryman</span>`;
-                } else {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                }
-            }
-
-            function getUpdateButton(isActive, deliveryId) {
-                if (isActive == 3) {
-                    return `
-            <div class="d-flex justify-content-center gap-2">
-                <form action="{{ route('admin.product.delivery.edit') }}" method="get">
-                    @csrf
-                    <input type="hidden" name="id" value="${deliveryId}">
-                    <button class="btn btn-sm btn-success" type="submit">
-                    <i class="fas fa-pencil-alt"></i>
-                    </button>
-                </form>
-                <form action="{{ route('admin.product.delivery.delete') }}" method="get">
-                    @csrf
-                    <input type="hidden" name="id" value="${deliveryId}">
-                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">
-                    <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </form>
-            </div>`;
-                } else {
-                    return '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
-                }
-            }
         });
     </script>
 @endsection

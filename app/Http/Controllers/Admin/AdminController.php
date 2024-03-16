@@ -502,24 +502,27 @@ class AdminController extends Controller
     public function productUpdate(Request $request)
     {
 
-        $delivery = Product::find($request->id);
-        $delivery->product_category = $request->product_category;
-        $delivery->customer_name = $request->customer_name;
-        $delivery->customer_phone = $request->customer_phone;
-        $delivery->full_address = $request->full_address;
+        $delivery = Product::find($request->up_id);
+        $delivery->product_category = $request->deliveryproduct;
+        $delivery->customer_name = $request->Customer_name;
+        $delivery->customer_phone = $request->phone;
+        $delivery->full_address = $request->address;
         $delivery->divisions = $request->divisions;
         $delivery->district = $request->district;
-        $delivery->police_station = $request->police_station;
-        $delivery->delivery_type = $request->delivery_type;
-        $delivery->cod_amount = $request->cod_amount;
+        $delivery->police_station = $request->police;
+        $delivery->delivery_type = $request->del;
+        $delivery->cod_amount = $request->cod;
         $delivery->invoice = $request->invoice;
         $delivery->note = $request->note;
-        $delivery->product_weight = $request->product_weight;
-        $delivery->exchange_status = $request->exchange_status;
-        $delivery->delivery_charge = $request->delivery_charge;
+        $delivery->product_weight = $request->weight;
+        $delivery->exchange_status = $request->exchangeparcel;
+        $delivery->delivery_charge = $request->deliverycharge;
 
         $delivery->update();
-        return redirect('admin/product/delivery')->withSuccess('Update successfully.');
+        // return redirect('admin/product/delivery')->withSuccess('Update successfully.');
+        return response()->json([
+            'status'=>'success',
+        ]);
     }
 
     public function productDeliveryConfirmation(Request $request)
