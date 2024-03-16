@@ -66,7 +66,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="#tableData">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -136,7 +136,8 @@
                                             class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
                                             {{-- <a href="{{ route('pickup.edit', $pickupman->id) }}"
                                                 class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            <form action="{{ route('admin.pickupman_destroy') }}" method="get">
+                                            <form id="pickupmanDeleteConformation"
+                                                action="{{ route('admin.pickupman_destroy') }}" method="get">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $pickupman->id }}">
                                                 <button class="btn btn-sm btn-danger" type="submit"
@@ -227,8 +228,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
@@ -502,7 +501,7 @@
             });
         });
     </script> --}}
-    
+
     <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
@@ -612,7 +611,7 @@
                         } else {
                             resultsBody.html(
                                 '<tr><td colspan="14" class="text-center fw-bold">No data found for the selected inputs.</td></tr>'
-                                );
+                            );
                         }
                     },
                     error: function(xhr, status, error) {
@@ -621,7 +620,7 @@
                         var resultsBody = $('#searchResultsBody');
                         resultsBody.html(
                             '<tr><td colspan="21">Error fetching search results. Please try again.</td></tr>'
-                            );
+                        );
                         existingTable.show();
                     }
                 });
@@ -658,6 +657,61 @@
                     searchResultsSection.hide();
                     existingTable.show();
                 }
+            });
+        });
+    </script>
+
+
+    {{-- product_delete_conformation_by_the_admin --}}
+    {{-- <script>
+        $(document).ready(function() {
+            // Use event delegation for form submission
+            $(document).on('submit', '#pickupmanDeleteConformation', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                var formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'GET',
+                    data: formData,
+                    success: function(response) {
+                        // Reload the table content after successful form submission
+                        // reloadTableData();
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script> --}}
+
+
+
+    {{-- pickupman_delete_conformation_by_the_admin --}}
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#pickupmanDeleteConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'GET',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#existingTable').load(location.href + ' #existingTable > *');
+                        } else {
+                            console.error('Error occurred during delete operation');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
             });
         });
     </script>

@@ -381,11 +381,27 @@ class AdminController extends Controller
 
     public function pickupmanDestroy(Request $request)
     {
+        // $pickupman = Pickupman::find($request->id);
+        // $profile_path = public_path('pickupmen/profile_images/' . $pickupman->profile_img);
+        // $nidfront_path = public_path('pickupmen/nid_images/' . $pickupman->nid_front);
+        // $nidback_path = public_path('pickupmen/nid_images/' . $pickupman->nid_back);
+        // // dd($profile_path);
+        // if (file_exists($profile_path)) {
+        //     unlink($profile_path);
+        // }
+        // if (file_exists($nidfront_path)) {
+        //     unlink($nidfront_path);
+        // }
+        // if (file_exists($nidback_path)) {
+        //     unlink($nidback_path);
+        // }
+        // $pickupman->delete();
+        // return redirect('admin/pickupman');
         $pickupman = Pickupman::find($request->id);
         $profile_path = public_path('pickupmen/profile_images/' . $pickupman->profile_img);
         $nidfront_path = public_path('pickupmen/nid_images/' . $pickupman->nid_front);
         $nidback_path = public_path('pickupmen/nid_images/' . $pickupman->nid_back);
-        // dd($profile_path);
+
         if (file_exists($profile_path)) {
             unlink($profile_path);
         }
@@ -395,8 +411,11 @@ class AdminController extends Controller
         if (file_exists($nidback_path)) {
             unlink($nidback_path);
         }
+
         $pickupman->delete();
-        return redirect('admin/pickupman');
+
+        // Return a response indicating success
+        return response()->json(['status' => 'success']);
     }
 
 
@@ -437,11 +456,27 @@ class AdminController extends Controller
 
     public function deliverymanDestroy(Request $request)
     {
-        $deliveryman = Deliveryman::find($request->id);
-        $profile_path = public_path('deliverymen/profile_images/' . $deliveryman->profile_img);
-        $nidfront_path = public_path('deliverymen/nid_images/' . $deliveryman->nid_front);
-        $nidback_path = public_path('deliverymen/nid_images/' . $deliveryman->nid_back);
-        // dd($profile_path);
+        // $deliveryman = Deliveryman::find($request->id);
+        // $profile_path = public_path('deliverymen/profile_images/' . $deliveryman->profile_img);
+        // $nidfront_path = public_path('deliverymen/nid_images/' . $deliveryman->nid_front);
+        // $nidback_path = public_path('deliverymen/nid_images/' . $deliveryman->nid_back);
+        // // dd($profile_path);
+        // if (file_exists($profile_path)) {
+        //     unlink($profile_path);
+        // }
+        // if (file_exists($nidfront_path)) {
+        //     unlink($nidfront_path);
+        // }
+        // if (file_exists($nidback_path)) {
+        //     unlink($nidback_path);
+        // }
+        // $deliveryman->delete();
+        // return redirect('admin/deliveryman');
+        $pickupman = Pickupman::find($request->id);
+        $profile_path = public_path('pickupmen/profile_images/' . $pickupman->profile_img);
+        $nidfront_path = public_path('pickupmen/nid_images/' . $pickupman->nid_front);
+        $nidback_path = public_path('pickupmen/nid_images/' . $pickupman->nid_back);
+
         if (file_exists($profile_path)) {
             unlink($profile_path);
         }
@@ -451,8 +486,11 @@ class AdminController extends Controller
         if (file_exists($nidback_path)) {
             unlink($nidback_path);
         }
-        $deliveryman->delete();
-        return redirect('admin/deliveryman');
+
+        $pickupman->delete();
+
+        // Return a response indicating success
+        return response()->json(['status' => 'success']);
     }
 
 
@@ -521,7 +559,7 @@ class AdminController extends Controller
         $delivery->update();
         // return redirect('admin/product/delivery')->withSuccess('Update successfully.');
         return response()->json([
-            'status'=>'success',
+            'status' => 'success',
         ]);
     }
 
