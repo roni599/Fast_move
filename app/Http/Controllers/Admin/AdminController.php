@@ -365,8 +365,8 @@ class AdminController extends Controller
         $pickup->is_active = 2;
 
         $pickup->update();
-
-        return redirect('admin/pickupman');
+        return response()->json(['status' => 'success']);
+        // return redirect('admin/pickupman');
     }
 
     public function pickupCancelConfirmation(Request $request)

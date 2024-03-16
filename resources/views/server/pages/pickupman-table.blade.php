@@ -116,7 +116,7 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
                                             @if ($pickupman->is_active == 1)
-                                                <form action="{{ route('admin.pickupman_confirmation') }}" method="post">
+                                                <form id="pickupmanConformation" action="{{ route('admin.pickupman_confirmation') }}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $pickupman->id }}">
                                                     <button class="btn btn-sm btn-success" type="submit"><i
@@ -687,6 +687,34 @@
             });
         });
     </script> --}}
+
+
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#pickupmanConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#existingTable').load(location.href + ' #existingTable > *');
+                        } else {
+                            console.error('Error occurred during delete operation');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
 
 
     <script>
