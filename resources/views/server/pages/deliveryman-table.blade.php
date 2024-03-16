@@ -116,14 +116,15 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
                                             @if ($deliveryman->is_active == 1)
-                                                <form id="deliverymanConformation" action="{{ route('admin.deliveryman_confirmation') }}"
-                                                    method="post">
+                                                <form id="deliverymanConformation"
+                                                    action="{{ route('admin.deliveryman_confirmation') }}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $deliveryman->id }}">
                                                     <button class="btn btn-sm btn-success" type="submit"><i
                                                             class="fa-solid fa-check"></i></button>
                                                 </form>
-                                                <form action="{{ route('admin.deliveryman_cancel_confirmation') }}"
+                                                <form id="deliverymanCancelConformation"
+                                                    action="{{ route('admin.deliveryman_cancel_confirmation') }}"
                                                     method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $deliveryman->id }}">
@@ -137,7 +138,7 @@
                                             class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
                                             {{-- <a href="{{ route('pickup.edit', $deliveryman->id) }}"
                                                 class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            <form action="{{ route('admin.deliveryman_destroy') }}" method="get">
+                                            <form id="deliverymanDeleteConformation" action="{{ route('admin.deliveryman_destroy') }}" method="get">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $deliveryman->id }}">
                                                 <button class="btn btn-sm btn-danger" type="submit"
@@ -485,6 +486,57 @@
         });
     </script> --}}
 
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#deliverymanDeleteConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'GET',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#existingTable').load(location.href + ' #existingTable > *');
+                        } else {
+                            console.error('Error occurred during delete operation');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#deliverymanCancelConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#existingTable').load(location.href + ' #existingTable > *');
+                        } else {
+                            console.error('Error occurred during delete operation');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script>
 
 
 
