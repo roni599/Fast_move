@@ -442,7 +442,8 @@ class AdminController extends Controller
 
         $deliveryman->update();
 
-        return redirect('admin/deliveryman');
+        // return redirect('admin/deliveryman');
+        return response()->json(['status' => 'success']);
     }
 
     public function deliverymanCancelConfirmation(Request $request)

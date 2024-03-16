@@ -116,13 +116,15 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
                                             @if ($pickupman->is_active == 1)
-                                                <form id="pickupmanConformation" action="{{ route('admin.pickupman_confirmation') }}" method="post">
+                                                <form id="pickupmanConformation"
+                                                    action="{{ route('admin.pickupman_confirmation') }}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $pickupman->id }}">
                                                     <button class="btn btn-sm btn-success" type="submit"><i
                                                             class="fa-solid fa-check"></i></button>
                                                 </form>
-                                                <form id="pickupmanCancelConformation" action="{{ route('admin.pickupman_cancel_confirmation') }}"
+                                                <form id="pickupmanCancelConformation"
+                                                    action="{{ route('admin.pickupman_cancel_confirmation') }}"
                                                     method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $pickupman->id }}">
@@ -662,33 +664,7 @@
     </script>
 
 
-    {{-- product_delete_conformation_by_the_admin --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Use event delegation for form submission
-            $(document).on('submit', '#pickupmanDeleteConformation', function(event) {
-                event.preventDefault(); // Prevent default form submission
-
-                var formData = $(this).serialize(); // Serialize form data
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: 'GET',
-                    data: formData,
-                    success: function(response) {
-                        // Reload the table content after successful form submission
-                        // reloadTableData();
-                        $('#table').load(location.href + ' #table')
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error occurred:', error);
-                    }
-                });
-            });
-        });
-    </script> --}}
-
-
+{{-- pickupman__conformation_by_the_admin --}}
 
     <script>
         $(document).ready(function() {
@@ -715,7 +691,7 @@
     </script>
 
 
-
+{{-- pickupman_cancel_conformation_by_the_admin --}}
 
     <script>
         $(document).ready(function() {
@@ -740,8 +716,6 @@
             });
         });
     </script>
-
-
 
 {{-- pickupman_delete_conformation_by_the_admin --}}
 

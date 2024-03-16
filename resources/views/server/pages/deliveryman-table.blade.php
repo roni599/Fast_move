@@ -116,7 +116,7 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
                                             @if ($deliveryman->is_active == 1)
-                                                <form action="{{ route('admin.deliveryman_confirmation') }}"
+                                                <form id="deliverymanConformation" action="{{ route('admin.deliveryman_confirmation') }}"
                                                     method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $deliveryman->id }}">
@@ -484,4 +484,31 @@
             });
         });
     </script> --}}
+
+
+
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#deliverymanConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#existingTable').load(location.href + ' #existingTable > *');
+                        } else {
+                            console.error('Error occurred during delete operation');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
