@@ -122,7 +122,7 @@
                                                     <button class="btn btn-sm btn-success" type="submit"><i
                                                             class="fa-solid fa-check"></i></button>
                                                 </form>
-                                                <form action="{{ route('admin.pickupman_cancel_confirmation') }}"
+                                                <form id="pickupmanCancelConformation" action="{{ route('admin.pickupman_cancel_confirmation') }}"
                                                     method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $pickupman->id }}">
@@ -689,8 +689,33 @@
     </script> --}}
 
 
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#pickupmanCancelConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#existingTable').load(location.href + ' #existingTable > *');
+                        } else {
+                            console.error('Error occurred during delete operation');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script>
 
-    {{-- pickupman_delete_conformation_by_the_admin --}}
+
+
+{{-- pickupman_delete_conformation_by_the_admin --}}
 
     <script>
         $(document).ready(function() {

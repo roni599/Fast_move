@@ -376,7 +376,8 @@ class AdminController extends Controller
         $pickup->is_active = 3;
         $pickup->update();
 
-        return redirect('admin/pickupman');
+        // return redirect('admin/pickupman');
+        return response()->json(['status' => 'success']);
     }
 
     public function pickupmanDestroy(Request $request)
