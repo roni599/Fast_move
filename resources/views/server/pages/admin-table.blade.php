@@ -56,7 +56,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive bg-light">
-                    <table class="table table-light table-hover">
+                    <table class="table table-light table-hover" id="table">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -76,11 +76,20 @@
                                     <td>{{ $admin->phone }}</td>
                                     <td>{{ $admin->email }}</td>
                                     <td>
-                                        <form action="{{ route('admin.destroy') }}" method="get">
+                                        {{-- <form id="adminDeleteConformation" action="{{ route('admin.destroy') }}" method="get">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $admin->id }}">
                                             <button class="btn btn-sm btn-danger" type="submit"
-                                                onclick="return confirm('Are you sure?')">
+                                                onclick="return confirm('Are you sure want to delete admin?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form> --}}
+                                        <form id="adminDeleteConformation" action="{{ route('admin.destroy') }}"
+                                            method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $admin->id }}">
+                                            <button class="btn btn-sm btn-danger" type="submit"
+                                                onclick="return confirm('Are you sure want to delete admin?')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -219,6 +228,27 @@
                     searchResultsSection.hide();
                     existingTable.show();
                 }
+            });
+        });
+    </script>
+{{-- admin delete_conformation --}}
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#adminDeleteConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
             });
         });
     </script>

@@ -81,7 +81,8 @@ class CalculatorController extends Controller
     {
 
         $deliverycharge->update($request->all());
-        return redirect('deliverycharge')->withSuccess('Update successfully.');
+        // return redirect('deliverycharge')->withSuccess('Update successfully.');
+        return response()->json(['status' => 'success']);
     }
 
     /**

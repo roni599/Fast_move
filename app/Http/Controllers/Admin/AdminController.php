@@ -112,7 +112,7 @@ class AdminController extends Controller
             return back()->with('fail', 'Login details are not valid');
         }
     }
-
+    
     public function table()
     {
 
@@ -550,7 +550,21 @@ class AdminController extends Controller
             'status' => 'success',
         ]);
     }
+    public function deliveryChargeupdate(Request $request, Deliverycharge $deliverycharge)
+    {
 
+        $delivery = Deliverycharge::find($request->id);
+        $delivery->from_location = $request->from_location;
+        $delivery->destination = $request->destination;
+        $delivery->category = $request->category;
+        $delivery->delivery_type = $request->delivery_type;
+        $delivery->cost = $request->cost;
+        $delivery->update();
+        // return redirect('admin/product/delivery')->withSuccess('Update successfully.');
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
     public function productDeliveryConfirmation(Request $request)
     {
 

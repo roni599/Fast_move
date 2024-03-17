@@ -94,7 +94,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('admin/delivery/searchDelivery', 'searchDeliveryman')->name('admin.searchDeliveryman');
     Route::post('admin/pickupman/search', 'searchPickup')->name('admin.searchPickup');
     Route::post('admin/merchant/search', 'searchMerchant')->name('admin.searchMerchant');
-    Route::get('admin/destroy', 'adminDestroy')->name('admin.destroy')->middleware('isLoggedIn');
+    Route::post('admin/destroy', 'adminDestroy')->name('admin.destroy')->middleware('isLoggedIn');
     Route::post('admin/admin/search', 'adminSearch')->name('admin.adminSearch');
     Route::get('admin/excel/export', 'adminExcelExport')->name('admin.excel.export')->middleware('isLoggedIn');
     Route::post('admin/excel/import', 'adminExcelImport')->name('admin.excel.import')->middleware('isLoggedIn');
@@ -125,6 +125,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('admin/product/delivery/delete', 'productDestroy')->name('admin.product.delivery.delete')->middleware('isLoggedIn');
     Route::post('admin/product/excel/import', 'productExcelImport')->name('admin.product.excel.import')->middleware('isLoggedIn');
     Route::get('admin/product/excel/export', 'productExcelExport')->name('admin.product.excel.export')->middleware('isLoggedIn');
+    Route::post('admin/deliverycharge/edit', 'deliveryChargeupdate')->name('admin.deliverycharge.update')->middleware('isLoggedIn');
+
 });
 
 

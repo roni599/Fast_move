@@ -28,6 +28,7 @@
                     </div>
                     <form action="{{ route('deliverycharge.update', $deliverycharge->id) }}" class="forms-sample" method="post">
                         @csrf
+                        {{ dd($deliverycharge->id) }}
                         @method('PUT')
 
                         <div class="form-group row">

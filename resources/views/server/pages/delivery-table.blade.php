@@ -247,8 +247,10 @@
                                                 {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
-                                                <button class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                                    data-bs-target="#updateModal" data-id="{{ $delivery->id }}"
+                                                <button class="btn btn-sm btn-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#updateModal"
+                                                    data-id="{{ $delivery->id }}"
                                                     data-name="{{ $delivery->customer_name }}"
                                                     data-phone="{{ $delivery->customer_phone }}"
                                                     data-address="{{ $delivery->full_address }}"

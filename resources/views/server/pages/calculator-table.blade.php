@@ -54,7 +54,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="table">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -77,13 +77,33 @@
                                     <td>{{ $calculate->cost }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="{{ route('deliverycharge.show', $calculate->id) }}"
+                                            {{-- <a href="{{ route('deliverycharge.show', $calculate->id) }}"
                                                 class="btn btn-info">
-                                                <i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('deliverycharge.edit', $calculate->id) }}"
+                                                <i class="fas fa-eye"></i></a> --}}
+                                            <button class="btn btn-sm btn-success showButton" data-bs-toggle="modal"
+                                                data-bs-target="#showModal" data-id="{{ $calculate->id }}"
+                                                data-fromlocation="{{ $calculate->from_location }}"
+                                                data-destination="{{ $calculate->from_location }}"
+                                                data-category="{{ $calculate->category }}"
+                                                data-delivery_type="{{ $calculate->delivery_type }}"
+                                                data-cost="{{ $calculate->cost }}" id="updateDeliveryForm">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            {{-- <a href="{{ route('deliverycharge.edit', $calculate->id) }}"
                                                 class="btn btn-success">
-                                                <i class="fas fa-pencil-alt"></i></a>
-                                            <form action="{{ route('deliverycharge.destroy', $calculate->id) }}"
+                                                <i class="fas fa-pencil-alt"></i></a> --}}
+                                            <button class="btn btn-sm btn-success editDeliveryChargeButton"
+                                                data-bs-toggle="modal" data-bs-target="#editModal"
+                                                data-chargeid="{{ $calculate->id }}"
+                                                data-chargefromlocation="{{ $calculate->from_location }}"
+                                                data-chargedestination="{{ $calculate->from_location }}"
+                                                data-chargecategory="{{ $calculate->category }}"
+                                                data-chargedeliverytype="{{ $calculate->delivery_type }}"
+                                                data-chargecost="{{ $calculate->cost }}">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <form id="chargeDeleteConformation"
+                                                action="{{ route('deliverycharge.destroy', $calculate->id) }}"
                                                 method="post">
                                                 @csrf
                                                 @method ('DELETE')
@@ -124,6 +144,151 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Update Delivery Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="errMsgContainer"></div>
+                    <div class="card">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Delivery Charge Details
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Delivery Charge ID : <span id="chargeid"></span></h5>
+                                <h5 class="card-title">From Location : <span id="fromLocation"></span></h5>
+                                <h5 class="card-title">Destination : <span id="destination"></span></h5>
+                                <h5 class="card-title">Category Type : <span id="category"></span></h5>
+                                <h5 class="card-title">Delivery Type : <span id="deliveryType"></span></h5>
+                                <h5 class="card-title">Cost : <span id="cost"></span></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-gradient-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{-- deliveryCharge update modal --}}
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <form id="editDeliveryChargeForm">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Update Delivery Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- <div class="row w-100">
+                                <div class="col-md-9 grid-margin stretch-card"> --}}
+                        <div class="errMsgContainer"></div>
+                        <div class="card">
+                            <div class="card-body">
+                                @if (Session::has('success'))
+                                    <div class="alert alert-success">{{ Session::get('success') }}</div>
+                                @endif
+                                @if (Session::has('fail'))
+                                    <div class="alert alert-danger">{{ Session::get('fail') }}</div>
+                                @endif
+                                <div class="page-header">
+                                    <h3 class="page-title">
+                                        <span class="page-title-icon bg-gradient-primary text-white me-2">
+                                            <i class="mdi mdi-home"></i>
+                                        </span> Update Delivery Charge
+                                    </h3>
+                                    <nav aria-label="breadcrumb">
+                                        <ul class="breadcrumb">
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                <span></span>Overview <i
+                                                    class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <input type="hidden" id="id">
+                                <div class="form-group row">
+                                    <label for="exampleInputUsername2" class="col-sm-3 col-form-label">From</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="from_location"
+                                            id="fromtoLocationto">
+                                        @error('from_location')
+                                            {{ $message }}
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Destination</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="destination" id="destinationto"
+                                            value="" placeholder="Write The Destination Location Name">
+                                        @error('destination')
+                                            {{ $message }}
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Category</label>
+                                    <select name="category" class="form-control" id="categoryto">
+                                        <option value="" disabled selected></option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Document">Document</option>
+                                        <option value="Book">Book</option>
+                                    </select>
+                                </div>
+                                <span class="text-danger mb-3 d-block">
+                                    @error('category')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Delevery Type</label>
+                                    <select name="delivery_type" class="form-control" id="deliveryto">
+                                        <option value="" disabled selected></option>
+                                        <option value="drop">Drop</option>
+                                        <option value="pickup and drop">Pickup & Drop</option>
+                                    </select>
+                                </div>
+                                <span class="text-danger mb-3 d-block">
+                                    @error('delivery_type')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Delivery
+                                        Cost/KG</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control text-black" id="costto"
+                                            name="cost">
+                                        @error('cost')
+                                            {{ $message }}
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-gradient-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-gradient-primary editDeliveryChargeSubmit">Update
+                            Delivery</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
     <div class="col-lg-12 stretch-card" id="searchResultsSection" style="display: none;">
         <div class="card">
             <div class="card-body">
@@ -161,6 +326,9 @@
     <script>
         var deliveryChargeId = {{ $calculate->id }};
     </script>
+
+    {{-- search button presse or type --}}
+
     <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
@@ -225,14 +393,14 @@
 
                             function getViewButton(resultsId) {
                                 return '<a href="{{ route('deliverycharge.show', '') }}/' +
-                                resultsId + '" class="btn btn-info">' +
+                                    resultsId + '" class="btn btn-info">' +
                                     '<i class="fas fa-eye"></i>' +
                                     '</a>';
                             }
 
                             function getEditButton(resultsId) {
                                 return '<a href="{{ route('deliverycharge.edit', '') }}/' +
-                                resultsId +
+                                    resultsId +
                                     '" class="btn btn-success">' +
                                     '<i class="fas fa-pencil-alt"></i>' +
                                     '</a>';
@@ -240,7 +408,7 @@
 
                             function getDeleteButton(resultsId) {
                                 return '<form action="{{ route('deliverycharge.destroy', '') }}/' +
-                                resultsId + '" method="post">' +
+                                    resultsId + '" method="post">' +
                                     '@csrf' +
                                     '@method('DELETE')' +
                                     '<button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure?\')">' +
@@ -286,5 +454,103 @@
                 }
             });
         });
+    </script>
+
+    {{-- show data --}}
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.showButton', function() {
+                let up_id = $(this).data('id');
+                let from_location = $(this).data('fromlocation');
+                let destination = $(this).data('destination')
+                let category = $(this).data('category')
+                let delivery_type = $(this).data('delivery_type')
+                let cost = $(this).data('cost')
+
+                $('#chargeid').text(up_id)
+                $('#fromLocation').text(from_location);
+                $('#destination').text(destination);
+                $('#category').text(category);
+                $('#deliveryType').text(delivery_type);
+                $('#cost').text(cost);
+            });
+
+            $(document).on('click', '.editDeliveryChargeButton', function() {
+                let chargeid = $(this).data('chargeid');
+                let chargefromlocation = $(this).data('chargefromlocation');
+                let chargedestination = $(this).data('chargedestination')
+                let chargecategory = $(this).data('chargecategory')
+                let chargedeliverytype = $(this).data('chargedeliverytype')
+                let chargecost = $(this).data('chargecost')
+
+                $('#id').val(chargeid);
+                $('#fromtoLocationto').val(chargefromlocation);
+                $('#destinationto').val(chargedestination);
+                $('#categoryto').val(chargecategory);
+                $('#deliveryto').val(chargedeliverytype);
+                $('#costto').val(chargecost);
+            });
+
+            $(document).on('click', '.editDeliveryChargeSubmit', function(e) {
+                e.preventDefault();
+                let up_id = $('#id').val();
+                let fromtoLocationto = $('#fromtoLocationto').val();
+                let destinationto = $('#destinationto').val();
+                let categoryto = $('#categoryto').val();
+                let deliveryto = $('#deliveryto').val();
+                let costto = $('#costto').val();
+                var csrfToken = '{{ csrf_token() }}';
+
+                $.ajax({
+                    // url: "{{ route('admin.deliverycharge.update') }}",
+                    url: "{{ route('deliverycharge.update', ['deliverycharge' => ':up_id']) }}"
+                        .replace(':up_id', up_id),
+                    // method:'POST',
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        '_method': 'PUT',
+                        from_location: fromtoLocationto,
+                        destination: destinationto,
+                        category: categoryto,
+                        delivery_type: deliveryto,
+                        cost: costto
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.status == 'success') {
+                            $('#editModal').modal('hide');
+                            $('#updateDeliveryForm').trigger('reset');
+                            $('.modal-backdrop').remove();
+                            $('#table').load(location.href + ' #table');
+                        }
+                    },
+                    error: function(err) {
+                        console.error("An error occurred:", err);
+                    }
+                });
+
+            });
+
+            $(document).on('submit', '#chargeDeleteConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+        })
     </script>
 @endsection
