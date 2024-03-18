@@ -21,6 +21,7 @@
                     </div>
                 </form>
 
+
                 <form id="excel" action="{{ route('admin.pickupman.excel.import') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
@@ -66,7 +67,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="#tableData">
+                    <table class="table table-bordered" id="tableData">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -504,7 +505,8 @@
         });
     </script> --}}
 
-    <script>
+    {{-- dynamically input search and table render --}}
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -661,10 +663,52 @@
                 }
             });
         });
+    </script> --}}
+
+    {{-- auto table search and table render --}}
+    <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                if (searchInputValue === '') {
+                    $('#tableData').load(location.href + ' #tableData');
+                    return;
+                }
+                $.ajax({
+                    url: '{{ route('admin.searchPickup') }}',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'admin_delivery_search': searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#tableData').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                        $('#tableData').load(location.href + ' #tableData');
+                    }
+                });
+            }
+            searchInput.on('input', function() {
+                submitForm();
+            });
+
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+        });
     </script>
 
-
-{{-- pickupman__conformation_by_the_admin --}}
+    {{-- pickupman__conformation_by_the_admin --}}
+    {{-- pickupman_cancel_conformation_by_the_admin --}}
+    {{-- pickupman_delete_conformation_by_the_admin --}}
 
     <script>
         $(document).ready(function() {
@@ -687,14 +731,7 @@
                     }
                 });
             });
-        });
-    </script>
 
-
-{{-- pickupman_cancel_conformation_by_the_admin --}}
-
-    <script>
-        $(document).ready(function() {
             $(document).on('submit', '#pickupmanCancelConformation', function(event) {
                 event.preventDefault();
                 var formData = $(this).serialize();
@@ -704,7 +741,8 @@
                     data: formData,
                     success: function(response) {
                         if (response.status === 'success') {
-                            $('#existingTable').load(location.href + ' #existingTable > *');
+                            $('#existingTable').load(location.href +
+                                ' #existingTable > *');
                         } else {
                             console.error('Error occurred during delete operation');
                         }
@@ -714,13 +752,7 @@
                     }
                 });
             });
-        });
-    </script>
 
-{{-- pickupman_delete_conformation_by_the_admin --}}
-
-    <script>
-        $(document).ready(function() {
             $(document).on('submit', '#pickupmanDeleteConformation', function(event) {
                 event.preventDefault();
                 var formData = $(this).serialize();
@@ -742,4 +774,5 @@
             });
         });
     </script>
+
 @endsection

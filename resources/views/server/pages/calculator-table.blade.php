@@ -144,8 +144,8 @@
             </div>
         </div>
     </div>
-    
-{{-- dliveryCharge Show modal --}}
+
+    {{-- dliveryCharge Show modal --}}
     <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -178,7 +178,7 @@
         </div>
     </div>
 
-{{-- deliveryCharge update modal --}}
+    {{-- deliveryCharge update modal --}}
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <form id="editDeliveryChargeForm">
             <div class="modal-dialog modal-lg">
@@ -330,7 +330,7 @@
 
     {{-- search button presse or type --}}
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -455,10 +455,54 @@
                 }
             });
         });
+    </script> --}}
+
+    {{-- search button presse or type and rerender the table --}}
+    <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                if (searchInputValue === '') {
+                    return;
+                }
+
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.calculatorSearch') }}';
+
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                    }
+                });
+            }
+            searchInput.on('input', function() {
+                submitForm();
+            });
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+        });
     </script>
 
     {{-- show data --}}
-
     <script>
         $(document).ready(function() {
             $(document).on('click', '.showButton', function() {

@@ -134,7 +134,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script>
+{{-- for the first time type or submit button search --}}
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -230,7 +231,56 @@
                 }
             });
         });
+    </script> --}}
+
+
+{{-- for the first time type or submit button search and render the table dynamically --}}
+    <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+    
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+    
+                if (searchInputValue === '') {
+                    $('#table').load(location.href + ' #table');
+                    return;
+                }
+    
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('admin.adminSearch') }}';
+    
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                        $('#table').load(location.href + ' #table');
+                    }
+                });
+            }
+            searchInput.on('input', function() {
+                submitForm();
+            });
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+        });
     </script>
+
 {{-- admin delete_conformation --}}
     <script>
         $(document).ready(function() {

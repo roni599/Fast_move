@@ -112,7 +112,7 @@ class AdminController extends Controller
             return back()->with('fail', 'Login details are not valid');
         }
     }
-    
+
     public function table()
     {
 
@@ -266,8 +266,145 @@ class AdminController extends Controller
                 $query->where('deliveryman_name', 'like', '%' . $search . '%');
             })
             ->get();
+        $tableHtml = '<div class="table-responsive bg-light" id="tableContainer">';
+        $tableHtml .= '<table class="table table-light table-hover" id="tableData">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th scope="col">ID</th>';
+        $tableHtml .= '<th scope="col">Merchant Name</th>';
+        $tableHtml .= '<th scope="col">Pickupman Name</th>';
+        $tableHtml .= '<th scope="col">Deliveryman Name</th>';
+        $tableHtml .= '<th scope="col">Customer Name</th>';
+        $tableHtml .= '<th scope="col">Customer Phone</th>';
+        $tableHtml .= '<th scope="col">Address</th>';
+        $tableHtml .= '<th scope="col">Police Station</th>';
+        $tableHtml .= '<th scope="col">District</th>';
+        $tableHtml .= '<th scope="col">Division</th>';
+        $tableHtml .= '<th scope="col">Product Category</th>';
+        $tableHtml .= '<th scope="col">Delivery Type</th>';
+        $tableHtml .= '<th scope="col">COD</th>';
+        $tableHtml .= '<th scope="col">Order Tracking Id</th>';
+        $tableHtml .= '<th scope="col">Invoice</th>';
+        $tableHtml .= '<th scope="col">Note</th>';
+        $tableHtml .= '<th scope="col">Exchange Status</th>';
+        $tableHtml .= '<th scope="col">Delivery Charge</th>';
+        $tableHtml .= '<th scope="col">Status</th>';
+        $tableHtml .= '<th scope="col">Action</th>';
+        $tableHtml .= '<th scope="col">Update</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody id="container">';
+        if (!$customers->isEmpty()) {
+            foreach ($customers as $delivery) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $delivery->id . '</td>';
+                $tableHtml .= '<td>' . $delivery->user->merchant_name . '</td>';
+                // Check if pickupman is assigned
+                if ($delivery->pickupman_id > 0) {
+                    $tableHtml .= '<td>' . $delivery->pickupman->pickupman_name . '</td>';
+                } else {
+                    $tableHtml .= '<td>No one pickup</td>';
+                }
+                // Check if deliveryman is assigned
+                if ($delivery->deliveryman_id > 0) {
+                    $tableHtml .= '<td>' . $delivery->deliveryman->deliveryman_name . '</td>';
+                } else {
+                    $tableHtml .= '<td>No one delivered</td>';
+                }
+                $tableHtml .= '<td>' . $delivery->customer_name . '</td>';
+                $tableHtml .= '<td>' . $delivery->customer_phone . '</td>';
+                $tableHtml .= '<td>' . $delivery->full_address . '</td>';
+                $tableHtml .= '<td>' . $delivery->police_station . '</td>';
+                $tableHtml .= '<td>' . $delivery->district . '</td>';
+                $tableHtml .= '<td>' . $delivery->divisions . '</td>';
+                $tableHtml .= '<td>' . $delivery->product_category . '</td>';
+                $tableHtml .= '<td>' . $delivery->delivery_type . '</td>';
+                $tableHtml .= '<td>' . $delivery->cod_amount . '</td>';
+                $tableHtml .= '<td>' . $delivery->order_tracking_id . '</td>';
+                $tableHtml .= '<td>' . $delivery->invoice . '</td>';
+                $tableHtml .= '<td>' . $delivery->note . '</td>';
+                $tableHtml .= '<td>' . $delivery->exchange_status . '</td>';
+                $tableHtml .= '<td>' . $delivery->delivery_charge . '</td>';
+                // Display status based on is_active value
+                if ($delivery->is_active == 2) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-dark">Product On the way</span></td>';
+                } elseif ($delivery->is_active == 3) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-dark">Product Stock</span></td>';
+                } elseif ($delivery->is_active == 4) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-dark">Product Shiped</span></td>';
+                } elseif ($delivery->is_active == 5) {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span></td>';
+                } elseif ($delivery->is_active == 6) {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>';
+                } elseif ($delivery->is_active == 7) {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span></td>';
+                } elseif ($delivery->is_active == 'cancelled') {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span></td>';
+                } else {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span></td>';
+                }
+                $tableHtml .= '<td>';
+                if ($delivery->is_active == 2) {
+                    // If product is on the way, show confirmation and cancellation buttons
+                    $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
+                    $tableHtml .= '<form id="deliveryConfirmationForm" action="' . route('admin.product.delivery_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $delivery->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success text-white" type="submit"><i class="fa-solid fa-check"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '<form id="deliveryCancelConfirmationForm" action="' . route('admin.product.cancel_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $delivery->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit"><i class="fa-solid fa-times"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '</div>';
+                } elseif ($delivery->is_active == 'cancelled') {
+                    // If product is cancelled, display appropriate message
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span>';
+                } elseif ($delivery->is_active == 4 || $delivery->is_active == 5) {
+                    // If product is shipped or delivered, show no action message
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } elseif ($delivery->is_active == 3) {
+                    // If product is in stock, show awaiting response message
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Awaiting response <br> for deliveryman</span>';
+                } else {
+                    // For other cases, show no action message
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+                $tableHtml .= '</td>';
 
-        return response()->json(['customers' => $customers]);
+                $tableHtml .= '<td>';
+                if ($delivery->is_active == 4) {
+                    // If product is shipped, show no action message
+                    $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                    $tableHtml .= '</div>';
+                } elseif ($delivery->is_active == 3) {
+                    // If product is in stock, show edit and delete buttons
+                    $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success updateDeliveryForm" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="' . $delivery->id . '" data-name="' . $delivery->customer_name . '" data-phone="' . $delivery->customer_phone . '" data-address="' . $delivery->full_address . '" data-division="' . $delivery->divisions . '" data-dis="' . $delivery->district . '" data-police="' . $delivery->police_station . '" data-deliveryproduct="' . $delivery->product_category . '" data-del="' . $delivery->delivery_type . '" data-cod="' . $delivery->cod_amount . '" data-invoice="' . $delivery->invoice . '" data-note="' . $delivery->note . '" data-exchangeparcel="' . $delivery->exchange_status . '" data-weight="' . $delivery->product_weight . '" data-ordertrack="' . $delivery->order_tracking_id . '" data-deliverycharge="' . $delivery->delivery_charge . '" id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>';
+                    $tableHtml .= '<form id="productDeleteConformation" action="' . route('admin.product.delivery.delete') . '" method="get">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $delivery->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit" onclick="return confirm(\'Are you sure?\')"><i class="fa-solid fa-trash-can"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '</div>';
+                } else {
+                    // For other cases, show no action message
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                }
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+        $tableHtml .= '</div>';
+
+        return $tableHtml;
+        // return response()->json(['customers' => $customers]);
     }
 
 
@@ -283,8 +420,89 @@ class AdminController extends Controller
             ->orWhere('district', 'like', '%' . $searchInput . '%')
             ->orWhere('division', 'like', '%' . $searchInput . '%')
             ->get();
+        $tableHtml = '<div class="table-responsive">';
+        $tableHtml .= '<table class="table table-bordered" id="#tableData">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th scope="col">ID</th>';
+        $tableHtml .= '<th scope="col">PickupMan Name</th>';
+        $tableHtml .= '<th scope="col">Phone</th>';
+        $tableHtml .= '<th scope="col">Alt Phone</th>';
+        $tableHtml .= '<th scope="col">Email</th>';
+        $tableHtml .= '<th scope="col">Full Address</th>';
+        $tableHtml .= '<th scope="col">Police Station</th>';
+        $tableHtml .= '<th scope="col">District</th>';
+        $tableHtml .= '<th scope="col">Division</th>';
+        $tableHtml .= '<th scope="col">Profile Photo</th>';
+        $tableHtml .= '<th scope="col">NID Front</th>';
+        $tableHtml .= '<th scope="col">NID Back</th>';
+        $tableHtml .= '<th scope="col">Status</th>';
+        $tableHtml .= '<th scope="col">Action</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        if (!$pickupmen->isEmpty()) {
+            foreach ($pickupmen as $pickupman) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $pickupman->id . '</td>';
+                $tableHtml .= '<td>' . $pickupman->pickupman_name . '</td>';
+                $tableHtml .= '<td>' . $pickupman->phone . '</td>';
+                $tableHtml .= '<td>' . $pickupman->alt_phone . '</td>';
+                $tableHtml .= '<td>' . $pickupman->email . '</td>';
+                $tableHtml .= '<td>' . $pickupman->full_address . '</td>';
+                $tableHtml .= '<td>' . $pickupman->police_station . '</td>';
+                $tableHtml .= '<td>' . $pickupman->district . '</td>';
+                $tableHtml .= '<td>' . $pickupman->division . '</td>';
+                $tableHtml .= '<td><img src="' . asset('pickupmen/profile_images') . '/' . $pickupman->profile_img . '" alt="Profile photo"></td>';
+                $tableHtml .= '<td><img src="' . asset('pickupmen/nid_images') . '/' . $pickupman->nid_front . '" alt="NID Front"></td>';
+                $tableHtml .= '<td><img src="' . asset('pickupmen/nid_images') . '/' . $pickupman->nid_back . '" alt="NID Back"></td>';
 
-        return response()->json(['pickupmen' => $pickupmen]);
+                if ($pickupman->is_active == 1) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-black">Pending</span></td>';
+                } elseif ($pickupman->is_active == 3) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-black">Cancelled</span></td>';
+                } else {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-black">Confirmed</span></td>';
+                }
+
+                $tableHtml .= '<td>';
+                $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+
+                if ($pickupman->is_active == 1) {
+                    $tableHtml .= '<form id="pickupmanConformation" action="' . route('admin.pickupman_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $pickupman->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-check"></i></button>';
+                    $tableHtml .= '</form>';
+
+                    $tableHtml .= '<form id="pickupmanCancelConformation" action="' . route('admin.pickupman_cancel_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $pickupman->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit"><i class="fa-solid fa-times"></i></button>';
+                    $tableHtml .= '</form>';
+                }
+
+                $tableHtml .= '<form id="pickupmanDeleteConformation" action="' . route('admin.pickupman_destroy') . '" method="get">';
+                $tableHtml .= csrf_field();
+                $tableHtml .= '<input type="hidden" name="id" value="' . $pickupman->id . '">';
+                $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit" onclick="return confirm(\'Are you sure?\')"><i class="far fa-trash-alt"></i></button>';
+                $tableHtml .= '</form>';
+
+                $tableHtml .= '</div>';
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+        $tableHtml .= '</div>';
+
+        return $tableHtml;
+
+
+        // return response()->json(['pickupmen' => $pickupmen]);
     }
 
     public function searchDeliveryman(Request $request)
@@ -299,8 +517,81 @@ class AdminController extends Controller
             ->orWhere('district', 'like', '%' . $searchInput . '%')
             ->orWhere('division', 'like', '%' . $searchInput . '%')
             ->get();
+        $tableHtml = '<div class="table-responsive">';
+        $tableHtml = '<table class="table table-bordered">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th scope="col">ID</th>';
+        $tableHtml .= '<th scope="col">Delivery Man Name</th>';
+        $tableHtml .= '<th scope="col">Phone</th>';
+        $tableHtml .= '<th scope="col">Alt Phone</th>';
+        $tableHtml .= '<th scope="col">Email</th>';
+        $tableHtml .= '<th scope="col">Full Address</th>';
+        $tableHtml .= '<th scope="col">Police Station</th>';
+        $tableHtml .= '<th scope="col">District</th>';
+        $tableHtml .= '<th scope="col">Division</th>';
+        $tableHtml .= '<th scope="col">Profile Photo</th>';
+        $tableHtml .= '<th scope="col">NID Front</th>';
+        $tableHtml .= '<th scope="col">NID Back</th>';
+        $tableHtml .= '<th scope="col">Status</th>';
+        $tableHtml .= '<th scope="col">Action</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        if (!$deliverymen->isEmpty()) {
+            foreach ($deliverymen as $deliveryman) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $deliveryman->id . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->deliveryman_name . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->phone . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->alt_phone . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->email . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->full_address . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->police_station . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->district . '</td>';
+                $tableHtml .= '<td>' . $deliveryman->division . '</td>';
+                $tableHtml .= '<td><img src="' . asset('deliverymen/profile_images/' . $deliveryman->profile_img) . '" alt="Profile photo"></td>';
+                $tableHtml .= '<td><img src="' . asset('deliverymen/nid_images/' . $deliveryman->nid_front) . '" alt="NID Front"></td>';
+                $tableHtml .= '<td><img src="' . asset('deliverymen/nid_images/' . $deliveryman->nid_back) . '" alt="NID Back"></td>';
+                if ($deliveryman->is_active == 1) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-black">Pending</span></td>';
+                } elseif ($deliveryman->is_active == 3) {
+                    $tableHtml .= '<td><span class="badge bg-label-danger me-1 text-black">Cancelled</span></td>';
+                } else {
+                    $tableHtml .= '<td><span class="badge bg-label-success me-1 text-black">Confirmed</span></td>';
+                }
+                $tableHtml .= '<td>';
+                $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+                if ($deliveryman->is_active == 1) {
+                    $tableHtml .= '<form id="deliverymanConformation" action="' . route('admin.deliveryman_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $deliveryman->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-check"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '<form id="deliverymanCancelConformation" action="' . route('admin.deliveryman_cancel_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $deliveryman->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit"><i class="fa-solid fa-times"></i></button>';
+                    $tableHtml .= '</form>';
+                }
+                $tableHtml .= '<form id="deliverymanDeleteConformation" action="' . route('admin.deliveryman_destroy') . '" method="get">';
+                $tableHtml .= csrf_field();
+                $tableHtml .= '<input type="hidden" name="id" value="' . $deliveryman->id . '">';
+                $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit" onclick="return confirm(\'Are you sure?\')"><i class="far fa-trash-alt"></i></button>';
+                $tableHtml .= '</form>';
+                $tableHtml .= '</div>';
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+        $tableHtml .= '</div>';
 
-        return response()->json(['deliverymen' => $deliverymen]);
+        return $tableHtml;
+        // return response()->json(['deliverymen' => $deliverymen]);
     }
 
     public function searchMerchant(Request $request)
@@ -325,8 +616,44 @@ class AdminController extends Controller
             ->orWhere('phone', 'LIKE', "%$searchTerm%")
             ->orWhere('email', 'LIKE', "%$searchTerm%")
             ->get();
-
-        return response()->json(['deliveries' => $deliveries]);
+        $tableHtml = '<table class="table table-light table-hover" id="table">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th scope="col">ID</th>';
+        $tableHtml .= '<th scope="col">Name</th>';
+        $tableHtml .= '<th scope="col">Designation</th>';
+        $tableHtml .= '<th scope="col">Phone</th>';
+        $tableHtml .= '<th scope="col">Email</th>';
+        $tableHtml .= '<th scope="col">Delete</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        if (!$deliveries->isEmpty()) {
+            foreach ($deliveries as $admin) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $admin->id . '</td>';
+                $tableHtml .= '<td>' . $admin->admin_name . '</td>';
+                $tableHtml .= '<td>' . $admin->designation . '</td>';
+                $tableHtml .= '<td>' . $admin->phone . '</td>';
+                $tableHtml .= '<td>' . $admin->email . '</td>';
+                $tableHtml .= '<td>';
+                $tableHtml .= '<form id="adminDeleteConformation" action="' . route('admin.destroy') . '" method="post">';
+                $tableHtml .= csrf_field();
+                $tableHtml .= '<input type="hidden" name="id" value="' . $admin->id . '">';
+                $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit" onclick="return confirm(\'Are you sure want to delete admin?\')">';
+                $tableHtml .= '<i class="fas fa-trash-alt"></i>';
+                $tableHtml .= '</button>';
+                $tableHtml .= '</form>';
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+        return $tableHtml;
+        // return response()->json(['deliveries' => $deliveries]);
     }
 
     public function calculatorSearch(Request $request)
@@ -341,8 +668,49 @@ class AdminController extends Controller
             ->orWhere('cost', 'LIKE', "%$searchTerm%")
             ->orWhere('weight', 'LIKE', "%$searchTerm%")
             ->get();
+        $tableHtml = '<table class="table table-bordered" id="table">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th scope="col">ID</th>';
+        $tableHtml .= '<th scope="col">From</th>';
+        $tableHtml .= '<th scope="col">Destination</th>';
+        $tableHtml .= '<th scope="col">Category</th>';
+        $tableHtml .= '<th scope="col">Delivery Type</th>';
+        $tableHtml .= '<th scope="col">Delivery Cost</th>';
+        $tableHtml .= '<th scope="col">Action</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        if (!$results->isEmpty()) {
+            foreach ($results as $calculate) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $calculate->id . '</td>';
+                $tableHtml .= '<td>' . $calculate->from_location . '</td>';
+                $tableHtml .= '<td>' . $calculate->destination . '</td>';
+                $tableHtml .= '<td>' . $calculate->category . '</td>';
+                $tableHtml .= '<td>' . $calculate->delivery_type . '</td>';
+                $tableHtml .= '<td>' . $calculate->cost . '</td>';
+                $tableHtml .= '<td>';
+                $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+                $tableHtml .= '<button class="btn btn-sm btn-success showButton" data-bs-toggle="modal" data-bs-target="#showModal" data-id="' . $calculate->id . '" data-fromlocation="' . $calculate->from_location . '" data-destination="' . $calculate->destination . '" data-category="' . $calculate->category . '" data-delivery_type="' . $calculate->delivery_type . '" data-cost="' . $calculate->cost . '" id="updateDeliveryForm"><i class="fas fa-eye"></i></button>';
+                $tableHtml .= '<button class="btn btn-sm btn-success editDeliveryChargeButton" data-bs-toggle="modal" data-bs-target="#editModal" data-chargeid="' . $calculate->id . '" data-chargefromlocation="' . $calculate->from_location . '" data-chargedestination="' . $calculate->destination . '" data-chargecategory="' . $calculate->category . '" data-chargedeliverytype="' . $calculate->delivery_type . '" data-chargecost="' . $calculate->cost . '"><i class="fas fa-pencil-alt"></i></button>';
+                $tableHtml .= '<form id="chargeDeleteConformation" action="' . route('deliverycharge.destroy', $calculate->id) . '" method="post">';
+                $tableHtml .= csrf_field();
+                $tableHtml .= method_field('DELETE');
+                $tableHtml .= '<button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure?\')"><i class="fas fa-trash-alt"></i></button>';
+                $tableHtml .= '</form>';
+                $tableHtml .= '</div>';
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
 
-        return response()->json(['results' => $results]);
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+        return $tableHtml;
+        // return response()->json(['results' => $results]);
     }
 
     // ******Pickupman controller for admin******
@@ -475,7 +843,7 @@ class AdminController extends Controller
         }
         $deliveryman->delete();
         // return redirect('admin/deliveryman');
-        
+
 
         // Return a response indicating success
         return response()->json(['status' => 'success']);

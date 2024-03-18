@@ -66,7 +66,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="table">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -138,7 +138,8 @@
                                             class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
                                             {{-- <a href="{{ route('pickup.edit', $deliveryman->id) }}"
                                                 class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            <form id="deliverymanDeleteConformation" action="{{ route('admin.deliveryman_destroy') }}" method="get">
+                                            <form id="deliverymanDeleteConformation"
+                                                action="{{ route('admin.deliveryman_destroy') }}" method="get">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $deliveryman->id }}">
                                                 <button class="btn btn-sm btn-danger" type="submit"
@@ -204,7 +205,8 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script>
+    {{-- for the first time type or submit button search --}}
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -355,8 +357,49 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
+
+    {{-- for the first time type or submit button search and render the table dynamically --}}
+    <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                if (searchInputValue === '') {
+                    $('#table').load(location.href + ' #table');
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('admin.searchDeliveryman') }}',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                        $('#table').load(location.href + ' #table');
+                    }
+                });
+            }
+            searchInput.on('input', function() {
+                submitForm();
+            });
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+        });
+    </script>
 
     {{-- for given input and automatic search --}}
     {{-- <script>
@@ -486,7 +529,6 @@
         });
     </script> --}}
 
-
     <script>
         $(document).ready(function() {
             $(document).on('submit', '#deliverymanDeleteConformation', function(event) {
@@ -508,14 +550,7 @@
                     }
                 });
             });
-        });
-    </script>
 
-
-
-
-    <script>
-        $(document).ready(function() {
             $(document).on('submit', '#deliverymanCancelConformation', function(event) {
                 event.preventDefault();
                 var formData = $(this).serialize();
@@ -535,13 +570,7 @@
                     }
                 });
             });
-        });
-    </script>
 
-
-
-    <script>
-        $(document).ready(function() {
             $(document).on('submit', '#deliverymanConformation', function(event) {
                 event.preventDefault();
                 var formData = $(this).serialize();
@@ -551,7 +580,8 @@
                     data: formData,
                     success: function(response) {
                         if (response.status === 'success') {
-                            $('#existingTable').load(location.href + ' #existingTable > *');
+                            $('#existingTable').load(location.href +
+                                ' #existingTable > *');
                         } else {
                             console.error('Error occurred during delete operation');
                         }

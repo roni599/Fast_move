@@ -12,11 +12,10 @@
                 <form id="searchForm">
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">
-                            <input type="search" name="admin_delivery_search" class="form-control mr-sm-2"
-                                placeholder="Search" id="searchInput">
+                            <input type="search" name="admin_delivery_search" class="form-control mr-sm-2" placeholder="Search" id="searchInput">
                         </div>
                         <div class="input-group-append ms-2">
-                            <button type="submit" class="btn btn-dark my-2 my-sm-0">Search</button>
+                            <button type="submit" class="btn btn-primary my-2 my-sm-0">Search</button>
                         </div>
                     </div>
                 </form>
@@ -66,7 +65,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive bg-light" id="tableContainer">
-                    <table class="table table-light table-hover" id="table">
+                    <table class="table table-light table-hover" id="tableData">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -247,10 +246,8 @@
                                                 {{-- <form action="{{ route('admin.product.delivery.edit') }}" method="get">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $delivery->id }}"> --}}
-                                                <button class="btn btn-sm btn-success"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#updateModal"
-                                                    data-id="{{ $delivery->id }}"
+                                                <button class="btn btn-sm btn-success updateDeliveryForm" data-bs-toggle="modal"
+                                                    data-bs-target="#updateModal" data-id="{{ $delivery->id }}"
                                                     data-name="{{ $delivery->customer_name }}"
                                                     data-phone="{{ $delivery->customer_phone }}"
                                                     data-address="{{ $delivery->full_address }}"
@@ -266,7 +263,7 @@
                                                     data-weight="{{ $delivery->product_weight }}"
                                                     data-ordertrack="{{ $delivery->order_tracking_id }}"
                                                     data-deliverycharge="{{ $delivery->delivery_charge }}"
-                                                    id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>
+                                                    ><i class="fas fa-pencil-alt"></i></button>
                                                 {{-- </form> --}}
 
                                                 {{-- <td>{{ $delivery->exchange_status }}</td>
@@ -292,7 +289,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
@@ -342,7 +338,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-        <form id="updateDeliveryForm">
+        <form id="updateDeliveryFormSubmit">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -519,7 +515,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#updateDeliveryForm').on('click', function() {
+            $(document).on('click', '.updateDeliveryForm', function(e) {
                 let id = $(this).data('id');
                 let Customer_name = $(this).data('name');
                 let phone = $(this).data('phone')
@@ -603,9 +599,9 @@
                     success: function(res) {
                         if (res.status == 'success') {
                             $('#updateModal').modal('hide');
-                            $('#updateDeliveryForm').trigger('reset');
+                            $('#updateDeliveryFormSubmit').trigger('reset');
                             $('.modal-backdrop').remove();
-                            $('#table').load(location.href + ' #table')
+                            $('#tableData').load(location.href + ' #tableData')
                         }
                     },
                     error: function(err) {
@@ -806,7 +802,6 @@
     </script> --}}
 
     {{-- for given input and auto search without press search button --}}
-
     {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
@@ -986,10 +981,11 @@
                     existingTable.show();
                 }
             });
-        });</script> --}}
+        });
+    </script> --}}
 
     {{-- search_button_typue_by_the_admin --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -1189,10 +1185,68 @@
                 }
             });
         });
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                if (searchInputValue === '') {
+                    $('#tableData').load(location.href + ' #tableData');
+                    return;
+                }
+                $.ajax({
+                    url: '{{ route('admin.search') }}',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'admin_delivery_search': searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#tableData').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                        $('#tableData').load(location.href + ' #tableData');
+                    }
+                });
+            }
+            searchInput.on('input', function() {
+                submitForm();
+            });
+
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+        });
     </script>
 
-    {{-- product_accept_conformation_by_the_admin --}}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {{-- product_accept_conformation_by_the_admin --}}
+    {{-- product_cancel_conformation_by_the_admin --}}
+    {{-- product_delete_conformation_by_the_admin --}}
     <script>
         $(document).ready(function() {
             // Use event delegation for form submission
@@ -1208,20 +1262,14 @@
                     success: function(response) {
                         // Reload the table content after successful form submission
                         // reloadTableData();
-                        $('#table').load(location.href + ' #table')
+                        $('#tableData').load(location.href + ' #tableData')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error occurred:', error);
                     }
                 });
             });
-        });
-    </script>
 
-    {{-- product_cancel_conformation_by_the_admin --}}
-    <script>
-        $(document).ready(function() {
-            // Use event delegation for form submission
             $(document).on('submit', '#deliveryCancelConfirmationForm', function(event) {
                 event.preventDefault(); // Prevent default form submission
 
@@ -1234,20 +1282,14 @@
                     success: function(response) {
                         // Reload the table content after successful form submission
                         // reloadTableData();
-                        $('#table').load(location.href + ' #table')
+                        $('#tableData').load(location.href + ' #tableData')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error occurred:', error);
                     }
                 });
             });
-        });
-    </script>
 
-    {{-- product_delete_conformation_by_the_admin --}}
-    <script>
-        $(document).ready(function() {
-            // Use event delegation for form submission
             $(document).on('submit', '#productDeleteConformation', function(event) {
                 event.preventDefault(); // Prevent default form submission
 
@@ -1260,7 +1302,7 @@
                     success: function(response) {
                         // Reload the table content after successful form submission
                         // reloadTableData();
-                        $('#table').load(location.href + ' #table')
+                        $('#tableData').load(location.href + ' #tableData')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error occurred:', error);
