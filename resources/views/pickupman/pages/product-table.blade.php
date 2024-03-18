@@ -347,22 +347,22 @@
 
 
 
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             var searchForm = $('#searchForm');
             var searchInput = $('#searchInput');
-
+    
             function submitForm() {
                 var searchInputValue = searchInput.val().trim();
-
+    
                 if (searchInputValue === '') {
                     $('#table').load(location.href + ' #table');
                     return;
                 }
-
+    
                 var csrfToken = '{{ csrf_token() }}';
                 var searchRoute = '{{ route('pickupman.productPickSearch') }}';
-
+    
                 $.ajax({
                     url: searchRoute,
                     type: 'POST',
@@ -383,99 +383,22 @@
                     }
                 });
             }
-
-            searchForm.submit(function(e) {
-                e.preventDefault();
+    
+            // Trigger submitForm on keyup event of searchInput
+            searchInput.on('keyup', function() {
                 submitForm();
             });
-
-            searchInput.on('keyup', function() {
-                var searchInputValue = $(this).val().trim();
-
-                if (searchInputValue === '') {
-                    $('#table').load(location.href + ' #table');
-                }
-            });
-        });
-    </script> --}}
-
-    <script>
-        $(document).ready(function() {
-            var searchForm = $('#searchForm');
-            var searchInput = $('#searchInput');
-            var tableBody = $('#table tbody');
-
-            function submitForm() {
-                var searchInputValue = searchInput.val().trim();
-
-                if (searchInputValue === '') {
-                    $('#table').load(location.href + ' #table');
-                    return;
-                }
-
-                var csrfToken = '{{ csrf_token() }}';
-                var searchRoute = '{{ route('pickupman.productPickSearch') }}';
-
-                $.ajax({
-                    url: searchRoute,
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    data: {
-                        '_token': csrfToken,
-                        admin_delivery_search: searchInputValue,
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        // Clear existing table rows
-                        tableBody.empty();
-
-                        // Populate table with search results
-                        $.each(response, function(index, customer) {
-                            var row = '<tr>' +
-                                '<td>' + customer.id + '</td>' +
-                                '<td>' + customer.customer_name + '</td>' +
-                                '<td>' + customer.customer_phone + '</td>' +
-                                '<td>';
-                            if (customer.is_active == 1) {
-                                row +=
-                                    '<div class="d-flex justify-center align-items-center gap-2">' +
-                                    '<form class="pickupmanDeliveryProductCoformation" action="' +
-                                    '{{ route('pickupman.product.delivery_confirmation') }}' +
-                                    '" method="post">' +
-                                    '@csrf' + // Include CSRF token here
-                                    '<input type="hidden" name="id" value="' + customer.id +
-                                    '">' +
-                                    '<button class="btn btn-sm btn-success text-white" type="submit"><i class="fa-solid fa-check"></i></button>' +
-                                    '</form>' +
-                                    '</div>';
-                            } else {
-                                row +=
-                                    '<span class="badge bg-label-success me-1 text-dark">Your job <br> is done<br> Thanks!!</span>';
-                            }
-                            row += '</td>' +
-                                '</tr>';
-                            tableBody.append(row);
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching search results:', error);
-                        $('#table').load(location.href + ' #table');
-                    }
-                });
-            }
-
+    
+            // Trigger submitForm on form submission
             searchForm.submit(function(e) {
                 e.preventDefault();
-                submitForm();
-            });
-
-            searchInput.on('keyup', function() {
                 submitForm();
             });
         });
     </script>
+    
+
+
 
 
 

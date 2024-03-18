@@ -307,144 +307,6 @@ class PickupManController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    // public function searchProductPickupmanTable(Request $request)
-    // {
-
-    //     $search = $request->input('admin_delivery_search');
-
-    //     $customers = Product::with(['user:id,merchant_name'])
-    //         ->where(function ($query) use ($search) {
-    //             $query->where('product_category', 'like', '%' . $search . '%')
-    //                 ->orWhere('customer_name', 'like', '%' . $search . '%')
-    //                 ->orWhere('customer_phone', 'like', '%' . $search . '%')
-    //                 ->orWhere('full_address', 'like', '%' . $search . '%')
-    //                 ->orWhere('divisions', 'like', '%' . $search . '%')
-    //                 ->orWhere('district', 'like', '%' . $search . '%')
-    //                 ->orWhere('police_station', 'like', '%' . $search . '%')
-    //                 ->orWhere('delivery_type', 'like', '%' . $search . '%')
-    //                 ->orWhere('order_tracking_id', 'like', '%' . $search . '%')
-    //                 ->orWhere('cod_amount', 'like', '%' . $search . '%')
-    //                 ->orWhere('invoice', 'like', '%' . $search . '%');
-    //         })
-    //         ->orWhereHas('user', function ($query) use ($search) {
-    //             $query->where('merchant_name', 'like', '%' . $search . '%');
-    //         })
-    //         ->get();
-
-    //     // return response()->json(['customers' => $customers]);
-    //     return response()->json($customers);
-    // }
-
-
-    // public function searchProductPickupmanTable(Request $request)
-    // {
-    //     $search = $request->input('admin_delivery_search');
-
-    //     $customers = Product::with(['user:id,merchant_name'])
-    //         ->where(function ($query) use ($search) {
-    //             $query->where('product_category', 'like', '%' . $search . '%')
-    //                 ->orWhere('customer_name', 'like', '%' . $search . '%')
-    //                 ->orWhere('customer_phone', 'like', '%' . $search . '%')
-    //                 ->orWhere('full_address', 'like', '%' . $search . '%')
-    //                 ->orWhere('divisions', 'like', '%' . $search . '%')
-    //                 ->orWhere('district', 'like', '%' . $search . '%')
-    //                 ->orWhere('police_station', 'like', '%' . $search . '%')
-    //                 ->orWhere('delivery_type', 'like', '%' . $search . '%')
-    //                 ->orWhere('order_tracking_id', 'like', '%' . $search . '%')
-    //                 ->orWhere('cod_amount', 'like', '%' . $search . '%')
-    //                 ->orWhere('invoice', 'like', '%' . $search . '%');
-    //         })
-    //         ->orWhereHas('user', function ($query) use ($search) {
-    //             $query->where('merchant_name', 'like', '%' . $search . '%');
-    //         })
-    //         ->get();
-
-    //     // Generate HTML markup for the table
-    //     $tableHtml = '<table id="table" class="table">';
-    //     $tableHtml .= '<thead>';
-    //     $tableHtml .= '<tr>';
-    //     $tableHtml .= '<th>ID</th>';
-    //     $tableHtml .= '<th>Customer Name</th>';
-    //     $tableHtml .= '<th>Customer Phone</th>';
-    //     // Add more table headers as needed
-    //     $tableHtml .= '</tr>';
-    //     $tableHtml .= '</thead>';
-    //     $tableHtml .= '<tbody>';
-    //     foreach ($customers as $customer) {
-    //         $tableHtml .= '<tr>';
-    //         $tableHtml .= '<td>' . $customer->id . '</td>';
-    //         $tableHtml .= '<td>' . $customer->customer_name . '</td>';
-    //         $tableHtml .= '<td>' . $customer->customer_phone . '</td>';
-    //         // Add more table cells as needed
-    //         $tableHtml .= '</tr>';
-    //     }
-    //     $tableHtml .= '</tbody>';
-    //     $tableHtml .= '</table>';
-
-    //     return $tableHtml;
-    // }
-
-    // public function searchProductPickupmanTable(Request $request)
-    // {
-    //     $search = $request->input('admin_delivery_search');
-
-    //     $customers = Product::with(['user:id,merchant_name'])
-    //         ->where(function ($query) use ($search) {
-    //             $query->where('product_category', 'like', '%' . $search . '%')
-    //                 ->orWhere('customer_name', 'like', '%' . $search . '%')
-    //                 ->orWhere('customer_phone', 'like', '%' . $search . '%')
-    //                 ->orWhere('full_address', 'like', '%' . $search . '%')
-    //                 ->orWhere('divisions', 'like', '%' . $search . '%')
-    //                 ->orWhere('district', 'like', '%' . $search . '%')
-    //                 ->orWhere('police_station', 'like', '%' . $search . '%')
-    //                 ->orWhere('delivery_type', 'like', '%' . $search . '%')
-    //                 ->orWhere('order_tracking_id', 'like', '%' . $search . '%')
-    //                 ->orWhere('cod_amount', 'like', '%' . $search . '%')
-    //                 ->orWhere('invoice', 'like', '%' . $search . '%');
-    //         })
-    //         ->orWhereHas('user', function ($query) use ($search) {
-    //             $query->where('merchant_name', 'like', '%' . $search . '%');
-    //         })
-    //         ->get();
-
-    //     // Generate HTML markup for the table
-    //     $tableHtml = '<table id="table" class="table">';
-    //     $tableHtml .= '<thead>';
-    //     $tableHtml .= '<tr>';
-    //     $tableHtml .= '<th>ID</th>';
-    //     $tableHtml .= '<th>Customer Name</th>';
-    //     $tableHtml .= '<th>Customer Phone</th>';
-    //     $tableHtml .= '<th>Action</th>'; // Add a new table header for Action
-    //     $tableHtml .= '</tr>';
-    //     $tableHtml .= '</thead>';
-    //     $tableHtml .= '<tbody>';
-    //     foreach ($customers as $customer) {
-    //         $tableHtml .= '<tr>';
-    //         $tableHtml .= '<td>' . $customer->id . '</td>';
-    //         $tableHtml .= '<td>' . $customer->customer_name . '</td>';
-    //         $tableHtml .= '<td>' . $customer->customer_phone . '</td>';
-    //         $tableHtml .= '<td>';
-    //         if ($customer->is_active == 1) {
-    //             $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
-    //             $tableHtml .= '<form id="pickupmanDeliveryProductCoformation" action="' . route('pickupman.product.delivery_confirmation') . '" method="post">';
-    //             $tableHtml .= csrf_field(); // Include CSRF token
-    //             $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
-    //             $tableHtml .= '<button class="btn btn-sm btn-success text-white" type="submit"><i class="fa-solid fa-check"></i></button>';
-    //             $tableHtml .= '</form>';
-    //             $tableHtml .= '</div>';
-    //         } else {
-    //             $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Your job <br> is done<br> Thanks!!</span>';
-    //         }
-    //         $tableHtml .= '</td>';
-    //         $tableHtml .= '</tr>';
-    //     }
-    //     $tableHtml .= '</tbody>';
-    //     $tableHtml .= '</table>';
-
-    //     return $tableHtml;
-    // }
-
-
     public function searchProductPickupmanTable(Request $request)
     {
         $search = $request->input('admin_delivery_search');
@@ -467,7 +329,68 @@ class PickupManController extends Controller
                 $query->where('merchant_name', 'like', '%' . $search . '%');
             })
             ->get();
+        $tableHtml = '<table id="table" class="table table-light table-hover">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th>ID</th>';
+        $tableHtml .= '<th>Merchant Name</th>';
+        $tableHtml .= '<th>Customer Name</th>';
+        $tableHtml .= '<th>Customer Phone</th>';
+        $tableHtml .= '<th>Address</th>';
+        $tableHtml .= '<th>Police Station</th>';
+        $tableHtml .= '<th>District</th>';
+        $tableHtml .= '<th>Division</th>';
+        $tableHtml .= '<th>Product Category</th>';
+        $tableHtml .= '<th>Delivery Type</th>';
+        $tableHtml .= '<th>COD</th>';
+        $tableHtml .= '<th>Order Tracking Id</th>';
+        $tableHtml .= '<th>Invoice</th>';
+        $tableHtml .= '<th>Note</th>';
+        $tableHtml .= '<th>Exchange Status</th>';
+        $tableHtml .= '<th>Delivery Charge</th>';
+        $tableHtml .= '<th>	Status</th>';
+        $tableHtml .= '<th>Action</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        foreach ($customers as $customer) {
+            $tableHtml .= '<tr>';
+            $tableHtml .= '<td>' . $customer->id . '</td>';
+            $tableHtml .= '<td>' . $customer->user->merchant_name  . '</td>';
+            $tableHtml .= '<td>' . $customer->customer_name . '</td>';
+            $tableHtml .= '<td>' . $customer->customer_phone . '</td>';
+            $tableHtml .= '<td>' . $customer->full_address . '</td>';
+            $tableHtml .= '<td>' . $customer->police_station . '</td>';
+            $tableHtml .= '<td>' . $customer->district . '</td>';
+            $tableHtml .= '<td>' . $customer->divisions . '</td>';
+            $tableHtml .= '<td>' . $customer->product_category . '</td>';
+            $tableHtml .= '<td>' . $customer->delivery_type . '</td>';
+            $tableHtml .= '<td>' . $customer->cod_amount . '</td>';
+            $tableHtml .= '<td>' . $customer->order_tracking_id . '</td>';
+            $tableHtml .= '<td>' . $customer->invoice . '</td>';
+            $tableHtml .= '<td>' . $customer->note . '</td>';
+            $tableHtml .= '<td>' . $customer->exchange_status . '</td>';
+            $tableHtml .= '<td>' . $customer->delivery_charge . '</td>';
+            $tableHtml .= '<td>' . ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' : ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On <br> the way</span>' : ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>' : ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>' : ($customer->is_active == 5 ? '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>' : ($customer->is_active == 6 ? '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>' : ($customer->is_active == 7 ? '<span class="badge bg-label-danger me-1 text-dark">Product Cancel</span>' : ''))))))) . '</td>';
 
-        return response()->json($customers);
+            $tableHtml .= '<td>';
+            if ($customer->is_active == 1) {
+                $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
+                $tableHtml .= '<form id="pickupmanDeliveryProductCoformation" action="' . route('pickupman.product.delivery_confirmation') . '" method="post">';
+                $tableHtml .= csrf_field(); // Include CSRF token
+                $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
+                $tableHtml .= '<button class="btn btn-sm btn-success text-white" type="submit"><i class="fa-solid fa-check"></i></button>';
+                $tableHtml .= '</form>';
+                $tableHtml .= '</div>';
+            } else {
+                $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Your job <br> is done<br> Thanks!!</span>';
+            }
+            $tableHtml .= '</td>';
+            $tableHtml .= '</tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+
+        return $tableHtml;
     }
 }
