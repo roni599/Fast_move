@@ -82,7 +82,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="table">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -99,6 +99,8 @@
                                 <th scope="col">Note</th>
                                 <th scope="col">Exchange Status</th>
                                 <th scope="col">Delivery Charge</th>
+                                <th scope="col">Product Price</th>
+                                <th scope="col">Product weight</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -120,9 +122,12 @@
                                     <td>{{ $delivery->note }}</td>
                                     <td>{{ $delivery->exchange_status }}</td>
                                     <td>{{ $delivery->delivery_charge }}</td>
+                                    <td>{{ $delivery->cod_amount }}</td>
+                                    <td>{{ $delivery->product_weight }}</td>
 
                                     @if ($delivery->is_active === '1')
-                                        <td><span class="badge bg-label-danger me-1 text-dark">Awaiting response <br> for Pickupman</span></td>
+                                        <td><span class="badge bg-label-danger me-1 text-dark">Awaiting response <br> for
+                                                Pickupman</span></td>
                                     @elseif ($delivery->is_active === '2')
                                         <td><span class="badge bg-label-danger me-1 text-dark">Product On <br> the
                                                 way</span></td>
@@ -138,19 +143,70 @@
                                         <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>
                                         </td>
                                     @endif
-
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="{{ route('product.show', $delivery->id) }}"
-                                                class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('product.edit', $delivery->id) }}"
-                                                class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a>
-                                            <form action="{{ route('product.destroy', $delivery->id) }}" method="post">
+                                            {{-- <a href="{{ route('product.show', $delivery->id) }}"
+                                                class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
+
+                                            <button class="btn btn-sm btn-success showMerchantProductButton"
+                                                data-bs-toggle="modal" data-bs-target="#showMerchantproductModal"
+                                                data-id="{{ $delivery->id }}"
+                                                data-customer_name="{{ $delivery->customer_name }}"
+                                                data-customer_phone="{{ $delivery->customer_phone }}"
+                                                data-full_address="{{ $delivery->full_address }}"
+                                                data-police_station="{{ $delivery->police_station }}"
+                                                data-district="{{ $delivery->district }}"
+                                                data-divisions="{{ $delivery->divisions }}"
+                                                data-product_category="{{ $delivery->product_category }}"
+                                                data-delivery_type="{{ $delivery->delivery_type }}"
+                                                data-amount="{{ $delivery->cod_amount }}"
+                                                data-status="{{ $delivery->is_active }}"
+                                                data-order_tracking_id="{{ $delivery->order_tracking_id }}"
+                                                data-invoice="{{ $delivery->invoice }}"
+                                                data-note="{{ $delivery->note }}"
+                                                data-weight="{{ $delivery->product_weight }}"
+                                                data-exchange_status="{{ $delivery->exchange_status }}"
+                                                data-delivery_charge="{{ $delivery->delivery_charge }}"
+                                                id="showProductMerchantForm">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            {{-- <a href="{{ route('product.edit', $delivery->id) }}"
+                                                class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
+                                            <button class="btn btn-sm btn-success merchantProductEditModal"
+                                                data-bs-toggle="modal" data-bs-target="#merchantProductEditModal"
+                                                data-idtoedit="{{ $delivery->id }}"
+                                                data-customer_nametoedit="{{ $delivery->customer_name }}"
+                                                data-customer_phonetoedit="{{ $delivery->customer_phone }}"
+                                                data-full_addresstoedit="{{ $delivery->full_address }}"
+                                                data-police_stationtoedit="{{ $delivery->police_station }}"
+                                                data-districttoedit="{{ $delivery->district }}"
+                                                data-divisionstoedit="{{ $delivery->divisions }}"
+                                                data-product_categorytoedit="{{ $delivery->product_category }}"
+                                                data-delivery_typetoedit="{{ $delivery->delivery_type }}"
+                                                data-amounttoedit="{{ $delivery->cod_amount }}"
+                                                data-statustoedit="{{ $delivery->is_active }}"
+                                                data-order_tracking_idtoedit="{{ $delivery->order_tracking_id }}"
+                                                data-invoicetoedit="{{ $delivery->invoice }}"
+                                                data-notetoedit="{{ $delivery->note }}"
+                                                data-exchange_statustoedit="{{ $delivery->exchange_status }}"
+                                                data-delivery_chargetoedit="{{ $delivery->delivery_charge }}"
+                                                data-weighttoedit="{{ $delivery->product_weight }}"
+                                                id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>
+                                            {{-- <form action="{{ route('product.destroy', $delivery->id) }}" method="post">
                                                 @csrf
                                                 @method ('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger"
                                                     onclick="return confirm('Are you sure?')"> <i
                                                         class="fas fa-trash-alt"></i> </button>
+                                            </form> --}}
+                                            <form id="merchantProductDeleteConformation"
+                                                action="{{ route('product.destroy', $delivery->id) }}" method="post">
+                                                @csrf
+                                                @method ('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Are you sure?')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </form>
                                         </div>
                                     </td>
@@ -159,10 +215,227 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="merchantProductEditModal" tabindex="-1" aria-labelledby="merchantProductEditModalLabel"
+        aria-hidden="true">
+        <form id="merchantProductEditForm">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="merchantProductupdateModalLabel">Update Delivery Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- <div class="row w-100">
+                                <div class="col-md-9 grid-margin stretch-card"> --}}
+                        <div class="errMsgContainer"></div>
+                        <div class="card">
+                            <div class="card-body">
+                                @if (Session::has('success'))
+                                    <div class="alert alert-success">{{ Session::get('success') }}</div>
+                                @endif
+                                @if (Session::has('fail'))
+                                    <div class="alert alert-danger">{{ Session::get('fail') }}</div>
+                                @endif
+                                <div class="page-header">
+                                    <h3 class="page-title">
+                                        <span class="page-title-icon bg-gradient-primary text-white me-2">
+                                            <i class="mdi mdi-home"></i>
+                                        </span> Update Parcel Delivery
+                                    </h3>
+                                    <nav aria-label="breadcrumb">
+                                        <ul class="breadcrumb">
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                <span></span>Overview <i
+                                                    class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                {{-- <form id="updateDeliveryForm" action="" class="forms-sample" method="post">
+                                @csrf --}}
+                                <input type="text" id="id">
+                                <div class="form-group row">
+                                    <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Customer Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="name" class="form-control"
+                                            id="Customer_nametoedit">
+                                    </div>
+                                </div>
+                                {{-- <input type="hidden" name="order_tracking_id" value="{{ $delivery->numericValue }}">
+                                                <input type="hidden" name="user_id" value="{{ $delivery->id }}"> --}}
+                                <div class="form-group row">
+                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">Customer Phone</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="phone" class="form-control" id="phonetoedit">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Address</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="address" class="form-control" id="addresstoedit">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Division</label>
+                                    <input type="text" name="divisions" class="form-control" id="divisionstoedit">
+                                    {{-- <select name="divisions" class="form-control" id="divisions"
+                                        onchange="divisionsList();">
+                                        <option selected></option>
+                                        <option value="Barishal">Barishal</option>
+                                        <option value="Chattogram">Chattogram</option>
+                                        <option value="Dhaka">Dhaka</option>
+                                        <option value="Khulna">Khulna</option>
+                                        <option value="Mymensingh">Mymensingh</option>
+                                        <option value="Rajshahi">Rajshahi</option>
+                                        <option value="Rangpur">Rangpur</option>
+                                        <option value="Sylhet">Sylhet</option>
+                                    </select> --}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">District</label>
+                                    <input type="text" name="district" class="form-control" id="distrtoedit">
+                                    {{-- <select name="district" class="form-control" id="distr" onchange="thanaList();">
+                                        <option selected></option>
+                                    </select> --}}
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Police Station</label>
+                                    <input type="text" name="police_station" class="form-control"
+                                        id="policstatoedit">
+                                    {{-- <select name="police_station" class="form-control" id="polic_sta">
+                                        <option selected></option>
+                                    </select> --}}
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Category Type</label>
+                                    <select name="category_type" class="form-control" id="categorytoedit">
+                                        <option selected></option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Document">Document</option>
+                                        <option value="Book">Book</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Delevery Type</label>
+                                    <input type="text" name="delivery_type" class="form-control"
+                                        id="deliverytypetoedit">
+                                    {{-- <select name="delivery_type" class="form-control" id="deliverytype">
+                                        <option selected></option>
+                                        <option value="Drop">Drop</option>
+                                        <option value="Pickup & Drop">Pickup & Drop</option>
+                                    </select> --}}
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">COD
+                                        Amount</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="cod_amount" class="form-control" id="codtoedit">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2"
+                                        class="col-sm-3 col-form-label">Invoice</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="invoice" class="form-control" id="invoicetoedit">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Note</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="note" class="form-control" id="notetoedit">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="exampleInputConfirmPassword2"
+                                        class="col-sm-3 col-form-label">Weight</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="weight" class="form-control" id="weighttoedit">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Exchange Parcel</label>
+                                    <select name="exchange_parcel" class="form-control" id="exchangeparceltoedit">
+                                        <option selected></option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+
+                                {{-- <button type="submit" class="btn btn-gradient-primary me-2">Save</button> --}}
+                                {{-- <button class="btn btn-light">Cancel</button> --}}
+
+                            </div>
+                        </div>
+                        {{-- </div>
+                            </div> --}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-gradient-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-gradient-primary merchantProductEdit">Update
+                            Delivery</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="showMerchantproductModal" tabindex="-1" aria-labelledby="showMerchantproductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showMerchantproductModalLabel">Update Delivery Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="errMsgContainer"></div>
+                    <div class="card">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Delivery Charge Details
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Product ID : <span id="productid"></span></h5>
+                                <h5 class="card-title">Customer Name : <span id="customername"></span></h5>
+                                <h5 class="card-title">Customer Phone : <span id="customerphone"></span></h5>
+                                <h5 class="card-title">District : <span id="customerdistrict"></span></h5>
+                                <h5 class="card-title">divisions : <span id="customerdivisions"></span></h5>
+                                <h5 class="card-title">Police Station : <span id="customerpolicestation"></span></h5>
+                                <h5 class="card-title">Full Address : <span id="customerfulladdress"></span></h5>
+                                <h5 class="card-title">Product Category : <span id="productcategory"></span></h5>
+                                <h5 class="card-title">Delivery Type : <span id="deliverytypeto"></span></h5>
+                                <h5 class="card-title">Product Price : <span id="productprice"></span></h5>
+                                <h5 class="card-title">Product Status : <span id="productstatus"></span></h5>
+                                <h5 class="card-title">Order Tracking ID : <span id="ordertrackingid"></span></h5>
+                                <h5 class="card-title">Product Invoice : <span id="productinvoice"></span></h5>
+                                <h5 class="card-title">Product Note : <span id="productnote"></span></h5>
+                                <h5 class="card-title">Exchange Status : <span id="exchangestatus"></span></h5>
+                                <h5 class="card-title">Delivery Charge : <span id="productdeliverycharge"></span></h5>
+                                <h5 class="card-title">Product Weight : <span id="productweight"></span></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-gradient-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
@@ -202,6 +475,187 @@
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.showMerchantProductButton', function() {
+                let up_id = $(this).data('id');
+                let customer_name = $(this).data('customer_name')
+                let customer_phone = $(this).data('customer_phone')
+                let district = $(this).data('district')
+                let divisions = $(this).data('divisions')
+                let police_station = $(this).data('police_station')
+                let full_address = $(this).data('full_address')
+                let product_category = $(this).data('product_category')
+                let delivery_type = $(this).data('delivery_type')
+                let amount = $(this).data('amount')
+                let status = $(this).data('status')
+                let order_tracking_id = $(this).data('order_tracking_id')
+                let invoice = $(this).data('invoice')
+                let note = $(this).data('note')
+                let exchange_status = $(this).data('exchange_status')
+                let delivery_charge = $(this).data('delivery_charge')
+                let weight = $(this).data('weight')
+
+                $('#productid').text(up_id)
+                $('#customername').text(customer_name)
+                $('#customerphone').text(customer_phone)
+                $('#customerdistrict').text(district)
+                $('#customerdivisions').text(divisions)
+                $('#customerpolicestation').text(police_station)
+                $('#customerfulladdress').text(full_address)
+                $('#productcategory').text(product_category)
+                $('#deliverytypeto').text(delivery_type)
+                $('#productprice').text(amount)
+                if (status == 1) {
+                    $('#productstatus').text("pending")
+                } else if (status == 2) {
+                    $('#productstatus').text("On the way")
+                } else if (status == 3) {
+                    $('#productstatus').text("stocked")
+                } else if (status == 4) {
+                    $('#productstatus').text("shiped")
+                } else if (status == 5) {
+                    $('#productstatus').text("deliverd")
+                } else if (status == 6) {
+                    $('#productstatus').text("Return")
+                } else if (status == 7) {
+                    $('#productstatus').text("cancel")
+                }
+                $('#ordertrackingid').text(order_tracking_id)
+                $('#productinvoice').text(invoice)
+                $('#productnote').text(note)
+                $('#exchangestatus').text(exchange_status)
+                $('#productdeliverycharge').text(delivery_charge)
+                $('#productweight').text(weight)
+
+            });
+            $(document).on('click', '.merchantProductEditModal', function() {
+                let up_idtoedit = $(this).data('idtoedit');
+                let customer_name = $(this).data('customer_nametoedit')
+                let customer_phone = $(this).data('customer_phonetoedit')
+                let district = $(this).data('districttoedit')
+                let divisions = $(this).data('divisionstoedit')
+                let police_station = $(this).data('police_stationtoedit')
+                let full_address = $(this).data('full_addresstoedit')
+                let product_category = $(this).data('product_categorytoedit')
+                let delivery_type = $(this).data('delivery_typetoedit')
+                let amount = $(this).data('amounttoedit')
+                let status = $(this).data('statustoedit')
+                let order_tracking_id = $(this).data('order_tracking_idtoedit')
+                let invoice = $(this).data('invoicetoedit')
+                let note = $(this).data('notetoedit')
+                let exchange_status = $(this).data('exchange_statustoedit')
+                let weight = $(this).data('weighttoedit')
+
+
+                $('#id').val(up_idtoedit);
+                $('#Customer_nametoedit').val(customer_name);
+                $('#phonetoedit').val(customer_phone);
+                $('#addresstoedit').val(full_address);
+                $('#divisionstoedit').val(divisions);
+                $('#distrtoedit').val(district);
+                $('#policstatoedit').val(police_station);
+                $('#categorytoedit').val(product_category);
+                $('#deliverytypetoedit').val(delivery_type);
+                $('#codtoedit').val(amount);
+                $('#invoicetoedit').val(invoice);
+                $('#notetoedit').val(note);
+                $('#weighttoedit').val(weight);
+                $('#exchangeparceltoedit').val(exchange_status);
+            });
+
+            $(document).on('click', '.merchantProductEdit', function(e) {
+                e.preventDefault();
+
+                let up_id = $('#id').val();
+                let Customer_name = $('#Customer_nametoedit').val();
+                let phone = $('#phonetoedit').val();
+                let address = $('#addresstoedit').val();
+                let divisions = $('#divisionstoedit').val();
+                let district = $('#distrtoedit').val();
+                let police = $('#policstatoedit').val();
+                let deliveryproduct = $('#categorytoedit').val();
+                let del = $('#deliverytypetoedit').val();
+                let cod = $('#codtoedit').val();
+                let invoice = $('#invoicetoedit').val();
+                let note = $('#notetoedit').val();
+                let weight = $('#weighttoedit').val();
+                let exchangeparcel = $('#exchangeparceltoedit').val();
+
+                var csrfToken = '{{ csrf_token() }}';
+                $.ajax({
+                    url: "{{ route('product.update', ['product' => ':up_id']) }}"
+                        .replace(':up_id', up_id),
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        '_method': 'PUT',
+                        id: up_id,
+                        customer_name: Customer_name,
+                        customer_phone: phone,
+                        full_address: address,
+                        divisions: divisions,
+                        district: district,
+                        police_station: police,
+                        product_category: deliveryproduct,
+                        delivery_type: del,
+                        cod_amount: cod,
+                        invoice: invoice,
+                        note: note,
+                        exchange_status: exchangeparcel,
+                        product_weight: weight,
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.status == 'success') {
+                            $('#merchantProductEditModal').modal('hide');
+                            $('#merchantProductEditForm').trigger('reset');
+                            $('.modal-backdrop').remove();
+                            $('#table').load(location.href + ' #table')
+                        }
+                    },
+                    error: function(err) {
+                        let error = err.responseJSON;
+                        $.each(error.errors, function(index, value) {
+                            $('.errMsgContainer').append('<span class="text-danger">' +
+                                value + '</span>' + '<br>')
+                        })
+                    }
+                })
+            });
+
+            $(document).on('submit', '#merchantProductDeleteConformation', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+        });
+    </script>
+
+
+
+
+
+
+
+
+
 
     {{-- declear route for input --}}
     <script>

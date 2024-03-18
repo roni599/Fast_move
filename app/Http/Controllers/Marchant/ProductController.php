@@ -93,7 +93,8 @@ class ProductController extends Controller
     {
 
         $product->update($request->all());
-        return redirect('product')->withSuccess('Update successfully.');
+        // return redirect('product')->withSuccess('Update successfully.');
+        return response()->json(['status' => 'success']);
     }
 
     /**
@@ -103,6 +104,7 @@ class ProductController extends Controller
     {
 
         $product->delete();
-        return redirect('product')->withSuccess('Delete successfully.');
+        // return redirect('product')->withSuccess('Delete successfully.');
+        return response()->json(['status' => 'success']);
     }
 }

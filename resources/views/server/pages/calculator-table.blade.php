@@ -144,7 +144,8 @@
             </div>
         </div>
     </div>
-
+    
+{{-- dliveryCharge Show modal --}}
     <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
