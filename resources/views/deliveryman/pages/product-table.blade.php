@@ -50,7 +50,7 @@
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
                 <div class="table-responsive bg-light">
-                    <table class="table table-light table-hover">
+                    <table class="table table-light table-hover" id="table">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -119,19 +119,30 @@
                                             <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                         @endif
                                         @if ($delivery->is_active == 3)
-                                            <form action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                            {{-- <form id="productCheckout"
+                                                action="{{ route('admin.product.delivery_checkout') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success" type="submit">
                                                     <i class="fa-solid fa-cart-shopping"></i>
                                                 </button>
+                                            </form> --}}
+
+                                            <form id="productcheckout"
+                                                action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $delivery->id }}">
+                                                <button class="btn btn-sm btn-success text-white" type="submit">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </button>
                                             </form>
+
                                             {{-- @else
                                             <span class="badge bg-label-success me-1 text-dark">Product <br> has not <br>
                                                 arrived yet <br>in the stock</span> --}}
                                         @endif
                                         @if ($delivery->is_active == 4)
-                                            <form action="{{ route('deliveryman.product.delivered') }}" method="post">
+                                            <form id="deliverymanproductcheckout" action="{{ route('deliveryman.product.delivered') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success" type="submit">
@@ -141,7 +152,7 @@
                                         @endif
 
                                         @if ($delivery->is_active == 4)
-                                            <form action="{{ route('deliveryman.product.return') }}" method="post">
+                                            <form id="deliverymanProductReturn" action="{{ route('deliveryman.product.return') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success" type="submit">
@@ -151,7 +162,7 @@
                                         @endif
 
                                         @if ($delivery->is_active == 4)
-                                            <form action="{{ route('deliveryman.product.cancel') }}" method="post">
+                                            <form id="deliverymanProductCancel" action="{{ route('deliveryman.product.cancel') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-danger" type="submit">
@@ -179,7 +190,6 @@
             </div>
         </div>
     </div>
-
 
     {{-- <div class="col-lg-12 stretch-card">
         <div class="card">
@@ -216,7 +226,6 @@
             </div>
         </div>
     </div> --}}
-
 
     <div class="col-lg-12 stretch-card" id="searchResultsSection" style="display: none;">
         <div class="card">
@@ -266,8 +275,118 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-
+{{-- search input or button new ajax code --}}
     <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+                if (searchInputValue === '') {
+                    $('#table').load(location.href + ' #table');
+                    return;
+                }
+                var csrfToken = '{{ csrf_token() }}';
+                var searchRoute = '{{ route('deliveryman.productDeliverySearch') }}';
+                $.ajax({
+                    url: searchRoute,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        '_token': csrfToken,
+                        admin_delivery_search: searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                        $('#table').load(location.href + ' #table');
+                    }
+                });
+            }
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+            searchInput.on('input keyup', function() {
+                var searchInputValue = $(this).val().trim();
+                if (searchInputValue === '') {
+                    submitForm();
+                } else {
+                    submitForm();
+                }
+            });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    submitForm();
+                }
+            });
+        });
+    </script>
+
+{{-- delivered,return,cancel perform using ajax --}}
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '#deliverymanproductcheckout', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+            $(document).on('submit', '#deliverymanProductReturn', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+            $(document).on('submit', '#deliverymanProductCancel', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
+
+        })
+    </script>
+
+
+
+    {{-- first input serarch create ajax conformation --}}
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -453,7 +572,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
     {{-- <script>
         var routeUrls = {
@@ -621,158 +740,6 @@
             $('#searchInput').on('input', function() {
                 var searchInput = $(this).val();
 
-                if (searchInput === '') {
-                    // If the input is cleared, hide search results, show existing table
-                    searchResultsSection.hide();
-                    existingTable.show();
-                }
-            });
-        });
-    </script> --}}
-
-
-    {{-- test --}}
-    {{-- <script>
-        $(document).ready(function () {
-            var existingTable = $('#existingTable');
-            var searchResultsSection = $('#searchResultsSection');
-    
-            // Initial setup: hide search results, show existing table
-            existingTable.show();
-            searchResultsSection.hide();
-    
-            // Set route URLs for dynamic actions
-            var routeUrls = {
-                show: '{{ route('delivery.show', ':id') }}',
-                edit: '{{ route('admin.delivery.edit', ':id') }}',
-                destroy: '{{ route('admin.delivery.delete', ':id') }}',
-            };
-    
-            $('#searchForm').submit(function (e) {
-                e.preventDefault();
-    
-                var searchInput = $('#searchInput').val();
-    
-                // Include CSRF token in headers
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-    
-                $.ajax({
-                    url: '{{ route('admin.search') }}',
-                    type: 'POST',
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                        search: searchInput,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
-    
-                        // Show search results, hide existing table
-                        existingTable.hide();
-                        searchResultsSection.show();
-    
-                        if (response.deliveries.length > 0) {
-                            var resultsBody = $('#searchResultsBody');
-                            resultsBody.empty();
-    
-                            $.each(response.deliveries, function (index, delivery) {
-                                var statusBadge = '';
-                                if (delivery.is_active == 1) {
-                                    statusBadge = '<span class="badge bg-label-danger me-1 text-dark">pending</span>';
-                                } else if (delivery.is_active === 'canceled') {
-                                    statusBadge = '<span class="badge bg-label-success me-1 text-dark">Canceled</span>';
-                                } else {
-                                    statusBadge = '<span class="badge bg-label-success me-1 text-dark">On the way</span>';
-                                }
-    
-                                var actionButtons = '';
-                                if (delivery.is_active == 1) {
-                                    actionButtons = '<div class="d-flex justify-center align-items-center gap-2">' +
-                                        '<form action="{{ route('marchant.delivery_confirmation') }}" method="post">' +
-                                        '@csrf' +
-                                        '<input type="hidden" name="id" value="' + delivery.id + '">' +
-                                        '<button class="btn btn-sm btn-success" type="submit">' +
-                                        '<i class="fa-solid fa-check"></i>' +
-                                        '</button>' +
-                                        '</form>' +
-                                        '<form action="{{ route('marchant.cancel_confirmation') }}" method="post">' +
-                                        '@csrf' +
-                                        '<input type="hidden" name="id" value="' + delivery.id + '">' +
-                                        '<button class="btn btn-sm btn-success" type="submit">' +
-                                        '<i class="fa-solid fa-times"></i>' +
-                                        '</button>' +
-                                        '</form>' +
-                                        '</div>';
-                                } else if (delivery.is_active === 'canceled') {
-                                    actionButtons = '<span class="badge bg-label-success me-1 text-dark">Not allowed</span>';
-                                } else {
-                                    actionButtons = '<form action="{{ route('marchant.delivery_confirmation') }}" method="post">' +
-                                        '@csrf' +
-                                        '<input type="hidden" name="id" value="' + delivery.id + '">' +
-                                        '<button class="btn btn-sm btn-success" type="submit">' +
-                                        '<i class="fas fa-truck"></i>' +
-                                        '</button>' +
-                                        '</form>';
-                                }
-    
-                                var actionButtons2 = `
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <a href="${routeUrls.show.replace(':id', delivery.id)}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                            <a href="${routeUrls.edit.replace(':id', delivery.id)}" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i></a>
-                                            <form action="${routeUrls.destroy.replace(':id', delivery.id)}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                `;
-    
-                                // Append a new row to the search results table for each result
-                                resultsBody.append('<tr>' +
-                                    '<td>' + delivery.id + '</td>' +
-                                    '<td>' + delivery.name + '</td>' +
-                                    '<td>' + delivery.phone + '</td>' +
-                                    '<td>' + delivery.address + '</td>' +
-                                    '<td>' + delivery.police_station + '</td>' +
-                                    '<td>' + delivery.district + '</td>' +
-                                    '<td>' + delivery.divisions + '</td>' +
-                                    '<td>' + delivery.category_type + '</td>' +
-                                    '<td>' + delivery.delivery_type + '</td>' +
-                                    '<td>' + delivery.order_tracking_id + '</td>' +
-                                    '<td>' + delivery.invoice + '</td>' +
-                                    '<td>' + delivery.note + '</td>' +
-                                    '<td>' + statusBadge + '</td>' +
-                                    '<td>' + actionButtons + '</td>' +
-                                    actionButtons2 +
-                                    // Add more columns as needed
-                                    '</tr>');
-                            });
-                        } else {
-                            // No search results, handle this case if needed
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching search results:', error);
-                        console.log('Status:', status);
-                        console.log('XHR:', xhr);
-    
-                        var resultsBody = $('#searchResultsBody');
-                        resultsBody.html('<tr><td colspan="4">Error fetching search results. Please try again.</td></tr>');
-                        existingTable.show();
-                    }
-                });
-            });
-    
-            // Add an event listener for the input to handle clearing
-            $('#searchInput').on('input', function () {
-                var searchInput = $(this).val();
-    
                 if (searchInput === '') {
                     // If the input is cleared, hide search results, show existing table
                     searchResultsSection.hide();

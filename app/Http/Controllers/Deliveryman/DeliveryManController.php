@@ -269,12 +269,14 @@ class DeliveryManController extends Controller
         $delivery->is_active = 5;
 
         $id = Session::get('loginId');
-        // dd($id);
         $delivery->deliveryman_id = $id;
 
         $delivery->update();
 
-        return redirect('deliveryman/product/table');
+        // return redirect('deliveryman/product/table');
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 
     public function productDeliveryReturn(Request $request)
@@ -287,8 +289,10 @@ class DeliveryManController extends Controller
         $delivery->deliveryman_id = $id;
 
         $delivery->update();
-
-        return redirect('deliveryman/product/table');
+        return response()->json([
+            'status' => 'success',
+        ]);
+        // return redirect('deliveryman/product/table');
     }
     public function productDeliveryCancel(Request $request)
     {
@@ -302,7 +306,10 @@ class DeliveryManController extends Controller
 
         $delivery->update();
 
-        return redirect('deliveryman/product/table');
+        // return redirect('deliveryman/product/table');
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 
     public function searcDeliverymanProductTable(Request $request)
@@ -328,6 +335,97 @@ class DeliveryManController extends Controller
             })
             ->get();
 
-        return response()->json(['customers' => $customers]);
+        $tableHtml = '<table id="table" class="table table-light table-hover">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th>ID</th>';
+        $tableHtml .= '<th>Merchant Name</th>';
+        $tableHtml .= '<th>Customer Name</th>';
+        $tableHtml .= '<th>Customer Phone</th>';
+        $tableHtml .= '<th>Address</th>';
+        $tableHtml .= '<th>Police Station</th>';
+        $tableHtml .= '<th>District</th>';
+        $tableHtml .= '<th>Division</th>';
+        $tableHtml .= '<th>Product Category</th>';
+        $tableHtml .= '<th>Delivery Type</th>';
+        $tableHtml .= '<th>COD</th>';
+        $tableHtml .= '<th>Order Tracking Id</th>';
+        $tableHtml .= '<th>Invoice</th>';
+        $tableHtml .= '<th>Note</th>';
+        $tableHtml .= '<th>Exchange Status</th>';
+        $tableHtml .= '<th>Delivery Charge</th>';
+        $tableHtml .= '<th>	Status</th>';
+        $tableHtml .= '<th>Action</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        if (!$customers->isEmpty()) {
+            foreach ($customers as $customer) {
+                $tableHtml .= '<tr>';
+                $tableHtml .= '<td>' . $customer->id . '</td>';
+                $tableHtml .= '<td>' . $customer->user->merchant_name  . '</td>';
+                $tableHtml .= '<td>' . $customer->customer_name . '</td>';
+                $tableHtml .= '<td>' . $customer->customer_phone . '</td>';
+                $tableHtml .= '<td>' . $customer->full_address . '</td>';
+                $tableHtml .= '<td>' . $customer->police_station . '</td>';
+                $tableHtml .= '<td>' . $customer->district . '</td>';
+                $tableHtml .= '<td>' . $customer->divisions . '</td>';
+                $tableHtml .= '<td>' . $customer->product_category . '</td>';
+                $tableHtml .= '<td>' . $customer->delivery_type . '</td>';
+                $tableHtml .= '<td>' . $customer->cod_amount . '</td>';
+                $tableHtml .= '<td>' . $customer->order_tracking_id . '</td>';
+                $tableHtml .= '<td>' . $customer->invoice . '</td>';
+                $tableHtml .= '<td>' . $customer->note . '</td>';
+                $tableHtml .= '<td>' . $customer->exchange_status . '</td>';
+                $tableHtml .= '<td>' . $customer->delivery_charge . '</td>';
+                $tableHtml .= '<td>' . ($customer->is_active == 1 ?
+                    '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' : ($customer->is_active == 2 ?
+                    '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>' : ($customer->is_active == 3 ?
+                    '<span class="badge bg-label-danger me-1 text-dark">Product arrived <br> in the <br> warehouse</span>' : ($customer->is_active == 4 ?
+                    '<span class="badge bg-label-danger me-1 text-dark">Product picked <br> by delivery man</span>' : ($customer->is_active == 5 ?
+                    '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>' : ($customer->is_active == 6 ?
+                    '<span class="badge bg-label-success me-1 text-dark">Product Return</span>' : ($customer->is_active == 7 ?
+                    '<span class="badge bg-label-success me-1 text-dark">Product canceled</span>' : ''))))))) . '</td>';
+                $tableHtml .= '<td>';
+                $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
+                if ($customer->is_active == 1 || $customer->is_active == 2 || $customer->is_active == 5 || $customer->is_active == 6 || $customer->is_active == 7) {
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
+                } elseif ($customer->is_active == 3) {
+                    $tableHtml .= '<form id="productCheckout" action="'. route('admin.product.delivery_checkout') .'" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-cart-shopping"></i></button>';
+                    $tableHtml .= '</form>';
+                } elseif ($customer->is_active == 4) {
+                    $tableHtml .= '<form  id="deliverymanproductcheckout" action="' . route('deliveryman.product.delivered') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fas fa-truck"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '<form id="deliverymanProductReturn" action="'.route('deliveryman.product.return').'" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-right-left"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '<form id="deliverymanProductCancel" action="'.route('deliveryman.product.cancel').'" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit"><i class="fa-solid fa-times"></i></button>';
+                    $tableHtml .= '</form>';
+                }
+                $tableHtml .= '</div>';
+                $tableHtml .= '</td>';
+
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+
+        return $tableHtml;
+        // return response()->json(['customers' => $customers]);
     }
 }

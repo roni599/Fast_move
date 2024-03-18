@@ -187,7 +187,7 @@
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-{{-- first searc code before create ajax for productConformation --}}
+    {{-- first searc code before create ajax for productConformation --}}
     {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
@@ -344,9 +344,7 @@
         });
     </script> --}}
 
-
-
-{{-- after product conformation ajax request create --}}
+    {{-- after product conformation ajax request create --}}
     <script>
         $(document).ready(function() {
             var searchForm = $('#searchForm');
@@ -394,9 +392,28 @@
                 e.preventDefault();
                 submitForm();
             });
+
+            searchInput.on('input keyup', function() {
+                var searchInputValue = $(this).val().trim();
+
+                if (searchInputValue === '') {
+                    // If the input is cleared, hide searchResultsSection, show existingTable
+                    submitForm();
+                } else {
+                    // Execute the search logic
+                    submitForm();
+                }
+            });
+            searchInput.on('keyup', function(e) {
+                if (e.key === 'Backspace' && $(this).val().trim() === '') {
+                    // If backspace key is pressed and input is empty, hide searchResultsSection, show existingTable
+                    submitForm();
+                }
+            });
         });
     </script>
 
+    {{-- pickupmanDeliveryProductCoformation --}}
     <script>
         $(document).ready(function() {
             $(document).on('submit', '#pickupmanDeliveryProductCoformation', function(event) {
