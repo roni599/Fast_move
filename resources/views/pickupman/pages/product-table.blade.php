@@ -187,7 +187,7 @@
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+{{-- first searc code before create ajax for productConformation --}}
     {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
@@ -346,23 +346,23 @@
 
 
 
-
+{{-- after product conformation ajax request create --}}
     <script>
         $(document).ready(function() {
             var searchForm = $('#searchForm');
             var searchInput = $('#searchInput');
-    
+
             function submitForm() {
                 var searchInputValue = searchInput.val().trim();
-    
+
                 if (searchInputValue === '') {
                     $('#table').load(location.href + ' #table');
                     return;
                 }
-    
+
                 var csrfToken = '{{ csrf_token() }}';
                 var searchRoute = '{{ route('pickupman.productPickSearch') }}';
-    
+
                 $.ajax({
                     url: searchRoute,
                     type: 'POST',
@@ -383,12 +383,12 @@
                     }
                 });
             }
-    
+
             // Trigger submitForm on keyup event of searchInput
             searchInput.on('keyup', function() {
                 submitForm();
             });
-    
+
             // Trigger submitForm on form submission
             searchForm.submit(function(e) {
                 e.preventDefault();
@@ -396,62 +396,6 @@
             });
         });
     </script>
-    
-
-
-
-
-
-    {{-- <script>
-        $(document).ready(function () {
-            var searchInput = $('#searchInput');
-    
-            function submitForm() {
-                var searchInputValue = searchInput.val().trim();
-    
-                if (searchInputValue === '') {
-                    $('#table').load(location.href + ' #table');
-                    return;
-                }
-    
-                var csrfToken = '{{ csrf_token() }}';
-                var searchRoute = '{{ route('pickupman.productPickSearch') }}';
-    
-                $.ajax({
-                    url: searchRoute,
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    data: {
-                        '_token': csrfToken,
-                        admin_delivery_search: searchInputValue,
-                    },
-                    dataType: 'html',
-                    success: function (response) {
-                        $('#table').html(response);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching search results:', error);
-                        $('#table').load(location.href + ' #table');
-                    }
-                });
-            }
-    
-            // Trigger search on input change
-            searchInput.on('input', function () {
-                submitForm();
-            });
-        });
-    </script> --}}
-
-
-
-
-
-
-
-
 
     <script>
         $(document).ready(function() {
@@ -472,39 +416,5 @@
             });
 
         })
-
-        $(document).on('submit', '#pickupmanDeliveryProductCoformatio', function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                url: $(this).attr('action'),
-                method: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('#searchtable').load(location.href + ' #searchtable')
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error occurred:', error);
-                }
-            });
-        });
-        // $(document).ready(function() {
-        //     $(document).on('submit', '#pickupmanDeliveryProductCoformation', function(event) {
-        //         event.preventDefault();
-        //         var formData = $(this).serialize();
-        //         $.ajax({
-        //             url: $(this).attr('action'),
-        //             method: 'POST',
-        //             data: formData,
-        //             success: function(response) {
-        //                 $('#searchtable').load(location.href + ' #searchtable')
-        //             },
-        //             error: function(xhr, status, error) {
-        //                 console.error('Error occurred:', error);
-        //             }
-        //         });
-        //     });
-
-        // })
     </script>
 @endsection
