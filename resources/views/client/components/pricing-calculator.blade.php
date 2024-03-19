@@ -1,34 +1,43 @@
 <div class="hero-content mb-3">
     <div class="content-1">
         <div class="left bg-warning p-4">
-            <h4 class="text-light">Track Your Parcel Here!</h4>
+            {{-- <h4 class="text-light">Track Your Parcel Here!</h4> --}}
+            <h4 class="text-light">{{ __('text.content16') }}</h4>
             <div class="mb-3">
                 <form id="searchForm">
                     @csrf
-                    <input type="text" class="form-control mb-2" name="tracking_id" placeholder="Tracking ID....." />
-                    <button type="button" class="btn btn-light" id="trackBtn" disabled>Track</button>
+                    {{-- <input type="text" class="form-control mb-2" name="tracking_id" placeholder="Tracking ID....." /> --}}
+                    <input type="text" class="form-control mb-2" name="tracking_id" placeholder="{{ __('text.content17') }}" />
+                    {{-- <button type="button" class="btn btn-light" id="trackBtn" disabled>Track</button> --}}
+                    <button type="button" class="btn btn-light" id="trackBtn" disabled>{{ __('text.content18') }}</button>
                 </form>
             </div>
         </div>
 
         <div class="right p-4">
-            <h4 class="text-dark">Calculate Charge</h4>
+            {{-- <h4 class="text-dark">Calculate Charge</h4> --}}
+            <h4 class="text-dark">{{ __('text.content20') }}</h4>
             <div class="boxes d-md-flex d-sm-block gap-2">
                 <select id="fromLocation" name="from_location" class="form-control">
-                    <option value="Dhaka">From</option>
+                    {{-- <option value="Dhaka">From</option> --}}
+                    <option value="Dhaka">{{ __('text.content21') }}</option>
                     @foreach ($fromLocations as $location)
                         <option value="{{ $location->from_location }}">{{ $location->from_location }}</option>
                     @endforeach
                 </select>
                 <select id="destination" name="destination" class="form-control">
-                    <option value="Dhaka">Destination</option>
+                    {{-- <option value="Dhaka">Destination</option> --}}
+                    <option value="Dhaka">{{ __('text.content22') }}</option>
                 </select>
                 <select id="serviceId" name="service" class="form-control">
-                    <option value="1">Delivery Type</option>
+                    {{-- <option value="1">Delivery Type</option> --}}
+                    <option value="1">{{ __('text.content23') }}</option>
                 </select>
                 <div class="">
+                    {{-- <input type="text" id="weightId" name="weight" value="1" placeholder="Parcel's Weight"
+                        class="form-control" readonly> --}}
                     <input type="text" id="weightId" name="weight" value="1" placeholder="Parcel's Weight"
-                        class="form-control" readonly>
+                    class="form-control" readonly>
                 </div>
             </div>
             <div class="price-text d-flex justify-content-center align-items-center">
@@ -47,7 +56,8 @@
 
             <div class="video-descriptions p-3 text-center">
                 <img src="/frontend/img/24-hours.png" alt="" width="80" />
-                <h6 class="mt-2">Real Time Support</h6>
+                {{-- <h6 class="mt-2">Real Time Support</h6> --}}
+                <h6 class="mt-2">{{ __('text.content19') }}</h6>
             </div>
         </div>
         <div class="right">

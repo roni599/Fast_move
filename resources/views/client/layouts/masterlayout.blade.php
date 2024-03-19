@@ -39,8 +39,8 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
 
     <link rel="stylesheet" href="/frontend/css/home.css" />
-    <link rel="stylesheet" href="/frontend/css/google_translate_api.css" />
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    {{-- <link rel="stylesheet" href="/frontend/css/google_translate_api.css" />
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> --}}
 </head>
 
 <body>
@@ -56,10 +56,11 @@
 
         <!-- Navbar & Hero Start -->
         <div class="top-header">
-            <span class="d-block"><i class="l-icon fa-solid fa-phone-volume"></i>+880-1723-456789</span>
-            {{-- <span class="d-block text-white fw-bold"><i class="l-icon fa-solid fa-phone-volume"></i>{{ __('text.content00') }}</span> --}}
-            <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>fastmovebd@gmail.com</span>
-            {{-- <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>{{ __('text.content01') }}</span> --}}
+            {{-- <span class="d-block"><i class="l-icon fa-solid fa-phone-volume"></i>+880-1723-456789</span> --}}
+            <span class="d-block text-white fw-bold"><i
+                    class="l-icon fa-solid fa-phone-volume"></i>{{ __('text.content00') }}</span>
+            {{-- <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>fastmovebd@gmail.com</span> --}}
+            <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>{{ __('text.content01') }}</span>
         </div>
         <div class="header">
             <div class="logo">
@@ -67,39 +68,39 @@
                     <img src="/frontend/img/startup.png" alt="logo" />
                 </div>
                 <div class="text">
-                    <span class="d-block head translate" data-key="ফাস্ট মুভ">Fast Move</span>
-                    {{-- <span class="d-block head">{{ __('text.content') }}</span> --}}
-                    <span class="d-block moto">Perfect Way To Your Destination.</span>
-                    {{-- <span class="d-block moto">{{ __('text.content1') }}</span> --}}
+                    {{-- <span class="d-block head">Fast Move</span> --}}
+                    <span class="d-block head">{{ __('text.content') }}</span>
+                    {{-- <span class="d-block moto">Perfect Way To Your Destination.</span> --}}
+                    <span class="d-block moto">{{ __('text.content1') }}</span>
                 </div>
             </div>
 
             <div class="nav-bar">
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    {{-- <li><a href="#">{{ __('text.content2') }}</a></li> --}}
-                    <li><a href="#">About</a></li>
-                    {{-- <li><a href="#">{{ __('text.content3') }}</a></li> --}}
-                    <li><a href="#">Services</a></li>
-                    {{-- <li><a href="#">{{ __('text.content4') }}</a></li> --}}
-                    <li><a href="#">Tracking</a></li>
-                    {{-- <li><a href="#">{{ __('text.content5') }}</a></li> --}}
-                    <li><a href="#">Contact</a></li>
-                    {{-- <li><a href="#">{{ __('text.content6') }}</a></li> --}}
-                    {{-- <li>
+                    {{-- <li><a href="#">Home</a></li> --}}
+                    <li><a href="#">{{ __('text.content2') }}</a></li>
+                    {{-- <li><a href="#">About</a></li> --}}
+                    <li><a href="#">{{ __('text.content3') }}</a></li>
+                    {{-- <li><a href="#">Services</a></li> --}}
+                    <li><a href="#">{{ __('text.content4') }}</a></li>
+                    {{-- <li><a href="#">Tracking</a></li> --}}
+                    <li><a href="#">{{ __('text.content5') }}</a></li>
+                    {{-- <li><a href="#">Contact</a></li> --}}
+                    <li><a href="#">{{ __('text.content6') }}</a></li>
+                    <li>
                         <select class="form-control lang-change">
                             <option value="Select Language">Select Language</option>
                             <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>English
-                            </option>
+                            {{-- </option>
                             <option value="ar" {{ session()->get('lang_code') == 'ar' ? 'selected' : '' }}>عربي
-                            </option>
+                            </option> --}}
                             <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>বাংলা
                             </option>
                         </select>
-                    </li> --}}
-                    <li>
-                        <div id="google_translate_element"></div>
                     </li>
+                    {{-- <li>
+                        <div id="google_translate_element"></div>
+                    </li> --}}
                 </ul>
             </div>
 
@@ -119,30 +120,40 @@
                 <div class="offcanvas-body">
                     <div class="mobile-nav">
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Tracking</a></li>
-                            <li><a href="#">Contact</a></li>
+                            {{-- <li><a href="#">Home</a></li> --}}
+                            <li><a href="#">{{ __('text.content2') }}</a></li>
+                            {{-- <li><a href="#">About</a></li> --}}
+                            <li><a href="#">{{ __('text.content3') }}</a></li>
+                            {{-- <li><a href="#">Services</a></li> --}}
+                            <li><a href="#">{{ __('text.content4') }}</a></li>
+                            {{-- <li><a href="#">Tracking</a></li> --}}
+                            <li><a href="#">{{ __('text.content5') }}</a></li>
+                            {{-- <li><a href="#">Contact</a></li> --}}
+                            <li><a href="#">{{ __('text.content6') }}</a></li>
                             <li>
                                 <button class="btn-grp orange-color">
-                                    <i class="me-2 fa-solid fa-user-lock"></i>Login<i
-                                        class="ms-2 fa-solid fa-caret-down"></i>
-                                    {{-- <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i
+                                    {{-- <i class="me-2 fa-solid fa-user-lock"></i>Login<i
                                         class="ms-2 fa-solid fa-caret-down"></i> --}}
+                                    <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i
+                                        class="ms-2 fa-solid fa-caret-down"></i>
 
                                     <div class="sub-button">
                                         {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin
                                             Login</a> --}}
+                                        {{-- <a href="{{ route('login') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a> --}}
                                         <a href="{{ route('login') }}"><i
-                                                class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a>
-                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a> --}}
+                                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a>
+
+                                        {{-- <a href="{{ route('pickupman.login') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a> --}}
                                         <a href="{{ route('pickupman.login') }}"><i
-                                                class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
-                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a> --}}
+                                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a>
+                                                
+                                        {{-- <a href="{{ route('deliveryman.login') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a> --}}
                                         <a href="{{ route('deliveryman.login') }}"><i
-                                                class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a>
-                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a> --}}
+                                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a>
                                     </div>
                                 </button>
                             </li>
@@ -152,15 +163,12 @@
                                         class="ms-2 fa-solid fa-caret-down"></i>
 
                                     <div class="sub-button">
-                                        <a href="{{ route('register') }}"><i
-                                                class="fa-solid fa-chevron-right me-2"></i>Become a Merchant</a>
-                                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a> --}}
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
-                                            Pickupman</a>
-                                        {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a> --}}
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a
-                                            Deliveryman</a>
-                                        {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a> --}}
+                                        {{-- <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Merchant</a> --}}
+                                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
+                                        {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a> --}}
+                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
+                                        {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a> --}}
+                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
                                     </div>
                                 </button>
                             </li>
@@ -171,34 +179,30 @@
 
             <div class="button-part">
                 <button class="btn-grp orange-color">
-                    {{-- <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i class="ms-2 fa-solid fa-caret-down"></i> --}}
-                    <i class="me-2 fa-solid fa-user-lock"></i>Login<i class="ms-2 fa-solid fa-caret-down"></i>
+                    <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i class="ms-2 fa-solid fa-caret-down"></i>
+                    {{-- <i class="me-2 fa-solid fa-user-lock"></i>Login<i class="ms-2 fa-solid fa-caret-down"></i> --}}
 
                     <div class="sub-button">
                         {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin Login</a> --}}
-                        <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant
-                            Login</a>
-                        {{-- <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a> --}}
-                        <a href="{{ route('pickupman.login') }}"><i
-                                class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a>
-                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a> --}}
-                        <a href="{{ route('deliveryman.login') }}"><i
-                                class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a>
-                        {{-- class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a> --}}
+                        {{-- <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a> --}}
+                        <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a>
+                        {{-- <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a> --}}
+                        <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a>
+                        {{-- <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a> --}}
+                        <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a>
                     </div>
                 </button>
 
                 <button class="btn-grp black-color">
-                    <i class="me-2 fa-solid fa-user-pen"></i>Register<i class="ms-2 fa-solid fa-caret-down"></i>
-
+                    {{-- <i class="me-2 fa-solid fa-user-pen"></i>Register<i class="ms-2 fa-solid fa-caret-down"></i> --}}
+                    <i class="me-2 fa-solid fa-user-pen"></i>{{ __('text.content8') }}<i class="ms-2 fa-solid fa-caret-down"></i>
                     <div class="sub-button">
-                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a
-                            Merchant</a>
-                        {{-- <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a> --}}
-                        <a href="{{ route('pickupman.register') }}"><i
-                                class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a>
-                        <a href="{{ route('deliveryman.register') }}"><i
-                                class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a>
+                        {{-- <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Merchant</a> --}}
+                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
+                        {{-- <a href="{{ route('pickupman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a> --}}
+                        <a href="{{ route('pickupman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
+                        {{-- <a href="{{ route('deliveryman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a> --}}
+                        <a href="{{ route('deliveryman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
                     </div>
                 </button>
             </div>
@@ -239,39 +243,56 @@
             <div class="container py-5 px-lg-5">
                 <div class="row gy-5 gx-4 pt-5">
                     <div class="col-12">
-                        <h5 class="fw-bold text-white mb-4">Subscribe Our Newsletter</h5>
+                        {{-- <h5 class="fw-bold text-white mb-4">Subscribe Our Newsletter</h5> --}}
+                        <h5 class="fw-bold text-white mb-4">{{ __('text.content41') }}</h5>
                         <div class="position-relative" style="max-width: 400px;">
-                            <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text"
-                                placeholder="Enter your email">
-                            <button type="button"
-                                class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Submit</button>
+                            {{-- <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Enter your email"> --}}
+                            <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="{{ __('text.content42') }}">
+                            {{-- <button type="button" class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Submit</button> --}}
+                            <button type="button" class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">{{ __('text.content43') }}</button>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-12">
                         <div class="row gy-5 g-4">
                             <div class="col-md-6">
-                                <h5 class="fw-bold text-white mb-4">About Us</h5>
-                                <a class="btn btn-link" href="">About Us</a>
-                                <a class="btn btn-link" href="">Contact Us</a>
-                                <a class="btn btn-link" href="">Privacy Policy</a>
-                                <a class="btn btn-link" href="">Terms & Condition</a>
-                                <a class="btn btn-link" href="">Support</a>
+                                {{-- <h5 class="fw-bold text-white mb-4">About Us</h5> --}}
+                                <h5 class="fw-bold text-white mb-4">{{ __('text.content48') }}</h5>
+                                {{-- <a class="btn btn-link" href="">About Us</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content49') }}</a>
+                                {{-- <a class="btn btn-link" href="">Contact Us</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content50') }}</a>
+                                {{-- <a class="btn btn-link" href="">Privacy Policy</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content51') }}</a>
+                                {{-- <a class="btn btn-link" href="">Terms & Condition</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content52') }}</a>
+                                {{-- <a class="btn btn-link" href="">Support</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content53') }}</a>
                             </div>
                             <div class="col-md-6">
-                                <h5 class="fw-bold text-white mb-4">Our Services</h5>
-                                <a class="btn btn-link" href="">Domain Register</a>
-                                <a class="btn btn-link" href="">Shared Hosting</a>
-                                <a class="btn btn-link" href="">VPS Hosting</a>
-                                <a class="btn btn-link" href="">Dedicated Hosting</a>
-                                <a class="btn btn-link" href="">Reseller Hosting</a>
+                                {{-- <h5 class="fw-bold text-white mb-4">Our Services</h5> --}}
+                                <h5 class="fw-bold text-white mb-4">{{ __('text.content54') }}</h5>
+                                {{-- <a class="btn btn-link" href="">Domain Register</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content55') }}</a>
+                                {{-- <a class="btn btn-link" href="">Shared Hosting</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content56') }}</a>
+                                {{-- <a class="btn btn-link" href="">VPS Hosting</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content57') }}</a>
+                                {{-- <a class="btn btn-link" href="">Dedicated Hosting</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content58') }}</a>
+                                {{-- <a class="btn btn-link" href="">Reseller Hosting</a> --}}
+                                <a class="btn btn-link" href="">{{ __('text.content59') }}</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <h5 class="fw-bold text-white mb-4">Get In Touch</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, Dhaka</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>quickexpress@gmail.com</p>
+                        {{-- <h5 class="fw-bold text-white mb-4">Get In Touch</h5> --}}
+                        <h5 class="fw-bold text-white mb-4">{{ __('text.content60') }}</h5>
+                        {{-- <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, Dhaka</p> --}}
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ __('text.content61') }}</p>
+                        {{-- <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p> --}}
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>{{ __('text.content62') }}</p>
+                        {{-- <p class="mb-2"><i class="fa fa-envelope me-3"></i>quickexpress@gmail.com</p> --}}
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>{{ __('text.content63') }}</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i
                                     class="fab fa-twitter"></i></a>
@@ -285,10 +306,14 @@
                     </div>
                     <div class="col-md-6 col-lg-4 mt-lg-n5">
                         <div class="bg-light rounded" style="padding: 30px;">
-                            <input type="text" class="form-control border-0 py-2 mb-2" placeholder="Name">
-                            <input type="email" class="form-control border-0 py-2 mb-2" placeholder="Email">
-                            <textarea class="form-control border-0 mb-2" rows="2" placeholder="Message"></textarea>
-                            <button class="btn btn-dark w-100 py-2">Send Message</button>
+                            {{-- <input type="text" class="form-control border-0 py-2 mb-2" placeholder="Name"> --}}
+                            <input type="text" class="form-control border-0 py-2 mb-2" placeholder="{{ __('text.content44') }}">
+                            {{-- <input type="email" class="form-control border-0 py-2 mb-2" placeholder="Email"> --}}
+                            <input type="email" class="form-control border-0 py-2 mb-2" placeholder="{{ __('text.content45') }}">
+                            {{-- <textarea class="form-control border-0 mb-2" rows="2" placeholder="Message"></textarea> --}}
+                            <textarea class="form-control border-0 mb-2" rows="2" placeholder="{{ __('text.content46') }}"></textarea>
+                            {{-- <button class="btn btn-dark w-100 py-2">Send Message</button> --}}
+                            <button class="btn btn-dark w-100 py-2">{{ __('text.content47') }}</button>
                         </div>
                     </div>
                 </div>
@@ -296,18 +321,24 @@
             <div class="container px-lg-5">
                 <div class="copyright">
                     <div class="row">
-                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy;2024. First Move Logistics Ltd. All Right Reserved.
-
-                            Designed By <a class="border-bottom text-decoration-none"
+                        {{-- <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy;2024. First Move Logistics Ltd. All Right Reserved. Designed By <a class="border-bottom text-decoration-none"
                                 href="https:/mystrix.site">Mystrix</a>
+                        </div> --}}
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy;{{ __('text.content64') }} <a class="border-bottom text-decoration-none"
+                                href="https:/mystrix.site">{{ __('text.content65') }}</a>
                         </div>
                         <div class="col-md-6 text-center text-md-end">
                             <div class="footer-menu">
-                                <a href="">Home</a>
-                                <a href="">Cookies</a>
-                                <a href="">Help</a>
-                                <a href="">FQAs</a>
+                                {{-- <a href="">Home</a> --}}
+                                <a href="">{{ __('text.content66') }}</a>
+                                {{-- <a href="">Cookies</a> --}}
+                                <a href="">{{ __('text.content67') }}</a>
+                                {{-- <a href="">Help</a> --}}
+                                <a href="">{{ __('text.content68') }}</a>
+                                {{-- <a href="">FQAs</a> --}}
+                                <a href="">{{ __('text.content69') }}</a>
                             </div>
                         </div>
                     </div>
@@ -322,16 +353,16 @@
                     class="bi bi-arrow-up"></i></a> --}}
     </div>
 
-    <script>
+    {{-- <script>
         var botmanWidget = {
             // frameEndpoint: '/iFrameUrl'
             title: 'Fast Move Logistics',
             aboutText: 'Webappfix',
             introMessage: 'Hi, welcome to fastest logistics service Fast Move Logistics.'
         };
-    </script>
-    <script id="botmanWidget" src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/chat.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
+    </script> --}}
+    {{-- <script id="botmanWidget" src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/chat.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script> --}}
 
 
     <!-- JavaScript Libraries -->
@@ -345,9 +376,17 @@
 
     <!-- Template Javascript -->
     <script src="frontend/js/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var url = "{{ route('lang.change') }}";
+        $('.lang-change').change(function() {
+            let lang_code = $(this).val();
+            window.location.href = url + "?lang=" + lang_code;
+        });
+    </script>
     {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> --}}
-    <script>
+    {{-- <script>
         function googleTranslateElementInit() {
             // Create a new instance of TranslateElement
             new google.translate.TranslateElement({
@@ -357,8 +396,7 @@
                 layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
             }, 'google_translate_element');
         }
-    </script>
-
+    </script> --}}
 </body>
 
 </html>
