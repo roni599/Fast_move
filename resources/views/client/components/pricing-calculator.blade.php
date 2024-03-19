@@ -91,8 +91,8 @@
 
 <div class="modal" id="trackingModal" tabindex="-1" role="dialog" aria-labelledby="trackingModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog" role="document"style="max-width: 80vw;">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
             <div class="modal-header">
                 <h5 class="modal-title" id="trackingModalLabel">Tracking Wizard</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -101,11 +101,11 @@
                 <!-- Your wizard structure -->
                 <section class="step-wizard">
                     <ul class="step-wizard-list py-5">
-                        <li class="step-wizard-item">
+                        <li class="step-wizard-item current-item">
                             <span class="progress-count">1</span>
                             <span class="progress-label">Pending</span>
                         </li>
-                        <li class="step-wizard-item current-item">
+                        <li class="step-wizard-item">
                             <span class="progress-count">2</span>
                             <span class="progress-label">On the way</span>
                         </li>
@@ -115,10 +115,23 @@
                         </li>
                         <li class="step-wizard-item">
                             <span class="progress-count">4</span>
-                            <span class="progress-label">Success</span>
+                            <span class="progress-label">Shiped</span>
+                        </li>
+                        <li class="step-wizard-item">
+                            <span class="progress-count">5</span>
+                            <span class="progress-label">Deliverd</span>
+                        </li>
+                        <li class="step-wizard-item">
+                            <span class="progress-count">6</span>
+                            <span class="progress-label">Return</span>
+                        </li>
+                        <li class="step-wizard-item">
+                            <span class="progress-count">7</span>
+                            <span class="progress-label">Cancelled</span>
                         </li>
                     </ul>
                 </section>
+                <p id="noDataMessage" class="text-center" style="display: none;">Your Query doesn't exits in our database</p>
             </div>
         </div>
     </div>
@@ -129,7 +142,6 @@
 
 {{-- for the calculate delivery charge --}}
 {{-- <script src="/frontend/js/delivey_charge_calculator.js"></script> --}}
-
 
 <script>
     $(document).ready(function() {
@@ -280,7 +292,6 @@
 </script>
 
 
-
 {{-- for the tracking --}}
 {{-- <script>
     $(document).ready(function() {
@@ -354,9 +365,9 @@
     });
 </script> --}}
 
-{{-- //disable track_button code --}}
+{{-- disable track_button code --}}
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.step-wizard').hide();
 
         function performAjaxCall(trackingId) {
@@ -367,20 +378,24 @@
                     '_token': $('input[name=_token]').val(),
                     'tracking_id': trackingId
                 },
-                success: function (data) {
-                    var is_active = parseInt(data.delivery.is_active, 10);
-                    progressCountValue = is_active + 1;
-                    console.log(progressCountValue);
-                    updateActiveStep(progressCountValue);
-                    $('.step-wizard').show();
+                success: function(data) {
+                    if (data && data.delivery && data.delivery.is_active) {
+                        var is_active = parseInt(data.delivery.is_active, 10);
+                        progressCountValue = is_active + 1;
+                        updateActiveStep(progressCountValue);
+                        $('#noDataMessage').hide();
+                        $('.step-wizard').show();
+                    } else {
+                        $('#noDataMessage').show();
+                    }
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log('Error:', error);
                 }
             });
         }
 
-        $('#searchForm input[name="tracking_id"]').on('input', function (e) {
+        $('#searchForm input[name="tracking_id"]').on('input', function(e) {
             var trackingId = $(this).val();
 
             if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length === 0) {
@@ -388,10 +403,7 @@
                 return;
             }
 
-            if (trackingId.length === 6) {
-                // $('#trackBtn').prop('disabled', true);
-                // $('#searchForm input[name="tracking_id"]').val('');
-            } else {
+            if (trackingId.length === 6) {} else {
                 $('#trackBtn').prop('disabled', false);
                 return;
             }
@@ -401,30 +413,43 @@
                 $('#trackingModal').modal('hide');
                 return;
             }
-
             performAjaxCall(trackingId);
             $('#trackingModal').modal('show');
         });
 
-        $('#trackBtn').on('click', function (e) {
+        $('#trackBtn').on('click', function(e) {
             e.preventDefault();
             var trackingId = $('#searchForm input[name="tracking_id"]').val();
             performAjaxCall(trackingId);
             $('#trackingModal').modal('show');
         });
 
-        function updateActiveStep(progressCountValue) {
+        function updateActiveStep(stepValue) {
             $('.step-wizard-item').removeClass('current-item');
-            $('.step-wizard-item').each(function () {
-                var stepValue = parseInt($(this).find('.progress-count').text());
-
-                if (stepValue == progressCountValue) {
-                    $(this).addClass('current-item');
-                }
-            });
+            $('.step-wizard-item').hide();
+            if (stepValue == 6) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            } else if (stepValue == 7) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(6)').show();
+            } else if (stepValue == 8) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(7)').show(); // Show "Cancelled"
+            } else {
+                $('.step-wizard-item').show(); // Show all steps if stepValue doesn't match any condition
+            }
+            // Highlight the current step
+            $('.step-wizard-item:nth-child(' + stepValue + ')').addClass('current-item');
         }
 
-        $('#trackingModal').on('hide.bs.modal', function () {
+        $('#trackingModal').on('hide.bs.modal', function() {
             $('.step-wizard').hide();
             // $('#searchForm input[name="tracking_id"]').val('');
             // $('#trackBtn').prop('disabled', true);
