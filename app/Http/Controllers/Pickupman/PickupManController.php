@@ -372,9 +372,16 @@ class PickupManController extends Controller
             $tableHtml .= '<td>' . $customer->note . '</td>';
             $tableHtml .= '<td>' . $customer->exchange_status . '</td>';
             $tableHtml .= '<td>' . $customer->delivery_charge . '</td>';
-            $tableHtml .= '<td>' . ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' : ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On <br> the way</span>' : ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>' : ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>' : ($customer->is_active == 5 ? '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>' : ($customer->is_active == 6 ? '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>' : ($customer->is_active == 7 ? '<span class="badge bg-label-danger me-1 text-dark">Product Cancel</span>' : ''))))))) . '</td>';
-           
-
+            $tableHtml .= '<td>' . 
+            ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' :
+            ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On <br> the way</span>' : 
+            ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>' : 
+            ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>' : 
+            ($customer->is_active == 5 ? '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>' : 
+            ($customer->is_active == 6 ? '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>' : 
+            ($customer->is_active === 'cancelled' ? '<span class="badge bg-label-danger me-1 text-dark">Product cancelled <br> the Admin</span>' : 
+            ($customer->is_active == 7 ? '<span class="badge bg-label-danger me-1 text-dark">Product Cancel</span>' : '')))))))) . '</td>';
+            
             $tableHtml .= '<td>';
             if ($customer->is_active == 1) {
                 $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';

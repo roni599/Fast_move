@@ -106,6 +106,9 @@
                                     <td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span></td>
                                 @elseif ($delivery->is_active == 6)
                                     <td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>
+                                @elseif ($delivery->is_active === 'cancelled')
+                                    <td><span class="badge bg-label-danger me-1 text-dark">Product Cancel <br> by the
+                                    Admin</span></td>
                                 @else
                                     <td><span class="badge bg-label-success me-1 text-dark">Product canceled</span></td>
                                 @endif
@@ -133,7 +136,7 @@
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success text-white" type="submit">
-                                                    <i class="fa-solid fa-check"></i>
+                                                    <i class="fa-solid fa-cart-shopping"></i>
                                                 </button>
                                             </form>
 
@@ -142,7 +145,8 @@
                                                 arrived yet <br>in the stock</span> --}}
                                         @endif
                                         @if ($delivery->is_active == 4)
-                                            <form id="deliverymanproductcheckout" action="{{ route('deliveryman.product.delivered') }}" method="post">
+                                            <form id="deliverymanproductcheckout"
+                                                action="{{ route('deliveryman.product.delivered') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success" type="submit">
@@ -152,7 +156,8 @@
                                         @endif
 
                                         @if ($delivery->is_active == 4)
-                                            <form id="deliverymanProductReturn" action="{{ route('deliveryman.product.return') }}" method="post">
+                                            <form id="deliverymanProductReturn"
+                                                action="{{ route('deliveryman.product.return') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success" type="submit">
@@ -162,7 +167,8 @@
                                         @endif
 
                                         @if ($delivery->is_active == 4)
-                                            <form id="deliverymanProductCancel" action="{{ route('deliveryman.product.cancel') }}" method="post">
+                                            <form id="deliverymanProductCancel"
+                                                action="{{ route('deliveryman.product.cancel') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-danger" type="submit">
@@ -174,6 +180,9 @@
                                             <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                         @endif
                                         @if ($delivery->is_active == 6)
+                                            <span class="badge bg-label-success me-1 text-dark">You have no action</span>
+                                        @endif
+                                        @if ($delivery->is_active ==='cancelled')
                                             <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                         @endif
                                         @if ($delivery->is_active == 7)
@@ -275,7 +284,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-{{-- search input or button new ajax code --}}
+    {{-- search input or button new ajax code --}}
     <script>
         $(document).ready(function() {
             var searchForm = $('#searchForm');
@@ -329,7 +338,7 @@
         });
     </script>
 
-{{-- delivered,return,cancel perform using ajax --}}
+    {{-- delivered,return,cancel perform using ajax --}}
     <script>
         $(document).ready(function() {
             $(document).on('submit', '#deliverymanproductcheckout', function(event) {
