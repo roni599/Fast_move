@@ -159,14 +159,15 @@
                                         </td>
                                     @endif
                                     @if ($delivery->is_active == 'cancelled')
-                                        <td><span class="badge bg-label-success me-1 text-dark"><br> No action <br> available</span>
+                                        <td><span class="badge bg-label-success me-1 text-dark"><br> No action <br>
+                                                available</span>
                                         </td>
-                                    @else{
+                                    @else
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
                                                 {{-- <a href="{{ route('product.show', $delivery->id) }}"
                                                     class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
-    
+
                                                 <button class="btn btn-sm btn-success showMerchantProductButton"
                                                     data-bs-toggle="modal" data-bs-target="#showMerchantproductModal"
                                                     data-id="{{ $delivery->id }}"
@@ -219,7 +220,8 @@
                                                             class="fas fa-trash-alt"></i> </button>
                                                 </form> --}}
                                                 <form id="merchantProductDeleteConformation"
-                                                    action="{{ route('product.destroy', $delivery->id) }}" method="post">
+                                                    action="{{ route('product.destroy', $delivery->id) }}"
+                                                    method="post">
                                                     @csrf
                                                     @method ('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger"
@@ -229,9 +231,8 @@
                                                 </form>
                                             </div>
                                         </td>
-                                    }
                                     @endif
-                                    
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -499,9 +500,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-
-
-
+    {{-- for input search --}}
     <script>
         $(document).ready(function() {
             var searchForm = $('#searchForm');
@@ -542,14 +541,38 @@
         });
     </script>
 
+    {{-- for option search --}}
+    <script>
+        $(document).ready(function() {
+            // Function to submit the search form
+            function submitForm() {
+                var division = $('#divisions').val();
+                var district = $('#distr').val();
+                var policeStation = $('#polic_sta').val();
 
-
-
-
-
-
-
-
+                $.ajax({
+                    url: '{{ route('optionsearch') }}',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'division': division,
+                        'district': district,
+                        'police_station': policeStation,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#table').load(location.href + ' #table');
+                    }
+                });
+            }
+            $('#divisions, #distr, #polic_sta').change(function() {
+                submitForm();
+            });
+        });
+    </script>
 
     {{-- product show edit,delete script --}}
     <script>
@@ -724,6 +747,12 @@
 
         });
     </script>
+
+
+
+
+
+
 
 
     {{-- declear route for input --}}

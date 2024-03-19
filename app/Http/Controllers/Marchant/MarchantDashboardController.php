@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Marchant;
 
 use App\Http\Controllers\Controller;
-use App\Models\Deliverycharge;
 use Ramsey\Uuid\Uuid;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Request;
 use Illuminate\Http\Request;
 
 class MarchantDashboardController extends Controller
@@ -159,64 +157,67 @@ class MarchantDashboardController extends Controller
         $tableHtml .= '</tr>';
         $tableHtml .= '</thead>';
         $tableHtml .= '<tbody>';
-
-        foreach ($deliveries as $delivery) {
-            $tableHtml .= '<tr class="table-info">';
-            $tableHtml .= '<td>' . $delivery->id . '</td>';
-            $tableHtml .= '<td>' . $delivery->customer_name . '</td>';
-            $tableHtml .= '<td>' . $delivery->customer_phone . '</td>';
-            $tableHtml .= '<td>' . $delivery->address . '</td>';
-            $tableHtml .= '<td>' . $delivery->police_station . '</td>';
-            $tableHtml .= '<td>' . $delivery->district . '</td>';
-            $tableHtml .= '<td>' . $delivery->divisions . '</td>';
-            $tableHtml .= '<td>' . $delivery->product_category . '</td>';
-            $tableHtml .= '<td>' . $delivery->delivery_type . '</td>';
-            $tableHtml .= '<td>' . $delivery->order_tracking_id . '</td>';
-            $tableHtml .= '<td>' . $delivery->invoice . '</td>';
-            $tableHtml .= '<td>' . $delivery->note . '</td>';
-            $tableHtml .= '<td>' . $delivery->exchange_status . '</td>';
-            $tableHtml .= '<td>' . $delivery->delivery_charge . '</td>';
-            $tableHtml .= '<td>' . $delivery->cod_amount . '</td>';
-            $tableHtml .= '<td>' . $delivery->product_weight . '</td>';
-            $tableHtml .= '<td>';
-            // Add conditions for status badges here
-            if ($delivery->is_active === '1') {
-                $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Awaiting response for Pickupman</span>';
-            } elseif ($delivery->is_active === '2') {
-                $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
-            } elseif ($delivery->is_active === '3') {
-                $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>';
-            } elseif ($delivery->is_active === '4') {
-                $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Shipped</span>';
-            } elseif ($delivery->is_active === '5') {
-                $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>';
-            } elseif ($delivery->is_active === '6') {
-                $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>';
-            } elseif ($delivery->is_active === '7') {
-                $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-            } elseif ($delivery->is_active === 'cancelled') {
-                $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled by the admin</span>';
-            }
-            $tableHtml .= '</td>';
-            if ($delivery->is_active === 'cancelled') {
+        if (!$deliveries->isEmpty()) {
+            foreach ($deliveries as $delivery) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $delivery->id . '</td>';
+                $tableHtml .= '<td>' . $delivery->customer_name . '</td>';
+                $tableHtml .= '<td>' . $delivery->customer_phone . '</td>';
+                $tableHtml .= '<td>' . $delivery->address . '</td>';
+                $tableHtml .= '<td>' . $delivery->police_station . '</td>';
+                $tableHtml .= '<td>' . $delivery->district . '</td>';
+                $tableHtml .= '<td>' . $delivery->divisions . '</td>';
+                $tableHtml .= '<td>' . $delivery->product_category . '</td>';
+                $tableHtml .= '<td>' . $delivery->delivery_type . '</td>';
+                $tableHtml .= '<td>' . $delivery->order_tracking_id . '</td>';
+                $tableHtml .= '<td>' . $delivery->invoice . '</td>';
+                $tableHtml .= '<td>' . $delivery->note . '</td>';
+                $tableHtml .= '<td>' . $delivery->exchange_status . '</td>';
+                $tableHtml .= '<td>' . $delivery->delivery_charge . '</td>';
+                $tableHtml .= '<td>' . $delivery->cod_amount . '</td>';
+                $tableHtml .= '<td>' . $delivery->product_weight . '</td>';
                 $tableHtml .= '<td>';
-                $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">No action <br> Available</span>';
+                // Add conditions for status badges here
+                if ($delivery->is_active === '1') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Awaiting response for Pickupman</span>';
+                } elseif ($delivery->is_active === '2') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                } elseif ($delivery->is_active === '3') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>';
+                } elseif ($delivery->is_active === '4') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Shipped</span>';
+                } elseif ($delivery->is_active === '5') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>';
+                } elseif ($delivery->is_active === '6') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>';
+                } elseif ($delivery->is_active === '7') {
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                } elseif ($delivery->is_active === 'cancelled') {
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled by the admin</span>';
+                }
                 $tableHtml .= '</td>';
-            } else {
-                $tableHtml .= '<td>';
-                $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
-                $tableHtml .= '<button class="btn btn-sm btn-success showMerchantProductButton" data-bs-toggle="modal" data-bs-target="#showMerchantproductModal" data-id="' . $delivery->id . '" data-customer_name="' . $delivery->customer_name . '" data-customer_phone="' . $delivery->customer_phone . '" data-full_address="' . $delivery->full_address . '" data-police_station="' . $delivery->police_station . '" data-district="' . $delivery->district . '" data-divisions="' . $delivery->divisions . '" data-product_category="' . $delivery->product_category . '" data-delivery_type="' . $delivery->delivery_type . '" data-amount="' . $delivery->cod_amount . '" data-status="' . $delivery->is_active . '" data-order_tracking_id="' . $delivery->order_tracking_id . '" data-invoice="' . $delivery->invoice . '" data-note="' . $delivery->note . '" data-weight="' . $delivery->product_weight . '" data-exchange_status="' . $delivery->exchange_status . '" data-delivery_charge="' . $delivery->delivery_charge . '" id="showProductMerchantForm"><i class="fas fa-eye"></i></button>';
-                $tableHtml .= '<button class="btn btn-sm btn-success merchantProductEditModal" data-bs-toggle="modal" data-bs-target="#merchantProductEditModal" data-idtoedit="' . $delivery->id . '" data-customer_nametoedit="' . $delivery->customer_name . '" data-customer_phonetoedit="' . $delivery->customer_phone . '" data-full_addresstoedit="' . $delivery->full_address . '" data-police_stationtoedit="' . $delivery->police_station . '" data-districttoedit="' . $delivery->district . '" data-divisionstoedit="' . $delivery->divisions . '" data-product_categorytoedit="' . $delivery->product_category . '" data-delivery_typetoedit="' . $delivery->delivery_type . '" data-amounttoedit="' . $delivery->cod_amount . '" data-statustoedit="' . $delivery->is_active . '" data-order_tracking_idtoedit="' . $delivery->order_tracking_id . '" data-invoicetoedit="' . $delivery->invoice . '" data-notetoedit="' . $delivery->note . '" data-exchange_statustoedit="' . $delivery->exchange_status . '" data-delivery_chargetoedit="' . $delivery->delivery_charge . '" data-weighttoedit="' . $delivery->product_weight . '" id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>';
-                $tableHtml .= '<form class="" id="merchantProductDeleteConformation" action="' . route('product.destroy', $delivery->id) . '" method="post">';
-                $tableHtml .= csrf_field();
-                $tableHtml .= method_field('DELETE');
-                $tableHtml .= '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">';
-                $tableHtml .= '<i class="fas fa-trash-alt"></i>';
-                $tableHtml .= '</button>';
-                $tableHtml .= '</form>';
-                $tableHtml .= '</td>';
-                $tableHtml .= '</tr>';
+                if ($delivery->is_active === 'cancelled') {
+                    $tableHtml .= '<td>';
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">No action <br> Available</span>';
+                    $tableHtml .= '</td>';
+                } else {
+                    $tableHtml .= '<td>';
+                    $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success showMerchantProductButton" data-bs-toggle="modal" data-bs-target="#showMerchantproductModal" data-id="' . $delivery->id . '" data-customer_name="' . $delivery->customer_name . '" data-customer_phone="' . $delivery->customer_phone . '" data-full_address="' . $delivery->full_address . '" data-police_station="' . $delivery->police_station . '" data-district="' . $delivery->district . '" data-divisions="' . $delivery->divisions . '" data-product_category="' . $delivery->product_category . '" data-delivery_type="' . $delivery->delivery_type . '" data-amount="' . $delivery->cod_amount . '" data-status="' . $delivery->is_active . '" data-order_tracking_id="' . $delivery->order_tracking_id . '" data-invoice="' . $delivery->invoice . '" data-note="' . $delivery->note . '" data-weight="' . $delivery->product_weight . '" data-exchange_status="' . $delivery->exchange_status . '" data-delivery_charge="' . $delivery->delivery_charge . '" id="showProductMerchantForm"><i class="fas fa-eye"></i></button>';
+                    $tableHtml .= '<button class="btn btn-sm btn-success merchantProductEditModal" data-bs-toggle="modal" data-bs-target="#merchantProductEditModal" data-idtoedit="' . $delivery->id . '" data-customer_nametoedit="' . $delivery->customer_name . '" data-customer_phonetoedit="' . $delivery->customer_phone . '" data-full_addresstoedit="' . $delivery->full_address . '" data-police_stationtoedit="' . $delivery->police_station . '" data-districttoedit="' . $delivery->district . '" data-divisionstoedit="' . $delivery->divisions . '" data-product_categorytoedit="' . $delivery->product_category . '" data-delivery_typetoedit="' . $delivery->delivery_type . '" data-amounttoedit="' . $delivery->cod_amount . '" data-statustoedit="' . $delivery->is_active . '" data-order_tracking_idtoedit="' . $delivery->order_tracking_id . '" data-invoicetoedit="' . $delivery->invoice . '" data-notetoedit="' . $delivery->note . '" data-exchange_statustoedit="' . $delivery->exchange_status . '" data-delivery_chargetoedit="' . $delivery->delivery_charge . '" data-weighttoedit="' . $delivery->product_weight . '" id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>';
+                    $tableHtml .= '<form class="" id="merchantProductDeleteConformation" action="' . route('product.destroy', $delivery->id) . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= method_field('DELETE');
+                    $tableHtml .= '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">';
+                    $tableHtml .= '<i class="fas fa-trash-alt"></i>';
+                    $tableHtml .= '</button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '</td>';
+                    $tableHtml .= '</tr>';
+                }
             }
+        } else {
+            $tableHtml .= '<tr><td colspan="18" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
         }
         $tableHtml .= '</tbody>';
         $tableHtml .= '</table>';
@@ -224,99 +225,118 @@ class MarchantDashboardController extends Controller
         return $tableHtml;
     }
 
-    // public function searchme(Request $request)
-    // {
-    //     $searchTerm = $request->input('admin_delivery_search');
-    //     $deliveries = Product::where('delivery_type', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('name', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('phone', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('address', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('category_type', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('district', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('order_tracking_id', 'LIKE', "%$searchTerm%")
-    //         ->orWhere('divisions', 'LIKE', "%$searchTerm%")
-    //         ->get();
+    public function optionsearch(Request $request)
+    {
+        $division = $request->input('division');
+        $district = $request->input('district');
+        $policeStation = $request->input('police_station');
 
-    //     // Build the table HTML
-    //     $tableHtml = '<div class="table-responsive">';
-    //     $tableHtml .= '<table class="table table-bordered" id="tableto">';
-    //     $tableHtml .= '<thead>';
-    //     $tableHtml .= '<tr>';
-    //     $tableHtml .= '<th scope="col">ID</th>';
-    //     $tableHtml .= '<th scope="col">Customer Name</th>';
-    //     $tableHtml .= '<th scope="col">Customer Phone</th>';
-    //     $tableHtml .= '<th scope="col">Address</th>';
-    //     $tableHtml .= '<th scope="col">Police Station</th>';
-    //     $tableHtml .= '<th scope="col">District</th>';
-    //     $tableHtml .= '<th scope="col">Division</th>';
-    //     $tableHtml .= '<th scope="col">Product Category</th>';
-    //     $tableHtml .= '<th scope="col">Delivery Type</th>';
-    //     $tableHtml .= '<th scope="col">Tracking Id</th>';
-    //     $tableHtml .= '<th scope="col">Invoice</th>';
-    //     $tableHtml .= '<th scope="col">Note</th>';
-    //     $tableHtml .= '<th scope="col">Exchange Status</th>';
-    //     $tableHtml .= '<th scope="col">Delivery Charge</th>';
-    //     $tableHtml .= '<th scope="col">Product Price</th>';
-    //     $tableHtml .= '<th scope="col">Product weight</th>';
-    //     $tableHtml .= '<th scope="col">Status</th>';
-    //     $tableHtml .= '<th scope="col">Action</th>';
-    //     $tableHtml .= '</tr>';
-    //     $tableHtml .= '</thead>';
-    //     $tableHtml .= '<tbody>';
+        $query = Product::query();
 
-    //     foreach ($deliveries as $delivery) {
-    //         $tableHtml .= '<tr class="table-info">';
-    //         $tableHtml .= '<td>' . $delivery->id . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->customer_name . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->customer_phone . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->address . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->police_station . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->district . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->divisions . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->product_category . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->delivery_type . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->order_tracking_id . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->invoice . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->note . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->exchange_status . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->delivery_charge . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->cod_amount . '</td>';
-    //         $tableHtml .= '<td>' . $delivery->product_weight . '</td>';
-    //         $tableHtml .= '<td>';
-    //         // Add conditions for status badges here
-    //         if ($delivery->is_active === '1') {
-    //             $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Awaiting response for Pickupman</span>';
-    //         } elseif ($delivery->is_active === '2') {
-    //             $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
-    //         } elseif ($delivery->is_active === '3') {
-    //             $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>';
-    //         } elseif ($delivery->is_active === '4') {
-    //             $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Shipped</span>';
-    //         } elseif ($delivery->is_active === '5') {
-    //             $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>';
-    //         } elseif ($delivery->is_active === '6') {
-    //             $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>';
-    //         } elseif ($delivery->is_active === '7') {
-    //             $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-    //         } elseif ($delivery->is_active === 'cancelled') {
-    //             $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled by the admin</span>';
-    //         }
-    //         $tableHtml .= '</td>';
-    //         $tableHtml .= '<td>';
-    //         // Add actions buttons here
-    //         $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
-    //         $tableHtml .= '<button class="btn btn-sm btn-success showMerchantProductButton" data-bs-toggle="modal" data-bs-target="#showMerchantproductModal" data-id="' . $delivery->id . '" data-customer_name="' . $delivery->customer_name . '" data-customer_phone="' . $delivery->customer_phone . '" data-full_address="' . $delivery->address . '" data-police_station="' . $delivery->police_station . '" data-district="' . $delivery->district . '" data-divisions="' . $delivery->divisions . '" data-product_category="' . $delivery->product_category . '" data-delivery_type="' . $delivery->delivery_type . '" data-amount="' . $delivery->cod_amount . '" data-status="' . $delivery->is_active . '" data-order_tracking_id="' . $delivery->order_tracking_id . '" data-invoice="' . $delivery->invoice . '" data-note="' . $delivery->note . '" data-weight="' . $delivery->product_weight . '" data-exchange_status="' . $delivery->exchange_status . '" data-delivery_charge="' . $delivery->delivery_charge . '" id="showProductMerchantForm"><i class="fas fa-eye"></i></button>';
-    //         $tableHtml .= '<button class="btn btn-sm btn-success merchantProductEditModal" data-bs-toggle="modal" data-bs-target="#merchantProductEditModal" data-idtoedit="' . $delivery->id . '" data-customer_nametoedit="' . $delivery->customer_name . '" data-customer_phonetoedit="' . $delivery->customer_phone . '" data-full_addresstoedit="' . $delivery->address . '" data-police_stationtoedit="' . $delivery->police_station . '" data-districttoedit="' . $delivery->district . '" data-divisionstoedit="' . $delivery->divisions . '" data-product_categorytoedit="' . $delivery->product_category . '" data-delivery_typetoedit="' . $delivery->delivery_type . '" data-amounttoedit="' . $delivery->cod_amount . '" data-statustoedit="' . $delivery->is_active . '" data-order_tracking_idtoedit="' . $delivery->order_tracking_id . '" data-invoicetoedit="' . $delivery->invoice . '" data-notetoedit="' . $delivery->note . '" data-exchange_statustoedit="' . $delivery->exchange_status . '" data-delivery_chargetoedit="' . $delivery->delivery_charge . '" data-weighttoedit="' . $delivery->product_weight . '" id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>';
-    //         $tableHtml .= '<form id="merchantProductDeleteConformation" action="' . route('product.destroy', $delivery->id) . '" method="post">';
-    //         $tableHtml .= csrf_field();
-    //         $tableHtml .= '</td>';
-    //         $tableHtml .= '</tr>';
-    //     }
-    //     $tableHtml .= '</tbody>';
-    //     $tableHtml .= '</table>';
-    //     $tableHtml .= '</div>';
-    //     // return response()->json(['html' => $tableHtml]);
-    //     // Return the HTML table
-    //     return $tableHtml;
-    // }
+        if ($division) {
+            $query->where('divisions', $division);
+        }
+
+        if ($district) {
+            $query->where('district', $district);
+        }
+
+        if ($policeStation) {
+            $query->where('police_station', $policeStation);
+        }
+
+        $deliveries = $query->get();
+
+        $tableHtml = '<div class="table-responsive">';
+        $tableHtml .= '<table class="table table-bordered" id="table">';
+        $tableHtml .= '<thead>';
+        $tableHtml .= '<tr>';
+        $tableHtml .= '<th scope="col">ID</th>';
+        $tableHtml .= '<th scope="col">Customer Name</th>';
+        $tableHtml .= '<th scope="col">Customer Phone</th>';
+        $tableHtml .= '<th scope="col">Address</th>';
+        $tableHtml .= '<th scope="col">Police Station</th>';
+        $tableHtml .= '<th scope="col">District</th>';
+        $tableHtml .= '<th scope="col">Division</th>';
+        $tableHtml .= '<th scope="col">Product Category</th>';
+        $tableHtml .= '<th scope="col">Delivery Type</th>';
+        $tableHtml .= '<th scope="col">Tracking Id</th>';
+        $tableHtml .= '<th scope="col">Invoice</th>';
+        $tableHtml .= '<th scope="col">Note</th>';
+        $tableHtml .= '<th scope="col">Exchange Status</th>';
+        $tableHtml .= '<th scope="col">Delivery Charge</th>';
+        $tableHtml .= '<th scope="col">Product Price</th>';
+        $tableHtml .= '<th scope="col">Product weight</th>';
+        $tableHtml .= '<th scope="col">Status</th>';
+        $tableHtml .= '<th scope="col">Action</th>';
+        $tableHtml .= '</tr>';
+        $tableHtml .= '</thead>';
+        $tableHtml .= '<tbody>';
+        if (!$deliveries->isEmpty()) {
+            foreach ($deliveries as $delivery) {
+                $tableHtml .= '<tr class="table-info">';
+                $tableHtml .= '<td>' . $delivery->id . '</td>';
+                $tableHtml .= '<td>' . $delivery->customer_name . '</td>';
+                $tableHtml .= '<td>' . $delivery->customer_phone . '</td>';
+                $tableHtml .= '<td>' . $delivery->address . '</td>';
+                $tableHtml .= '<td>' . $delivery->police_station . '</td>';
+                $tableHtml .= '<td>' . $delivery->district . '</td>';
+                $tableHtml .= '<td>' . $delivery->divisions . '</td>';
+                $tableHtml .= '<td>' . $delivery->product_category . '</td>';
+                $tableHtml .= '<td>' . $delivery->delivery_type . '</td>';
+                $tableHtml .= '<td>' . $delivery->order_tracking_id . '</td>';
+                $tableHtml .= '<td>' . $delivery->invoice . '</td>';
+                $tableHtml .= '<td>' . $delivery->note . '</td>';
+                $tableHtml .= '<td>' . $delivery->exchange_status . '</td>';
+                $tableHtml .= '<td>' . $delivery->delivery_charge . '</td>';
+                $tableHtml .= '<td>' . $delivery->cod_amount . '</td>';
+                $tableHtml .= '<td>' . $delivery->product_weight . '</td>';
+                $tableHtml .= '<td>';
+
+                if ($delivery->is_active === '1') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Awaiting response for Pickupman</span>';
+                } elseif ($delivery->is_active === '2') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>';
+                } elseif ($delivery->is_active === '3') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>';
+                } elseif ($delivery->is_active === '4') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Shipped</span>';
+                } elseif ($delivery->is_active === '5') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>';
+                } elseif ($delivery->is_active === '6') {
+                    $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>';
+                } elseif ($delivery->is_active === '7') {
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
+                } elseif ($delivery->is_active === 'cancelled') {
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled by the admin</span>';
+                }
+                $tableHtml .= '</td>';
+                if ($delivery->is_active === 'cancelled') {
+                    $tableHtml .= '<td>';
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">No action <br> Available</span>';
+                    $tableHtml .= '</td>';
+                } else {
+                    $tableHtml .= '<td>';
+                    $tableHtml .= '<div class="d-flex justify-content-center gap-2">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success showMerchantProductButton" data-bs-toggle="modal" data-bs-target="#showMerchantproductModal" data-id="' . $delivery->id . '" data-customer_name="' . $delivery->customer_name . '" data-customer_phone="' . $delivery->customer_phone . '" data-full_address="' . $delivery->full_address . '" data-police_station="' . $delivery->police_station . '" data-district="' . $delivery->district . '" data-divisions="' . $delivery->divisions . '" data-product_category="' . $delivery->product_category . '" data-delivery_type="' . $delivery->delivery_type . '" data-amount="' . $delivery->cod_amount . '" data-status="' . $delivery->is_active . '" data-order_tracking_id="' . $delivery->order_tracking_id . '" data-invoice="' . $delivery->invoice . '" data-note="' . $delivery->note . '" data-weight="' . $delivery->product_weight . '" data-exchange_status="' . $delivery->exchange_status . '" data-delivery_charge="' . $delivery->delivery_charge . '" id="showProductMerchantForm"><i class="fas fa-eye"></i></button>';
+                    $tableHtml .= '<button class="btn btn-sm btn-success merchantProductEditModal" data-bs-toggle="modal" data-bs-target="#merchantProductEditModal" data-idtoedit="' . $delivery->id . '" data-customer_nametoedit="' . $delivery->customer_name . '" data-customer_phonetoedit="' . $delivery->customer_phone . '" data-full_addresstoedit="' . $delivery->full_address . '" data-police_stationtoedit="' . $delivery->police_station . '" data-districttoedit="' . $delivery->district . '" data-divisionstoedit="' . $delivery->divisions . '" data-product_categorytoedit="' . $delivery->product_category . '" data-delivery_typetoedit="' . $delivery->delivery_type . '" data-amounttoedit="' . $delivery->cod_amount . '" data-statustoedit="' . $delivery->is_active . '" data-order_tracking_idtoedit="' . $delivery->order_tracking_id . '" data-invoicetoedit="' . $delivery->invoice . '" data-notetoedit="' . $delivery->note . '" data-exchange_statustoedit="' . $delivery->exchange_status . '" data-delivery_chargetoedit="' . $delivery->delivery_charge . '" data-weighttoedit="' . $delivery->product_weight . '" id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>';
+                    $tableHtml .= '<form class="" id="merchantProductDeleteConformation" action="' . route('product.destroy', $delivery->id) . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= method_field('DELETE');
+                    $tableHtml .= '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">';
+                    $tableHtml .= '<i class="fas fa-trash-alt"></i>';
+                    $tableHtml .= '</button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '</td>';
+                    $tableHtml .= '</tr>';
+                }
+            }
+        } else {
+            $tableHtml .= '<tr><td colspan="18" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
+        }
+        $tableHtml .= '</tbody>';
+        $tableHtml .= '</table>';
+        $tableHtml .= '</div>';
+        return $tableHtml;
+    }
 }

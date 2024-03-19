@@ -101,49 +101,49 @@ class FraudController extends Controller
 
 
 
-    public function optionsearch(Request $request)
-    {
-        $searchTerm = $request->input('search');
-        $searchTerm2 = $request->input('search2');
-        $searchTerm3 = $request->input('search3');
-        $query = Deliveryman::query();
+    // public function optionsearch(Request $request)
+    // {
+    //     $searchTerm = $request->input('search');
+    //     $searchTerm2 = $request->input('search2');
+    //     $searchTerm3 = $request->input('search3');
+    //     $query = Deliveryman::query();
 
-        if ($searchTerm) {
-            $query->where('divisions', $searchTerm);
-        }
+    //     if ($searchTerm) {
+    //         $query->where('divisions', $searchTerm);
+    //     }
 
-        if ($searchTerm2) {
-            $query->where('district', $searchTerm2);
-        }
+    //     if ($searchTerm2) {
+    //         $query->where('district', $searchTerm2);
+    //     }
 
-        if ($searchTerm3) {
-            $query->where('police_station', $searchTerm3);
-        }
-        $deliveries = $query->get();
-        $formattedData = [];
+    //     if ($searchTerm3) {
+    //         $query->where('police_station', $searchTerm3);
+    //     }
+    //     $deliveries = $query->get();
+    //     $formattedData = [];
 
-        foreach ($deliveries as $delivery) {
-            $formattedData[] = [
-                'id' => $delivery->id,
-                'name' => $delivery->name,
-                'phone' => $delivery->phone,
-                'address' => $delivery->address,
-                'divisions' => $delivery->divisions,
-                'district' => $delivery->district,
-                'police_station' => $delivery->police_station,
-                'category_type' => $delivery->category_type,
-                'delivery_type' => $delivery->delivery_type,
-                'order_tracking_id' => $delivery->order_tracking_id,
-                'cod_amount' => $delivery->cod_amount,
-                'invoice' => $delivery->invoice,
-                'note' => $delivery->note,
-                'weight' => $delivery->weight,
-                'exchange_parcel' => $delivery->exchange_parcel,
-                'created_at' => $delivery->created_at,
-                'updated_at' => $delivery->updated_at,
-                'is_active' => $delivery->is_active,
-            ];
-        }
-        return response()->json(['deliveries' => $formattedData]);
-    }
+    //     foreach ($deliveries as $delivery) {
+    //         $formattedData[] = [
+    //             'id' => $delivery->id,
+    //             'name' => $delivery->name,
+    //             'phone' => $delivery->phone,
+    //             'address' => $delivery->address,
+    //             'divisions' => $delivery->divisions,
+    //             'district' => $delivery->district,
+    //             'police_station' => $delivery->police_station,
+    //             'category_type' => $delivery->category_type,
+    //             'delivery_type' => $delivery->delivery_type,
+    //             'order_tracking_id' => $delivery->order_tracking_id,
+    //             'cod_amount' => $delivery->cod_amount,
+    //             'invoice' => $delivery->invoice,
+    //             'note' => $delivery->note,
+    //             'weight' => $delivery->weight,
+    //             'exchange_parcel' => $delivery->exchange_parcel,
+    //             'created_at' => $delivery->created_at,
+    //             'updated_at' => $delivery->updated_at,
+    //             'is_active' => $delivery->is_active,
+    //         ];
+    //     }
+    //     return response()->json(['deliveries' => $formattedData]);
+    // }
 }
