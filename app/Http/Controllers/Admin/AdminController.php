@@ -338,7 +338,7 @@ class AdminController extends Controller
                     $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>';
                 } elseif ($delivery->is_active == 7) {
                     $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span></td>';
-                } elseif ($delivery->is_active == 'cancelled') {
+                } elseif ($delivery->is_active === '8') {
                     $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> By Admin</span></td>';
                 } else {
                     $tableHtml .= '<td><span class="badge bg-label-success me-1 text-dark">Product Pickupman <br> has not <br> reached yet</span></td>';
@@ -970,7 +970,7 @@ class AdminController extends Controller
     public function productCancelConfirmation(Request $request)
     {
         $delivery = Product::find($request->id);
-        $delivery->is_active = 'cancelled';
+        $delivery->is_active =8;
         $delivery->update();
         return redirect('admin/product/delivery');
     }

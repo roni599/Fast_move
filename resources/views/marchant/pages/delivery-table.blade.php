@@ -153,12 +153,12 @@
                                     @elseif ($delivery->is_active == 7)
                                         <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>
                                         </td>
-                                    @elseif ($delivery->is_active == 'cancelled')
+                                    @elseif ($delivery->is_active == '8')
                                         <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> by
                                                 the admin</span>
                                         </td>
                                     @endif
-                                    @if ($delivery->is_active == 'cancelled')
+                                    @if ($delivery->is_active === '8')
                                         <td><span class="badge bg-label-success me-1 text-dark"><br> No action <br>
                                                 available</span>
                                         </td>

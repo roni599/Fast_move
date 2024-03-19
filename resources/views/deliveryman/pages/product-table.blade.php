@@ -106,7 +106,7 @@
                                     <td><span class="badge bg-label-success me-1 text-dark">Product Delivered</span></td>
                                 @elseif ($delivery->is_active == 6)
                                     <td><span class="badge bg-label-success me-1 text-dark">Product Return</span></td>
-                                @elseif ($delivery->is_active === 'cancelled')
+                                @elseif ($delivery->is_active === '8')
                                     <td><span class="badge bg-label-danger me-1 text-dark">Product Cancel <br> by the
                                     Admin</span></td>
                                 @else
@@ -182,7 +182,7 @@
                                         @if ($delivery->is_active == 6)
                                             <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                         @endif
-                                        @if ($delivery->is_active ==='cancelled')
+                                        @if ($delivery->is_active ==='8')
                                             <span class="badge bg-label-success me-1 text-dark">You have no action</span>
                                         @endif
                                         @if ($delivery->is_active == 7)

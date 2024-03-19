@@ -129,6 +129,10 @@
                             <span class="progress-count">7</span>
                             <span class="progress-label">Cancelled</span>
                         </li>
+                        <li class="step-wizard-item">
+                            <span class="progress-count">8</span>
+                            <span class="progress-label">Cancel By Admin</span>
+                        </li>
                     </ul>
                 </section>
                 <p id="noDataMessage" class="text-center" style="display: none;">Your Query doesn't exits in our database</p>
@@ -441,8 +445,13 @@
                 $('.step-wizard-item:nth-child(1)').show();
                 $('.step-wizard-item:nth-child(2)').show();
                 $('.step-wizard-item:nth-child(3)').show();
-                $('.step-wizard-item:nth-child(7)').show(); // Show "Cancelled"
-            } else {
+                $('.step-wizard-item:nth-child(7)').show();
+            }else if (stepValue == 9) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(8)').show();
+            }else {
                 $('.step-wizard-item').show(); // Show all steps if stepValue doesn't match any condition
             }
             // Highlight the current step

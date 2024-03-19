@@ -192,11 +192,11 @@ class MarchantDashboardController extends Controller
                     $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>';
                 } elseif ($delivery->is_active === '7') {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-                } elseif ($delivery->is_active === 'cancelled') {
+                } elseif ($delivery->is_active === '8') {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled by the admin</span>';
                 }
                 $tableHtml .= '</td>';
-                if ($delivery->is_active === 'cancelled') {
+                if ($delivery->is_active === '8') {
                     $tableHtml .= '<td>';
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">No action <br> Available</span>';
                     $tableHtml .= '</td>';
@@ -307,11 +307,11 @@ class MarchantDashboardController extends Controller
                     $tableHtml .= '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>';
                 } elseif ($delivery->is_active === '7') {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>';
-                } elseif ($delivery->is_active === 'cancelled') {
+                } elseif ($delivery->is_active === '8') {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Product Cancelled by the admin</span>';
                 }
                 $tableHtml .= '</td>';
-                if ($delivery->is_active === 'cancelled') {
+                if ($delivery->is_active === '8') {
                     $tableHtml .= '<td>';
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">No action <br> Available</span>';
                     $tableHtml .= '</td>';

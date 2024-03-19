@@ -385,11 +385,11 @@ class DeliveryManController extends Controller
                 ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product picked <br> by delivery man</span>' :
                 ($customer->is_active == 5 ? '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>' : 
                 ($customer->is_active == 6 ? '<span class="badge bg-label-success me-1 text-dark">Product Return</span>' :
-                ($customer->is_active ==='cancelled' ? '<span class="badge bg-label-success me-1 text-dark">Product cancel <br> the Admin</span>' :
+                ($customer->is_active ==='8' ? '<span class="badge bg-label-success me-1 text-dark">Product cancel <br> the Admin</span>' :
                 ($customer->is_active == 7 ? '<span class="badge bg-label-success me-1 text-dark">Product canceled</span>' : '')))))))) . '</td>';
                 $tableHtml .= '<td>';
                 $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
-                if ($customer->is_active == 1 || $customer->is_active == 2 || $customer->is_active === 'cancelled' || $customer->is_active == 5 || $customer->is_active == 6 || $customer->is_active == 7) {
+                if ($customer->is_active == 1 || $customer->is_active == 2 || $customer->is_active === '8' || $customer->is_active == 5 || $customer->is_active == 6 || $customer->is_active == 7) {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
                 } elseif ($customer->is_active == 3) {
                     $tableHtml .= '<form id="productCheckout" action="'. route('admin.product.delivery_checkout') .'" method="post">';
