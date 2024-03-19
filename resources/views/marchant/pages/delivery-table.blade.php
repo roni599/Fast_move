@@ -8,11 +8,11 @@
 
     <div class="card">
         <div class="card-body">
-            <form id="searchForm">
+            {{-- <form id="searchForm" action="{{ route('deliveryme') }}" method="POST">
                 @csrf
                 <div class="input-group mb-0">
                     <div class="form-group-feedback form-group-feedback-left">
-                        <input type="search" class="form-control form-control-lg" placeholder="Search by Phone"
+                        <input type="search" name="ttt" class="form-control form-control-lg" placeholder="Search by Phone"
                             id="searchInput">
                         <div class="form-control-feedback form-control-feedback-lg">
                             <i class="icon-search4 text-muted"></i>
@@ -21,6 +21,17 @@
 
                     <div class="input-group-append ms-2">
                         <button type="submit" class="btn btn-primary btn-lg">Search</button>
+                    </div>
+                </div>
+            </form> --}}
+            <form id="searchForm">
+                <div class="input-group mb-0">
+                    <div class="form-group-feedback form-group-feedback-left">
+                        <input type="search" name="admin_delivery_search" class="form-control mr-sm-2" placeholder="Search"
+                            id="searchInput">
+                    </div>
+                    <div class="input-group-append ms-2">
+                        <button type="submit" class="btn btn-primary my-2 my-sm-0">Search</button>
                     </div>
                 </div>
             </form>
@@ -142,74 +153,85 @@
                                     @elseif ($delivery->is_active == 7)
                                         <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled</span>
                                         </td>
+                                    @elseif ($delivery->is_active == 'cancelled')
+                                        <td><span class="badge bg-label-success me-1 text-dark">Product Cancelled <br> by
+                                                the admin</span>
+                                        </td>
                                     @endif
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2">
-                                            {{-- <a href="{{ route('product.show', $delivery->id) }}"
-                                                class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
-
-                                            <button class="btn btn-sm btn-success showMerchantProductButton"
-                                                data-bs-toggle="modal" data-bs-target="#showMerchantproductModal"
-                                                data-id="{{ $delivery->id }}"
-                                                data-customer_name="{{ $delivery->customer_name }}"
-                                                data-customer_phone="{{ $delivery->customer_phone }}"
-                                                data-full_address="{{ $delivery->full_address }}"
-                                                data-police_station="{{ $delivery->police_station }}"
-                                                data-district="{{ $delivery->district }}"
-                                                data-divisions="{{ $delivery->divisions }}"
-                                                data-product_category="{{ $delivery->product_category }}"
-                                                data-delivery_type="{{ $delivery->delivery_type }}"
-                                                data-amount="{{ $delivery->cod_amount }}"
-                                                data-status="{{ $delivery->is_active }}"
-                                                data-order_tracking_id="{{ $delivery->order_tracking_id }}"
-                                                data-invoice="{{ $delivery->invoice }}"
-                                                data-note="{{ $delivery->note }}"
-                                                data-weight="{{ $delivery->product_weight }}"
-                                                data-exchange_status="{{ $delivery->exchange_status }}"
-                                                data-delivery_charge="{{ $delivery->delivery_charge }}"
-                                                id="showProductMerchantForm">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            {{-- <a href="{{ route('product.edit', $delivery->id) }}"
-                                                class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
-                                            <button class="btn btn-sm btn-success merchantProductEditModal"
-                                                data-bs-toggle="modal" data-bs-target="#merchantProductEditModal"
-                                                data-idtoedit="{{ $delivery->id }}"
-                                                data-customer_nametoedit="{{ $delivery->customer_name }}"
-                                                data-customer_phonetoedit="{{ $delivery->customer_phone }}"
-                                                data-full_addresstoedit="{{ $delivery->full_address }}"
-                                                data-police_stationtoedit="{{ $delivery->police_station }}"
-                                                data-districttoedit="{{ $delivery->district }}"
-                                                data-divisionstoedit="{{ $delivery->divisions }}"
-                                                data-product_categorytoedit="{{ $delivery->product_category }}"
-                                                data-delivery_typetoedit="{{ $delivery->delivery_type }}"
-                                                data-amounttoedit="{{ $delivery->cod_amount }}"
-                                                data-statustoedit="{{ $delivery->is_active }}"
-                                                data-order_tracking_idtoedit="{{ $delivery->order_tracking_id }}"
-                                                data-invoicetoedit="{{ $delivery->invoice }}"
-                                                data-notetoedit="{{ $delivery->note }}"
-                                                data-exchange_statustoedit="{{ $delivery->exchange_status }}"
-                                                data-delivery_chargetoedit="{{ $delivery->delivery_charge }}"
-                                                data-weighttoedit="{{ $delivery->product_weight }}"
-                                                id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>
-                                            {{-- <form action="{{ route('product.destroy', $delivery->id) }}" method="post">
-                                                @csrf
-                                                @method ('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Are you sure?')"> <i
-                                                        class="fas fa-trash-alt"></i> </button>
-                                            </form> --}}
-                                            <form id="merchantProductDeleteConformation"
-                                                action="{{ route('product.destroy', $delivery->id) }}" method="post">
-                                                @csrf
-                                                @method ('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Are you sure?')">
-                                                    <i class="fas fa-trash-alt"></i>
+                                    @if ($delivery->is_active == 'cancelled')
+                                        <td><span class="badge bg-label-success me-1 text-dark"><br> No action <br> available</span>
+                                        </td>
+                                    @else{
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                {{-- <a href="{{ route('product.show', $delivery->id) }}"
+                                                    class="btn btn-sm btn-info"> <i class="fas fa-eye"></i></a> --}}
+    
+                                                <button class="btn btn-sm btn-success showMerchantProductButton"
+                                                    data-bs-toggle="modal" data-bs-target="#showMerchantproductModal"
+                                                    data-id="{{ $delivery->id }}"
+                                                    data-customer_name="{{ $delivery->customer_name }}"
+                                                    data-customer_phone="{{ $delivery->customer_phone }}"
+                                                    data-full_address="{{ $delivery->full_address }}"
+                                                    data-police_station="{{ $delivery->police_station }}"
+                                                    data-district="{{ $delivery->district }}"
+                                                    data-divisions="{{ $delivery->divisions }}"
+                                                    data-product_category="{{ $delivery->product_category }}"
+                                                    data-delivery_type="{{ $delivery->delivery_type }}"
+                                                    data-amount="{{ $delivery->cod_amount }}"
+                                                    data-status="{{ $delivery->is_active }}"
+                                                    data-order_tracking_id="{{ $delivery->order_tracking_id }}"
+                                                    data-invoice="{{ $delivery->invoice }}"
+                                                    data-note="{{ $delivery->note }}"
+                                                    data-weight="{{ $delivery->product_weight }}"
+                                                    data-exchange_status="{{ $delivery->exchange_status }}"
+                                                    data-delivery_charge="{{ $delivery->delivery_charge }}"
+                                                    id="showProductMerchantForm">
+                                                    <i class="fas fa-eye"></i>
                                                 </button>
-                                            </form>
-                                        </div>
-                                    </td>
+                                                {{-- <a href="{{ route('product.edit', $delivery->id) }}"
+                                                    class="btn btn-sm btn-success"> <i class="fas fa-pencil-alt"></i></a> --}}
+                                                <button class="btn btn-sm btn-success merchantProductEditModal"
+                                                    data-bs-toggle="modal" data-bs-target="#merchantProductEditModal"
+                                                    data-idtoedit="{{ $delivery->id }}"
+                                                    data-customer_nametoedit="{{ $delivery->customer_name }}"
+                                                    data-customer_phonetoedit="{{ $delivery->customer_phone }}"
+                                                    data-full_addresstoedit="{{ $delivery->full_address }}"
+                                                    data-police_stationtoedit="{{ $delivery->police_station }}"
+                                                    data-districttoedit="{{ $delivery->district }}"
+                                                    data-divisionstoedit="{{ $delivery->divisions }}"
+                                                    data-product_categorytoedit="{{ $delivery->product_category }}"
+                                                    data-delivery_typetoedit="{{ $delivery->delivery_type }}"
+                                                    data-amounttoedit="{{ $delivery->cod_amount }}"
+                                                    data-statustoedit="{{ $delivery->is_active }}"
+                                                    data-order_tracking_idtoedit="{{ $delivery->order_tracking_id }}"
+                                                    data-invoicetoedit="{{ $delivery->invoice }}"
+                                                    data-notetoedit="{{ $delivery->note }}"
+                                                    data-exchange_statustoedit="{{ $delivery->exchange_status }}"
+                                                    data-delivery_chargetoedit="{{ $delivery->delivery_charge }}"
+                                                    data-weighttoedit="{{ $delivery->product_weight }}"
+                                                    id="updateDeliveryForm"><i class="fas fa-pencil-alt"></i></button>
+                                                {{-- <form action="{{ route('product.destroy', $delivery->id) }}" method="post">
+                                                    @csrf
+                                                    @method ('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Are you sure?')"> <i
+                                                            class="fas fa-trash-alt"></i> </button>
+                                                </form> --}}
+                                                <form id="merchantProductDeleteConformation"
+                                                    action="{{ route('product.destroy', $delivery->id) }}" method="post">
+                                                    @csrf
+                                                    @method ('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Are you sure?')">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    }
+                                    @endif
+                                    
                                 </tr>
                             @endforeach
                         </tbody>
@@ -477,6 +499,59 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
+
+
+
+    <script>
+        $(document).ready(function() {
+            var searchForm = $('#searchForm');
+            var searchInput = $('#searchInput');
+
+            function submitForm() {
+                var searchInputValue = searchInput.val().trim();
+
+                if (searchInputValue === '') {
+                    $('#table').load(location.href + ' #table');
+                    return;
+                }
+                $.ajax({
+                    url: '{{ route('deliveryme') }}',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'admin_delivery_search': searchInputValue,
+                    },
+                    dataType: 'html',
+                    success: function(response) {
+                        $('#table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching search results:', error);
+                        $('#table').load(location.href + ' #table');
+                    }
+                });
+            }
+            searchInput.on('input', function() {
+                submitForm();
+            });
+
+            searchForm.submit(function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+    {{-- product show edit,delete script --}}
     <script>
         $(document).ready(function() {
             $(document).on('click', '.showMerchantProductButton', function() {
@@ -522,6 +597,8 @@
                     $('#productstatus').text("Return")
                 } else if (status == 7) {
                     $('#productstatus').text("cancel")
+                } else if (status === 'cancelled') {
+                    $('#productstatus').text("Product cancelled <br> by the admin")
                 }
                 $('#ordertrackingid').text(order_tracking_id)
                 $('#productinvoice').text(invoice)
@@ -649,25 +726,17 @@
     </script>
 
 
-
-
-
-
-
-
-
-
     {{-- declear route for input --}}
-    <script>
+    {{-- <script>
         var routeUrls = {
             show: '{{ route('product.show', ':id') }}',
             edit: '{{ route('product.edit', ':id') }}',
             destroy: '{{ route('product.destroy', ':id') }}',
         }
-    </script>
+    </script> --}}
 
     {{-- for input --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var existingTable = $('#existingTable');
             var searchResultsSection = $('#searchResultsSection');
@@ -824,10 +893,10 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
     {{-- for option --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Initial setup: hide search results, show existing table
             var existingTable = $('#existingTable');
@@ -977,5 +1046,5 @@
             // Attach the event listener to all three select elements
             $('#divisions, #distr, #polic_sta').on('change', loadDataBasedOnDivisionsAndDistricts);
         });
-    </script>
+    </script> --}}
 @endsection

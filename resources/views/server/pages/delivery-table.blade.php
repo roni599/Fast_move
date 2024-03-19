@@ -1228,22 +1228,6 @@
     </script>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {{-- product_accept_conformation_by_the_admin --}}
     {{-- product_cancel_conformation_by_the_admin --}}
     {{-- product_delete_conformation_by_the_admin --}}

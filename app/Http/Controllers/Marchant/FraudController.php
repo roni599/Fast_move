@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Delivery;
 use App\Models\Deliveryman;
 use App\Models\Fraud;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -81,21 +82,25 @@ class FraudController extends Controller
         return redirect()->back()->with('message', 'Fraud record remove successfully');
     }
 
-    public function search(Request $request)
-    {
+    // public function search(Request $request)
+    // {
 
-        $searchTerm = $request->input('search');
-        $deliveries = Deliveryman::where('delivery_type', 'LIKE', "%$searchTerm%")
-            ->orWhere('name', 'LIKE', "%$searchTerm%")
-            ->orWhere('phone', 'LIKE', "%$searchTerm%")
-            ->orWhere('address', 'LIKE', "%$searchTerm%")
-            ->orWhere('category_type', 'LIKE', "%$searchTerm%")
-            ->orWhere('district', 'LIKE', "%$searchTerm%")
-            ->orWhere('order_tracking_id', 'LIKE', "%$searchTerm%")
-            ->orWhere('divisions', 'LIKE', "%$searchTerm%")
-            ->get();
-        return response()->json(['deliveries' => $deliveries]);
-    }
+    //     $searchTerm = $request->input('admin_delivery_search');
+    //     $deliveries = Deliveryman::where('delivery_type', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('name', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('phone', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('address', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('category_type', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('district', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('order_tracking_id', 'LIKE', "%$searchTerm%")
+    //         ->orWhere('divisions', 'LIKE', "%$searchTerm%")
+    //         ->get();
+           
+    //     return response()->json(['deliveries' => $deliveries]);
+    // }
+
+
+
     public function optionsearch(Request $request)
     {
         $searchTerm = $request->input('search');

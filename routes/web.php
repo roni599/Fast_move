@@ -60,6 +60,9 @@ Route::controller(MarchantDashboardController::class)->group(function () {
 
     Route::get('merchant/product/store', 'productCreate')->name('merchant.product.create');
     Route::post('admin/product/store', 'productStore')->name('merchant.product.store');
+
+    Route::post('/delivery/search', 'searchme')->name('deliveryme');
+    Route::post('/delivery/optionsearch', 'optionsearch')->name('optionsearch');
 });
 
 Route::controller(MarchantFraudController::class)->group(function () {
@@ -70,8 +73,6 @@ Route::controller(MarchantFraudController::class)->group(function () {
     Route::get('fraud/myentries', 'fraud_myentries')->name('fraud_myentries');
     Route::post('fraud/search', 'fraud_search')->name('fraud_search');
     Route::delete('/fraud/{id}', 'fraud_delete')->name('fraud_delete');
-    Route::post('/delivery/search', 'search')->name('delivery');
-    Route::post('/delivery/optionsearch', 'optionsearch')->name('optionsearch');
 });
 
 
