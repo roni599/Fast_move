@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Illuminate\Http\UploadedFile;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -19,7 +20,6 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        
         Validator::make($input, [
             'business_name' => ['required', 'string', 'max:255'],
             'merchant_name' => ['required', 'string', 'max:255'],
@@ -36,7 +36,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
             'nid_front' => ['required'],
             'nid_back' => ['required'],
-            'profile_img' => ['required', 'max:2048'], // Assuming profile is an image file and not exceeding 2MB
+            'profile_img' => ['required', 'max:2048'],
         ])->validate();
 
         $user = User::create([
@@ -52,20 +52,29 @@ class CreateNewUser implements CreatesNewUsers
             'profile_img' => '',
         ]);
 
-        if (isset($input['nid_front'])) {
-            $nid_front = $input['nid_front']->move('merchant/nid-photos/'. $user->id, $user->merchant_name.'_'.$input['nid_front']->getClientOriginalName(), '');
-            $user->update(['nid_front' => $nid_front]);
-        }
+        $this->uploadFiles($user, $input);
 
-        if (isset($input['nid_back'])) {
-            $nid_back = $input['nid_back']->move('merchant/nid-photos/'. $user->id, $user->merchant_name.'_'.$input['nid_back']->getClientOriginalName(), '');
-            $user->update(['nid_back' => $nid_back]);
-        }
-
-        if (isset($input['profile_img'])) {
-            $profile_img = $input['profile_img']->move('merchant/profile-photos/'. $user->id, $user->merchant_name.'_'.$input['profile_img']->getClientOriginalName(), '');
-            $user->update(['profile_img' => $profile_img]);
-        }
         return $user;
+    }
+
+    private function uploadFiles(User $user, array $input): void
+    {
+        $destinationPath = 'merchant/nid-photos/';
+        if (isset($input['nid_front']) && $input['nid_front'] instanceof UploadedFile) {
+            $nid_frontName = $user->merchant_name . '_' . $input['nid_front']->getClientOriginalName();
+            $input['nid_front']->move($destinationPath, $nid_frontName);
+            $user->update(['nid_front' => $nid_frontName]);
+        }
+        if (isset($input['nid_back']) && $input['nid_back'] instanceof UploadedFile) {
+            $nid_backName = $user->merchant_name . '_' . $input['nid_back']->getClientOriginalName();
+            $input['nid_back']->move($destinationPath, $nid_backName);
+            $user->update(['nid_back' => $nid_backName]);
+        }
+        $destinationPath = 'merchant/profile-photos/';
+        if (isset($input['profile_img']) && $input['profile_img'] instanceof UploadedFile) {
+            $profile_imgName = $user->merchant_name . '_' . $input['profile_img']->getClientOriginalName();
+            $input['profile_img']->move($destinationPath, $profile_imgName);
+            $user->update(['profile_img' => $profile_imgName]);
+        }
     }
 }
