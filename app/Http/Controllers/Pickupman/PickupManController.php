@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Pickupman;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fraud;
 use App\Models\Pickupman;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class PickupManController extends Controller
 {
@@ -353,56 +355,132 @@ class PickupManController extends Controller
         $tableHtml .= '</tr>';
         $tableHtml .= '</thead>';
         $tableHtml .= '<tbody>';
-        if(!$customers->isEmpty()){
-        foreach ($customers as $customer) {
-            $tableHtml .= '<tr>';
-            $tableHtml .= '<td>' . $customer->id . '</td>';
-            $tableHtml .= '<td>' . $customer->user->merchant_name  . '</td>';
-            $tableHtml .= '<td>' . $customer->customer_name . '</td>';
-            $tableHtml .= '<td>' . $customer->customer_phone . '</td>';
-            $tableHtml .= '<td>' . $customer->full_address . '</td>';
-            $tableHtml .= '<td>' . $customer->police_station . '</td>';
-            $tableHtml .= '<td>' . $customer->district . '</td>';
-            $tableHtml .= '<td>' . $customer->divisions . '</td>';
-            $tableHtml .= '<td>' . $customer->product_category . '</td>';
-            $tableHtml .= '<td>' . $customer->delivery_type . '</td>';
-            $tableHtml .= '<td>' . $customer->cod_amount . '</td>';
-            $tableHtml .= '<td>' . $customer->order_tracking_id . '</td>';
-            $tableHtml .= '<td>' . $customer->invoice . '</td>';
-            $tableHtml .= '<td>' . $customer->note . '</td>';
-            $tableHtml .= '<td>' . $customer->exchange_status . '</td>';
-            $tableHtml .= '<td>' . $customer->delivery_charge . '</td>';
-            $tableHtml .= '<td>' . 
-            ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' :
-            ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On <br> the way</span>' : 
-            ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>' : 
-            ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>' : 
-            ($customer->is_active == 5 ? '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>' : 
-            ($customer->is_active == 6 ? '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>' : 
-            ($customer->is_active === '8' ? '<span class="badge bg-label-danger me-1 text-dark">Product cancelled <br> the Admin</span>' : 
-            ($customer->is_active == 7 ? '<span class="badge bg-label-danger me-1 text-dark">Product Cancel</span>' : '')))))))) . '</td>';
-            
-            $tableHtml .= '<td>';
-            if ($customer->is_active == 1) {
-                $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
-                $tableHtml .= '<form id="pickupmanDeliveryProductCoformation" action="' . route('pickupman.product.delivery_confirmation') . '" method="post">';
-                $tableHtml .= csrf_field();
-                $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
-                $tableHtml .= '<button class="btn btn-sm btn-success text-white" type="submit"><i class="fa-solid fa-check"></i></button>';
-                $tableHtml .= '</form>';
-                $tableHtml .= '</div>';
-            } else {
-                $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Your job <br> is done<br> Thanks!!</span>';
+        if (!$customers->isEmpty()) {
+            foreach ($customers as $customer) {
+                $tableHtml .= '<tr>';
+                $tableHtml .= '<td>' . $customer->id . '</td>';
+                $tableHtml .= '<td>' . $customer->user->merchant_name  . '</td>';
+                $tableHtml .= '<td>' . $customer->customer_name . '</td>';
+                $tableHtml .= '<td>' . $customer->customer_phone . '</td>';
+                $tableHtml .= '<td>' . $customer->full_address . '</td>';
+                $tableHtml .= '<td>' . $customer->police_station . '</td>';
+                $tableHtml .= '<td>' . $customer->district . '</td>';
+                $tableHtml .= '<td>' . $customer->divisions . '</td>';
+                $tableHtml .= '<td>' . $customer->product_category . '</td>';
+                $tableHtml .= '<td>' . $customer->delivery_type . '</td>';
+                $tableHtml .= '<td>' . $customer->cod_amount . '</td>';
+                $tableHtml .= '<td>' . $customer->order_tracking_id . '</td>';
+                $tableHtml .= '<td>' . $customer->invoice . '</td>';
+                $tableHtml .= '<td>' . $customer->note . '</td>';
+                $tableHtml .= '<td>' . $customer->exchange_status . '</td>';
+                $tableHtml .= '<td>' . $customer->delivery_charge . '</td>';
+                $tableHtml .= '<td>' .
+                    ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' : ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On <br> the way</span>' : ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product Stocked</span>' : ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product Shiped</span>' : ($customer->is_active == 5 ? '<span class="badge bg-label-danger me-1 text-dark">Product Delivered</span>' : ($customer->is_active == 6 ? '<span class="badge bg-label-danger me-1 text-dark">Product Return</span>' : ($customer->is_active === '8' ? '<span class="badge bg-label-danger me-1 text-dark">Product cancelled <br> the Admin</span>' : ($customer->is_active == 7 ? '<span class="badge bg-label-danger me-1 text-dark">Product Cancel</span>' : '')))))))) . '</td>';
+
+                $tableHtml .= '<td>';
+                if ($customer->is_active == 1) {
+                    $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
+                    $tableHtml .= '<form id="pickupmanDeliveryProductCoformation" action="' . route('pickupman.product.delivery_confirmation') . '" method="post">';
+                    $tableHtml .= csrf_field();
+                    $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
+                    $tableHtml .= '<button class="btn btn-sm btn-success text-white" type="submit"><i class="fa-solid fa-check"></i></button>';
+                    $tableHtml .= '</form>';
+                    $tableHtml .= '</div>';
+                } else {
+                    $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">Your job <br> is done<br> Thanks!!</span>';
+                }
+                $tableHtml .= '</td>';
+                $tableHtml .= '</tr>';
             }
-            $tableHtml .= '</td>';
-            $tableHtml .= '</tr>';
-        }}
-        else{
+        } else {
             $tableHtml .= '<tr><td colspan="6" class="text-center fw-bold">No data found for the selected inputs.</td></tr>';
         }
         $tableHtml .= '</tbody>';
         $tableHtml .= '</table>';
 
         return $tableHtml;
+    }
+
+
+
+
+    public function pickupman_fraud_check()
+    {
+        $pickupman = array();
+        if (Session::has('loginId')) {
+            $pickupman = Pickupman::where('id', '=', Session::get('loginId'))->first();
+        }
+        $frauds = Fraud::all();
+        $formattedFrauds = $frauds->map(function ($fraud) {
+            $fraud->formattedPhoneNumber = substr($fraud->phone_number, 0, 5) . '***' . substr($fraud->phone_number, -3);
+            return $fraud;
+        });
+        return view('pickupman.pages.fraud_check', compact('pickupman', 'formattedFrauds'));
+    }
+    public function pickupman_fraud_add_new()
+    {
+        $pickupman = array();
+        if (Session::has('loginId')) {
+            $pickupman = Pickupman::where('id', '=', Session::get('loginId'))->first();
+        }
+        return view('pickupman.pages.fraud_add_new', compact('pickupman'));
+    }
+    public function pickupman_fraud_add_new_insert(Request $request)
+    {
+
+        Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'disputant_name' => 'required',
+            'details' => 'required',
+            'fast_move_parcel_id' => 'nullable',
+            'user_id' => 'nullable',
+        ]);
+        $fraud = new Fraud();
+        $fraud->phone_number = $request->phone_number;
+        $fraud->disputant_name = $request->disputant_name;
+        $fraud->details = $request->details;
+        $fraud->fast_move_parcel_id = $request->steadfast_parcel_id;
+        $fraud->pickupman_id = $request->user_id;
+        $fraud->save();
+        return redirect()->back()->with('message', 'Fraud Added Successfully');
+    }
+    public function pickupman_fraud_check_search()
+    {
+        $pickupman = array();
+        if (Session::has('loginId')) {
+            $pickupman = Pickupman::where('id', '=', Session::get('loginId'))->first();
+        }
+        return view('pickupman.pages.fraud_check_search', compact('pickupman'));
+    }
+    public function pickupman_fraud_myentries()
+    {
+        $pickupman = array();
+        if (Session::has('loginId')) {
+            $pickupman = Pickupman::where('id', '=', Session::get('loginId'))->first();
+        }
+        $frauds = Fraud::where('pickupman_id', $pickupman->id)->get();
+        $formattedFrauds = $frauds->map(function ($fraud) {
+            $fraud->formattedPhoneNumber = substr($fraud->phone_number, 0, 5) . '***' . substr($fraud->phone_number, -3);
+            return $fraud;
+        });
+        // $formattedFrauds = Fraud::where('pickupman_id', $pickupman->id)->get();
+        return view('pickupman.pages.myentries', compact('pickupman', 'formattedFrauds'));
+    }
+    public function pickupman_fraud_search(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required|numeric|digits:11',
+        ]);
+        $phone_number = $request->input('phone_number');
+
+        $result = Fraud::where('phone_number', '=', $phone_number)->get();
+        return response()->json(['result' => $result]);
+    }
+    public function pickupman_fraud_delete($id)
+    {
+
+        $fraud = Fraud::findOrFail($id);
+        $fraud->delete();
+        return redirect()->back()->with('message', 'Fraud record remove successfully');
     }
 }

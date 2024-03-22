@@ -28,9 +28,18 @@ class User extends Authenticatable implements MustVerifyEmail
         'nid_front',
         'nid_back',
         'profile_img',
+        'phone_number',
+        'disputant_name',
+        'details',
+        'fast_move_parcel_id',
+        'user_id',
     ];
     public function product(){
         return $this->hasMany(Product::class);
+    }
+    public function frauds()
+    {
+        return $this->hasMany(Fraud::class);
     }
     /**
      * The attributes that should be hidden for serialization.

@@ -60,18 +60,27 @@
             <span class="d-block text-white fw-bold"><i
                     class="l-icon fa-solid fa-phone-volume"></i>{{ __('text.content00') }}</span>
             {{-- <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>fastmovebd@gmail.com</span> --}}
+            <select class="lang-change">
+                <option value="Select Language bg-dark">Select Language</option>
+                <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>English
+                {{-- </option>
+                <option value="ar" {{ session()->get('lang_code') == 'ar' ? 'selected' : '' }}>عربي
+                </option> --}}
+                <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>বাংলা
+                </option>
+            </select>
             <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>{{ __('text.content01') }}</span>
         </div>
         <div class="header">
             <div class="logo">
                 <div class="img">
-                    <img src="/frontend/img/startup.png" alt="logo" />
+                    <img src="/frontend/img/delivery-bike.png" style="width: 160px; height:60px;"  alt="logo" />
                 </div>
                 <div class="text">
                     {{-- <span class="d-block head">Fast Move</span> --}}
-                    <span class="d-block head">{{ __('text.content') }}</span>
+                    {{-- <span class="d-block head">{{ __('text.content') }}</span> --}}
                     {{-- <span class="d-block moto">Perfect Way To Your Destination.</span> --}}
-                    <span class="d-block moto">{{ __('text.content1') }}</span>
+                    {{-- <span class="d-block moto">{{ __('text.content1') }}</span> --}}
                 </div>
             </div>
 
@@ -87,17 +96,7 @@
                     <li><a href="#">{{ __('text.content5') }}</a></li>
                     {{-- <li><a href="#">Contact</a></li> --}}
                     <li><a href="#">{{ __('text.content6') }}</a></li>
-                    <li>
-                        <select class="form-control lang-change">
-                            <option value="Select Language">Select Language</option>
-                            <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>English
-                            {{-- </option>
-                            <option value="ar" {{ session()->get('lang_code') == 'ar' ? 'selected' : '' }}>عربي
-                            </option> --}}
-                            <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>বাংলা
-                            </option>
-                        </select>
-                    </li>
+
                     {{-- <li>
                         <div id="google_translate_element"></div>
                     </li> --}}
@@ -105,7 +104,7 @@
             </div>
 
             <div class="toggle-buttons">
-                <button class="btn btn-light" type="button" data-bs-toggle="offcanvas"
+                <button class="btn btn-light " type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
                     <i class="fa-solid fa-bars"></i>
                 </button>

@@ -14,12 +14,14 @@ use App\Imports\ProductImport;
 use App\Models\Admin;
 use App\Models\Deliverycharge;
 use App\Models\Deliveryman;
+use App\Models\Fraud;
 use App\Models\Pickupman;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
@@ -76,7 +78,7 @@ class AdminController extends Controller
         $admin->save();
         // Admin::create($request->all());
 
-        return redirect('admin/table')->withSuccess('Admin added successfully.');
+        return redirect()->back()->withSuccess('Admin added successfully.');
     }
 
     public function loginView()
@@ -892,6 +894,56 @@ class AdminController extends Controller
         $delivery = Product::find($request->id);
         return view('server.pages.admin-delivery-edit', compact('delivery', 'admin'));
     }
+    public function admin_fraud_check()
+    {
+        $admin = array();
+        if (Session::has('loginId')) {
+            $admin = Admin::where('id', '=', Session::get('loginId'))->first();
+        }
+        // $deliveryman = array();
+        // if (Session::has('loginId')) {
+        //     $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        // }
+        // $frauds = Fraud::all();
+        $frauds = Fraud::with('user', 'deliveryman', 'pickupman')->get();
+        // $formattedFrauds = $frauds->map(function ($fraud) {
+        //     $fraud->formattedPhoneNumber = substr($fraud->phone_number, 0, 5) . '***' . substr($fraud->phone_number, -3);
+        //     return $fraud;
+        // });
+        // return view('server.pages.admin-delivery-edit', compact('delivery', 'admin'));
+        return view('server.pages.fraud_check', compact('admin', 'frauds'));
+    }
+
+    public function admin_fraud_check_search()
+    {
+        $admin = array();
+        if (Session::has('loginId')) {
+            $admin = Admin::where('id', '=', Session::get('loginId'))->first();
+        }
+        return view('server.pages.fraud_check_search', compact('admin'));
+    }
+
+    public function admin_fraud_search(Request $request)
+    {
+        // $request->validate([
+        //     'phone_number' => 'required|numeric|digits:11',
+        // ]);
+        // $phone_number = $request->input('phone_number');
+
+        // $result = Fraud::where('phone_number', '=', $phone_number)->get();
+        // return response()->json(['result' => $result]);
+        $request->validate([
+            'phone_number' => 'required|numeric|digits:11',
+        ]);
+
+        $phone_number = $request->input('phone_number');
+
+        $result = Fraud::with('user', 'deliveryman', 'pickupman')
+            ->where('phone_number', $phone_number)
+            ->get();
+
+        return response()->json(['result' => $result]);
+    }
 
     public function productUpdate(Request $request)
     {
@@ -970,7 +1022,7 @@ class AdminController extends Controller
     public function productCancelConfirmation(Request $request)
     {
         $delivery = Product::find($request->id);
-        $delivery->is_active =8;
+        $delivery->is_active = 8;
         $delivery->update();
         return redirect('admin/product/delivery');
     }
@@ -1042,5 +1094,59 @@ class AdminController extends Controller
         return Excel::download(new AdminExport, 'admins.xlsx');
         // return redirect('admin/product/delivery')->withSuccess('Excel file download successfully.');
 
+    }
+
+
+
+
+
+    public function admin_fraud_add_new()
+    {
+        $deliveryman = array();
+        if (Session::has('loginId')) {
+            $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        }
+        return view('deliveryman.pages.fraud_add_new', compact('deliveryman'));
+    }
+    public function admin_fraud_add_new_insert(Request $request)
+    {
+
+        Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'disputant_name' => 'required',
+            'details' => 'required',
+            'fast_move_parcel_id' => 'nullable',
+            'deliveryman_id' => 'nullable',
+        ]);
+        $fraud = new Fraud();
+        $fraud->phone_number = $request->phone_number;
+        $fraud->disputant_name = $request->disputant_name;
+        $fraud->details = $request->details;
+        $fraud->fast_move_parcel_id = $request->steadfast_parcel_id;
+        $fraud->deliveryman_id = $request->user_id;
+        $fraud->save();
+        return redirect()->back()->with('message', 'Fraud Added Successfully');
+    }
+
+    public function admin_fraud_myentries()
+    {
+        $deliveryman = array();
+        if (Session::has('loginId')) {
+            $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        }
+        $frauds = Fraud::where('deliveryman_id', $deliveryman->id)->get();
+        $formattedFrauds = $frauds->map(function ($fraud) {
+            $fraud->formattedPhoneNumber = substr($fraud->phone_number, 0, 5) . '***' . substr($fraud->phone_number, -3);
+            return $fraud;
+        });
+        return view('deliveryman.pages.myentries', compact('deliveryman', 'formattedFrauds'));
+    }
+
+    public function admin_fraud_delete($id)
+    {
+
+        $fraud = Fraud::findOrFail($id);
+        $fraud->delete();
+        return redirect()->back()->with('message', 'Fraud record remove successfully');
     }
 }

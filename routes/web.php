@@ -78,7 +78,7 @@ Route::controller(MarchantFraudController::class)->group(function () {
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('admin/dashboard', 'index')->name('admin.dashboard')->middleware('isLoggedIn');
-    Route::get('admin/register', 'create')->name('admin.register');
+    Route::get('admin/register', 'create')->name('admin.register')->middleware('isLoggedIn');
     Route::post('admin/register', 'store')->name('admin.store');
     Route::get('admin/login', 'loginView')->name('admin.login')->middleware('alreadyLogin');
     Route::post('admin/login', 'loginCheck')->name('super.admin.login');
@@ -127,6 +127,15 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('admin/product/excel/import', 'productExcelImport')->name('admin.product.excel.import')->middleware('isLoggedIn');
     Route::get('admin/product/excel/export', 'productExcelExport')->name('admin.product.excel.export')->middleware('isLoggedIn');
     Route::post('admin/deliverycharge/edit', 'deliveryChargeupdate')->name('admin.deliverycharge.update')->middleware('isLoggedIn');
+
+
+    Route::get('admin/fraud_check', 'admin_fraud_check')->name('admin.fraud_check');
+    Route::get('admin/fraud/add_new', 'admin_fraud_add_new')->name('admin.fraud_add_new');
+    Route::post('admin/fraud/add_new', 'admin_fraud_add_new_insert')->name('admin.fraud_add_new_insert');
+    Route::get('admin/fraud/check', 'admin_fraud_check_search')->name('admin.fraud_check_search');
+    Route::get('admin/fraud/myentries', 'admin_fraud_myentries')->name('admin.fraud_myentries');
+    Route::post('admin/fraud/search', 'admin_fraud_search')->name('admin.fraud_search');
+    Route::delete('/admin/fraud/{id}', 'admin_fraud_delete')->name('admin.fraud_delete');
 
 });
 
@@ -196,6 +205,14 @@ Route::controller(DeliveryManController::class)->group(function () {
     Route::post('deliveryman/product/delivered', 'productDeliveryDelivered')->name('deliveryman.product.delivered')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/product/cancel', 'productDeliveryCancel')->name('deliveryman.product.cancel')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/product/return', 'productDeliveryReturn')->name('deliveryman.product.return')->middleware('deliverymanIsLoggedIn');
+
+    Route::get('deliveryman/fraud_check', 'deliveryman_fraud_check')->name('deliveryman.fraud_check');
+    Route::get('deliveryman/fraud/add_new', 'deliveryman_fraud_add_new')->name('deliveryman.fraud_add_new');
+    Route::post('deliveryman/fraud/add_new', 'deliveryman_fraud_add_new_insert')->name('deliveryman.fraud_add_new_insert');
+    Route::get('deliveryman/fraud/check', 'deliveryman_fraud_check_search')->name('deliveryman.fraud_check_search');
+    Route::get('deliveryman/fraud/myentries', 'deliveryman_fraud_myentries')->name('deliveryman.fraud_myentries');
+    Route::post('deliveryman/fraud/search', 'deliveryman_fraud_search')->name('deliveryman.fraud_search');
+    Route::delete('/deliveryman/fraud/{id}', 'deliveryman_fraud_delete')->name('deliveryman.fraud_delete');
 });
 
 
@@ -216,6 +233,14 @@ Route::controller(PickupManController::class)->group(function () {
     Route::post('pickupman/delete', 'pickupmanDeleteAccount')->name('pickupman.delete.account')->middleware('pickupmanIsLoggedIn');
     Route::get('pickupman/product/table', 'productTable')->name('pickupman.product.table')->middleware('pickupmanIsLoggedIn');
     Route::post('pickupman/product/delivery', 'productDeliveryConfirmation')->name('pickupman.product.delivery_confirmation')->middleware('pickupmanIsLoggedIn');
+
+    Route::get('pickupman/fraud_check', 'pickupman_fraud_check')->name('pickupman.fraud_check');
+    Route::get('pickupman/fraud/add_new', 'pickupman_fraud_add_new')->name('pickupman.fraud_add_new');
+    Route::post('pickupman/fraud/add_new', 'pickupman_fraud_add_new_insert')->name('pickupman.fraud_add_new_insert');
+    Route::get('pickupman/fraud/check', 'pickupman_fraud_check_search')->name('pickupman.fraud_check_search');
+    Route::get('pickupman/fraud/myentries', 'pickupman_fraud_myentries')->name('pickupman.fraud_myentries');
+    Route::post('pickupman/fraud/search', 'pickupman_fraud_search')->name('pickupman.fraud_search');
+    Route::delete('/pickupman/fraud/{id}', 'pickupman_fraud_delete')->name('pickupman.fraud_delete');
 });
 
 

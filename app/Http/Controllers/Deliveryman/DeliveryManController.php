@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Deliveryman;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deliveryman;
+use App\Models\Fraud;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class DeliveryManController extends Controller
 {
@@ -379,20 +381,13 @@ class DeliveryManController extends Controller
                 $tableHtml .= '<td>' . $customer->exchange_status . '</td>';
                 $tableHtml .= '<td>' . $customer->delivery_charge . '</td>';
                 $tableHtml .= '<td>' .
-                ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' :
-                ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>':
-                ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product arrived <br> in the <br> warehouse</span>' : 
-                ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product picked <br> by delivery man</span>' :
-                ($customer->is_active == 5 ? '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>' : 
-                ($customer->is_active == 6 ? '<span class="badge bg-label-success me-1 text-dark">Product Return</span>' :
-                ($customer->is_active ==='8' ? '<span class="badge bg-label-success me-1 text-dark">Product cancel <br> the Admin</span>' :
-                ($customer->is_active == 7 ? '<span class="badge bg-label-success me-1 text-dark">Product canceled</span>' : '')))))))) . '</td>';
+                    ($customer->is_active == 1 ? '<span class="badge bg-label-danger me-1 text-dark">Product Pending</span>' : ($customer->is_active == 2 ? '<span class="badge bg-label-danger me-1 text-dark">Product On the way</span>' : ($customer->is_active == 3 ? '<span class="badge bg-label-danger me-1 text-dark">Product arrived <br> in the <br> warehouse</span>' : ($customer->is_active == 4 ? '<span class="badge bg-label-danger me-1 text-dark">Product picked <br> by delivery man</span>' : ($customer->is_active == 5 ? '<span class="badge bg-label-success me-1 text-dark">Product Delivered</span>' : ($customer->is_active == 6 ? '<span class="badge bg-label-success me-1 text-dark">Product Return</span>' : ($customer->is_active === '8' ? '<span class="badge bg-label-success me-1 text-dark">Product cancel <br> the Admin</span>' : ($customer->is_active == 7 ? '<span class="badge bg-label-success me-1 text-dark">Product canceled</span>' : '')))))))) . '</td>';
                 $tableHtml .= '<td>';
                 $tableHtml .= '<div class="d-flex justify-center align-items-center gap-2">';
                 if ($customer->is_active == 1 || $customer->is_active == 2 || $customer->is_active === '8' || $customer->is_active == 5 || $customer->is_active == 6 || $customer->is_active == 7) {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
                 } elseif ($customer->is_active == 3) {
-                    $tableHtml .= '<form id="productCheckout" action="'. route('admin.product.delivery_checkout') .'" method="post">';
+                    $tableHtml .= '<form id="productCheckout" action="' . route('admin.product.delivery_checkout') . '" method="post">';
                     $tableHtml .= csrf_field();
                     $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
                     $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-cart-shopping"></i></button>';
@@ -403,12 +398,12 @@ class DeliveryManController extends Controller
                     $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
                     $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fas fa-truck"></i></button>';
                     $tableHtml .= '</form>';
-                    $tableHtml .= '<form id="deliverymanProductReturn" action="'.route('deliveryman.product.return').'" method="post">';
+                    $tableHtml .= '<form id="deliverymanProductReturn" action="' . route('deliveryman.product.return') . '" method="post">';
                     $tableHtml .= csrf_field();
                     $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
                     $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-right-left"></i></button>';
                     $tableHtml .= '</form>';
-                    $tableHtml .= '<form id="deliverymanProductCancel" action="'.route('deliveryman.product.cancel').'" method="post">';
+                    $tableHtml .= '<form id="deliverymanProductCancel" action="' . route('deliveryman.product.cancel') . '" method="post">';
                     $tableHtml .= csrf_field();
                     $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
                     $tableHtml .= '<button class="btn btn-sm btn-danger" type="submit"><i class="fa-solid fa-times"></i></button>';
@@ -428,5 +423,85 @@ class DeliveryManController extends Controller
 
         return $tableHtml;
         // return response()->json(['customers' => $customers]);
+    }
+
+
+    public function deliveryman_fraud_check()
+    {
+        $deliveryman = array();
+        if (Session::has('loginId')) {
+            $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        }
+        $frauds = Fraud::all();
+        $formattedFrauds = $frauds->map(function ($fraud) {
+            $fraud->formattedPhoneNumber = substr($fraud->phone_number, 0, 5) . '***' . substr($fraud->phone_number, -3);
+            return $fraud;
+        });
+        return view('deliveryman.pages.fraud_check', compact('deliveryman', 'formattedFrauds'));
+    }
+    public function deliveryman_fraud_add_new()
+    {
+        $deliveryman = array();
+        if (Session::has('loginId')) {
+            $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        }
+        return view('deliveryman.pages.fraud_add_new', compact('deliveryman'));
+    }
+    public function deliveryman_fraud_add_new_insert(Request $request)
+    {
+
+        Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'disputant_name' => 'required',
+            'details' => 'required',
+            'fast_move_parcel_id' => 'nullable',
+            'deliveryman_id' => 'nullable',
+        ]);
+        $fraud = new Fraud();
+        $fraud->phone_number = $request->phone_number;
+        $fraud->disputant_name = $request->disputant_name;
+        $fraud->details = $request->details;
+        $fraud->fast_move_parcel_id = $request->steadfast_parcel_id;
+        $fraud->deliveryman_id = $request->user_id;
+        $fraud->save();
+        return redirect()->back()->with('message', 'Fraud Added Successfully');
+    }
+    public function deliveryman_fraud_check_search()
+    {
+        $deliveryman = array();
+        if (Session::has('loginId')) {
+            $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        }
+        return view('deliveryman.pages.fraud_check_search', compact('deliveryman'));
+    }
+    public function deliveryman_fraud_myentries()
+    {
+        $deliveryman = array();
+        if (Session::has('loginId')) {
+            $deliveryman = Deliveryman::where('id', '=', Session::get('loginId'))->first();
+        }
+        $frauds = Fraud::where('deliveryman_id', $deliveryman->id)->get();
+        $formattedFrauds = $frauds->map(function ($fraud) {
+            $fraud->formattedPhoneNumber = substr($fraud->phone_number, 0, 5) . '***' . substr($fraud->phone_number, -3);
+            return $fraud;
+        });
+        return view('deliveryman.pages.myentries', compact('deliveryman', 'formattedFrauds'));
+    }
+    public function deliveryman_fraud_search(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required|numeric|digits:11',
+        ]);
+        $phone_number = $request->input('phone_number');
+
+        $result = Fraud::where('phone_number', '=', $phone_number)->get();
+        return response()->json(['result' => $result]);
+    }
+    public function deliveryman_fraud_delete($id)
+    {
+
+        $fraud = Fraud::findOrFail($id);
+        $fraud->delete();
+        return redirect()->back()->with('message', 'Fraud record remove successfully');
     }
 }

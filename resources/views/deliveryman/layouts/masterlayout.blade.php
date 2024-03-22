@@ -25,7 +25,7 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo" href="{{ route('deliveryman.dashboard') }}"><img
-                        src="/frontend/img/delivery-bike.png" style="width: 25px" alt="logo" /> Fast Move</a>
+                        src="/frontend/img/delivery-bike.png" style="width: 100px; height:50px;"  alt="logo" /></a>
                 {{-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="marchant/assets/images/logo-mini.svg"
                             alt="logo" /></a> --}}
             </div>
@@ -265,6 +265,14 @@
                                 @endif --}}
                             </ul>
                         </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('deliveryman.fraud_check') }}">
+                            <span class="menu-title">Fraud Check</span>
+                            <i class="mdi mdi-emoticon-devil menu-icon"></i>
+                            {{-- <i class="mdi mdi-contacts menu-icon"></i> --}}
+                        </a>
                     </li>
 
                     {{-- <li class="nav-item">

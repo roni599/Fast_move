@@ -22,9 +22,18 @@ class Deliveryman extends Model
         'nid_front',
         'nid_back',
         'profile_img',
+        'phone_number',
+        'disputant_name',
+        'details',
+        'steadfast_parcel_id',
+        'user_id',
     ];
 
     public function product(){
         return $this->hasMany(Product::class);
+    }
+    public function frauds()
+    {
+        return $this->hasMany(Fraud::class);
     }
 }

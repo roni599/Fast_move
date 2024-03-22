@@ -73,7 +73,7 @@
     <div class="container-xxl position-relative p-0 bg-light">
         <nav class="navbar navbar-expand-lg px-4 px-lg-5 py-3 ">
             <a href="" class="navbar-brand p-0">
-                <h2 class="m-0"><img src="/frontend/img/delivery-bike.png" width="60">Fast Move</h2>
+                <h2 class="m-0"><img src="/frontend/img/delivery-bike.png" style="width: 170px; height:80px;" ></h2>
                 <!-- <img src="img/logo.png" alt="Logo"> -->
             </a>
             {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -111,7 +111,7 @@
 
     <div class="form-box w-50">
         <div class="text-center mt-3">
-            <img src="/frontend/img/delivery-bike.png" style="width: 70px" alt="logo" />
+            <img src="/frontend/img/delivery-bike.png" style="width: 170px; height:8px;"  alt="logo" />
         </div>
 
         @if (Session::has('fail'))

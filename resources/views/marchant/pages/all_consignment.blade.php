@@ -275,8 +275,8 @@
         });
     </script>
 @endsection --}}
-@extends('marchant.layouts.masterlayout')
 
+@extends('marchant.layouts.masterlayout')
 @section('content')
     <div class="container-fluid">
         <div class="row p-5 p-md-2 my-3">
@@ -401,60 +401,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    {{-- <script>
-        $(document).ready(function() {
-            var lastClickedButton = localStorage.getItem("lastClickedButton");
-            var lastClickedColor = localStorage.getItem("lastClickedColor");
-
-            if (lastClickedButton && lastClickedColor) {
-                $("#" + lastClickedButton).addClass(lastClickedColor);
-                // if (lastClickedButton === "buttonListStatus") {
-                // $("#buttonOne").addClass(lastClickedColor);
-            }
-            }
-            
-
-            $(".btn").click(function() {
-                $(".btn").removeClass("bg-success bg-primary btn-warning btn-danger btn-success");
-                var buttonId = $(this).attr("id");
-                var buttonColor;
-
-                if (buttonId === "buttonOne") {
-                    buttonColor = "bg-success";
-                } else if (buttonId === "buttonTwo") {
-                    buttonColor = "";
-                } else if (buttonId === "buttonThree") {
-                    buttonColor = "btn-warning";
-                } else if (buttonId === "buttonFour") {
-                    buttonColor = 'btn-success';
-                } else if (buttonId === "buttonFive") {
-                    buttonColor = 'btn-success';
-                } else if (buttonId === "buttonSix") {
-                    buttonColor = 'btn-success';
-                } else if (buttonId === "buttonSeven") {
-                    buttonColor = 'btn-danger';
-                }else if (buttonId === "buttonEight") {
-                    buttonColor = 'btn-success';
-                }else if (buttonId === "buttonNine") {
-                    buttonColor = 'btn-success';
-                }else if (buttonId === "buttonTen") {
-                    buttonColor = 'btn-success';
-                }
-
-
-                $(this).addClass(buttonColor);
-
-                // Save button state to localStorage
-                localStorage.setItem("lastClickedButton", buttonId);
-                localStorage.setItem("lastClickedColor", buttonColor);
-
-                // Log a message to the console
-                console.log("Clicked '" + $(this).text() + "' button");
-
-            });
-        });
-    </script> --}}
-    {{-- final code --}}
     <script>
         $(document).ready(function() {
             var lastClickedButton = localStorage.getItem("lastClickedButton");

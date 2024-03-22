@@ -16,16 +16,13 @@
 </head>
 
 <body>
-
-
-
     <div class="conatiner-scroller">
 
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo" href="index.html"><img src="/frontend/img/delivery-bike.png"
-                        style="width: 25px" alt="logo" /> First Move</a>
+                <a class="navbar-brand brand-logo" href="#"><img src="/frontend/img/delivery-bike.png"
+                    style="width: 100px; height:50px;"  alt="logo" /></a>
                 {{-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="marchant/assets/images/logo-mini.svg"
                             alt="logo" /></a> --}}
             </div>
@@ -51,7 +48,7 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="nav-profile-img">
                                 {{-- {{dd(auth()->user()->profile_img)}} --}}
-                                <img src="{{'merchant/profile-photos/'.auth()->user()->profile_img}}" alt="image">
+                                <img src="{{asset('merchant/profile-photos')}}/{{auth()->user()->profile_img}}" alt="image">
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
@@ -208,16 +205,13 @@
         <!-- partial -->
 
         <div class="container-fluid page-body-wrapper">
-
-
-
             <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item nav-profile">
                         <a href="#" class="nav-link">
                             <div class="nav-profile-image">
-                                <img src="{{'merchant/profile-photos/'.auth()->user()->profile_img}}" alt="profile">
+                                <img src="{{asset('merchant/profile-photos')}}/{{auth()->user()->profile_img}}" alt="profile">
                                 <span class="login-status online"></span>
                                 <!--change to offline or busy as needed-->
                             </div>
@@ -348,16 +342,11 @@
                             </ul>
                         </div>
                     </li> --}}
-
                 </ul>
             </nav>
             <!-- partial -->
-
-
             <div class="main-panel">
                 <div class="content-wrapper">
-
-
                     @hasSection('content')
                         @yield('content')
                     @else
@@ -365,16 +354,8 @@
                     @endif
                 </div>
             </div>
-
         </div>
-
-
-
     </div>
-
-
-
-
     <script src="/marchant/assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="/marchant/assets/vendors/chart.js/Chart.min.js"></script>
     <script src="/marchant/assets/js/jquery.cookie.js" type="text/javascript"></script>

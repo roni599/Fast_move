@@ -27,6 +27,11 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'address',
         'role',
         'profile_img',
+        'phone_number',
+        'disputant_name',
+        'details',
+        'steadfast_parcel_id',
+        'user_id',
     ];
 
     /**

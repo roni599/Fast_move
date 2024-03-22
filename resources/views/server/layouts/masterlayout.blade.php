@@ -25,7 +25,7 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo" href="{{ route('admin.dashboard') }}"><img
-                        src="/frontend/img/delivery-bike.png" style="width: 25px" alt="logo" /> First Move</a>
+                        src="/frontend/img/delivery-bike.png" style="width: 100px; height:50px;" alt="logo" /></a>
                 {{-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="marchant/assets/images/logo-mini.svg"
                             alt="logo" /></a> --}}
             </div>
@@ -279,6 +279,14 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.fraud_check') }}">
+                            <span class="menu-title">Fraud Check</span>
+                            <i class="mdi mdi-emoticon-devil menu-icon"></i>
+                            {{-- <i class="mdi mdi-contacts menu-icon"></i> --}}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false"
                             aria-controls="general-pages">
                             <span class="menu-title">Create</span>
@@ -362,32 +370,13 @@
                             </ul>
                         </div>
                     </li> --}}
-                    <li class="nav-item sidebar-actions">
-                        <span class="nav-link">
-                            <div class="border-bottom">
-                                <h6 class="font-weight-normal mb-3">Projects</h6>
-                            </div>
-                            <button class="btn btn-block btn-lg btn-gradient-primary mt-4">+ Add a project</button>
-                            <div class="mt-4">
-                                <div class="border-bottom">
-                                    <p class="text-secondary">Categories</p>
-                                </div>
-                                <ul class="gradient-bullet-list mt-4">
-                                    <li>Free</li>
-                                    <li>Pro</li>
-                                </ul>
-                            </div>
-                        </span>
-                    </li>
+                    
                 </ul>
             </nav>
             <!-- partial -->
 
-
             <div class="main-panel">
                 <div class="content-wrapper">
-
-
                     @hasSection('content')
                         @yield('content')
                     @else
@@ -397,14 +386,7 @@
             </div>
 
         </div>
-
-
-
     </div>
-
-
-
-
     <script src="/marchant/assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="/marchant/assets/vendors/chart.js/Chart.min.js"></script>
     <script src="/marchant/assets/js/jquery.cookie.js" type="text/javascript"></script>
