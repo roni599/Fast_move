@@ -10,9 +10,11 @@
                 <form id="searchForm">
                     @csrf
                     {{-- <input type="text" class="form-control mb-2" name="tracking_id" placeholder="Tracking ID....." /> --}}
-                    <input type="text" class="form-control mb-2" name="tracking_id" placeholder="{{ __('text.content17') }}" />
+                    <input type="text" class="form-control mb-2" name="tracking_id"
+                        placeholder="{{ __('text.content17') }}" />
                     {{-- <button type="button" class="btn btn-light" id="trackBtn" disabled>Track</button> --}}
-                    <button type="button" class="btn btn-light" id="trackBtn" disabled>{{ __('text.content18') }}</button>
+                    <button type="button" class="btn btn-light" id="trackBtn"
+                        disabled>{{ __('text.content18') }}</button>
                 </form>
             </div>
         </div>
@@ -85,7 +87,7 @@
                     {{-- <input type="text" id="weightId" name="weight" value="1" placeholder="Parcel's Weight"
                         class="form-control" readonly> --}}
                     <input type="text" id="weightId" name="weight" value="1" placeholder="Parcel's Weight"
-                    class="form-control" readonly>
+                        class="form-control" readonly>
                 </div>
             </div>
             <div class="price-text d-flex justify-content-center align-items-center">
@@ -94,7 +96,7 @@
             </div>
 
         </div>
-        
+
     </div>
 </div>
 
@@ -147,7 +149,8 @@
                         </li>
                     </ul>
                 </section>
-                <p id="noDataMessage" class="text-center" style="display: none;">Your Query doesn't exits in our database</p>
+                <p id="noDataMessage" class="text-center" style="display: none;">Your Query doesn't exits in our
+                    database</p>
             </div>
         </div>
     </div>
@@ -382,7 +385,7 @@
 </script> --}}
 
 {{-- disable track_button code --}}
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('.step-wizard').hide();
 
@@ -476,4 +479,219 @@
             // $('#trackBtn').prop('disabled', true);
         });
     });
+</script> --}}
+
+
+
+<script>
+    $(document).ready(function() {
+        $('.step-wizard').hide();
+
+        function performAjaxCall(trackingId) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('search.delivery') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'tracking_id': trackingId
+                },
+                success: function(data) {
+                    if (data && data.delivery && data.delivery.is_active) {
+                        var is_active = parseInt(data.delivery.is_active, 10);
+                        progressCountValue = is_active + 1;
+                        updateActiveStep(progressCountValue);
+                        $('#noDataMessage').hide();
+                        $('.step-wizard').show();
+                    } else {
+                        $('#noDataMessage').show();
+                    }
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        $('#searchForm input[name="tracking_id"]').on('input', function(e) {
+            var trackingId = $(this).val();
+
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length === 0) {
+                $('#trackBtn').prop('disabled', true);
+                return;
+            }
+
+            if (trackingId.length === 6) {} else {
+                $('#trackBtn').prop('disabled', false);
+                return;
+            }
+
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length < 6) {
+                $('.step-wizard').hide();
+                $('#trackingModal').modal('hide');
+                return;
+            }
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        $('#trackBtn').on('click', function(e) {
+            e.preventDefault();
+            var trackingId = $('#searchForm input[name="tracking_id"]').val();
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        function updateActiveStep(stepValue) {
+            $('.step-wizard-item').removeClass('current-item');
+            $('.step-wizard-item').hide();
+            if (stepValue == 1) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(4)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            }
+            else if (stepValue == 2) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(4)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            }
+            else if (stepValue == 3) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(4)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            }
+            else if (stepValue == 4) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(4)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            }
+            else if (stepValue == 5) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(4)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            } else if (stepValue == 6) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(5)').show();
+            } else if (stepValue == 7) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(6)').show();
+            } else if (stepValue == 8) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(7)').show();
+            } else if (stepValue == 9) {
+                $('.step-wizard-item:nth-child(1)').show();
+                $('.step-wizard-item:nth-child(2)').show();
+                $('.step-wizard-item:nth-child(3)').show();
+                $('.step-wizard-item:nth-child(8)').show();
+            } else {
+                $('.step-wizard-item').show();
+                // Show all steps if stepValue doesn't match any condition
+            }
+            // Highlight the current step
+            $('.step-wizard-item:nth-child(' + stepValue + ')').addClass('current-item');
+        }
+
+        $('#trackingModal').on('hide.bs.modal', function() {
+            $('.step-wizard').hide();
+            // $('#searchForm input[name="tracking_id"]').val('');
+            // $('#trackBtn').prop('disabled', true);
+        });
+    });
 </script>
+
+
+{{-- 
+<script>
+    $(document).ready(function() {
+        $('.step-wizard').hide();
+
+        function performAjaxCall(trackingId) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('search.delivery') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'tracking_id': trackingId
+                },
+                success: function(data) {
+                    if (data && data.delivery && data.delivery.is_active) {
+                        var is_active = parseInt(data.delivery.is_active, 10);
+                        progressCountValue = is_active + 1;
+                        updateActiveStep(progressCountValue);
+                        $('#noDataMessage').hide();
+                        $('.step-wizard').show();
+                    } else {
+                        $('#noDataMessage').show();
+                    }
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        $('#searchForm input[name="tracking_id"]').on('input', function(e) {
+            var trackingId = $(this).val();
+
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length === 0) {
+                $('#trackBtn').prop('disabled', true);
+                return;
+            }
+
+            if (trackingId.length === 6) {} else {
+                $('#trackBtn').prop('disabled', false);
+                return;
+            }
+
+            if (e.originalEvent.inputType === 'deleteContentBackward' && trackingId.length < 6) {
+                $('.step-wizard').hide();
+                $('#trackingModal').modal('hide');
+                return;
+            }
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        $('#trackBtn').on('click', function(e) {
+            e.preventDefault();
+            var trackingId = $('#searchForm input[name="tracking_id"]').val();
+            performAjaxCall(trackingId);
+            $('#trackingModal').modal('show');
+        });
+
+        function updateActiveStep(stepValue) {
+            $('.step-wizard-item').removeClass('current-item');
+            $('.step-wizard-item').hide();
+
+            // Show steps 1 to 4 always
+            // for (var i = 0; i < 6; i++) {
+            //     $('.step-wizard-item:nth-child(' + i + ')').show();
+            // }
+           
+
+            // Highlight the current step
+            $('.step-wizard-item:nth-child(' + stepValue + ')').addClass('current-item');
+        }
+
+        $('#trackingModal').on('hide.bs.modal', function() {
+            $('.step-wizard').hide();
+            // $('#searchForm input[name="tracking_id"]').val('');
+            // $('#trackBtn').prop('disabled', true);
+        });
+    });
+</script> --}}
