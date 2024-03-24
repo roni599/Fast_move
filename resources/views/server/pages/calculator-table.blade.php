@@ -42,7 +42,9 @@
             </form>
         </div>
     </div>
-
+    <div class="add-btn bg-white px-5">
+        <a href="{{ route('addDeliveryCharge') }}" class="btn btn-primary btn-sm">Add Delivery Charge</a>
+    </div>
     <div class="col-lg-12 stretch-card" id="existingTable">
         <div class="card">
             <div class="card-body">
@@ -107,7 +109,7 @@
                                                 method="post">
                                                 @csrf
                                                 @method ('DELETE')
-                                                <button type="submit" class="btn btn-danger"
+                                                <button type="submit" class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Are you sure?')"> <i
                                                         class="fas fa-trash-alt"></i>
                                                 </button>

@@ -1,8 +1,11 @@
 <div class="hero-content mb-3">
     <div class="content-1">
-        <div class="left bg-warning p-4">
+        <div class="left p-4">
             {{-- <h4 class="text-light">Track Your Parcel Here!</h4> --}}
-            <h4 class="text-light">{{ __('text.content16') }}</h4>
+            <div class="track-img">
+                <img src="/frontend/info/track.png" alt="">
+            </div>
+            <h4 class="text-light mt-4">{{ __('text.content16') }}</h4>
             <div class="mb-3">
                 <form id="searchForm">
                     @csrf
@@ -14,7 +17,52 @@
             </div>
         </div>
 
-        <div class="right p-4">
+        <div class="right">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/frontend/info/c2.jpg" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/frontend/info/c3.jpg" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/frontend/info/c3.jpg" class="d-block w-100" alt="..." />
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="content-2">
+        <div class="left">
+            <video width="100%" height="100%" controls>
+                <source src="/frontend/video/nature.mp4" type="video/mp4" />
+            </video>
+
+        </div>
+
+        <div class="right">
             {{-- <h4 class="text-dark">Calculate Charge</h4> --}}
             <h4 class="text-dark">{{ __('text.content20') }}</h4>
             <div class="boxes d-md-flex d-sm-block gap-2">
@@ -41,58 +89,12 @@
                 </div>
             </div>
             <div class="price-text d-flex justify-content-center align-items-center">
-                <input type="text" id="valueId" class="form-control w-25 py-3 text-dark inputsearch"
+                <input type="text" id="valueId" class="form-control w-25 py-2 text-dark inputsearch"
                     value="50TK">
             </div>
 
         </div>
-    </div>
-
-    <div class="content-2">
-        <div class="left">
-            <video width="100%" muted loop autoplay>
-                <source src="/frontend/video/nature.mp4" type="video/mp4" />
-            </video>
-
-            <div class="video-descriptions p-3 text-center">
-                <img src="/frontend/img/24-hours.png" alt="" width="80" />
-                {{-- <h6 class="mt-2">Real Time Support</h6> --}}
-                <h6 class="mt-2">{{ __('text.content19') }}</h6>
-            </div>
-        </div>
-        <div class="right">
-            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                        class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                        aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                        aria-label="Slide 3"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="/frontend/img/1.jpg" class="d-block w-100" alt="..." />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="/frontend/img/2.jpg" class="d-block w-100" alt="..." />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="/frontend/img/3.jpg" class="d-block w-100" alt="..." />
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
+        
     </div>
 </div>
 

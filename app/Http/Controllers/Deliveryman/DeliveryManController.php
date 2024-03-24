@@ -264,6 +264,23 @@ class DeliveryManController extends Controller
         return view('deliveryman.pages.product-table', compact('products', 'deliveryman'));
     }
 
+    public function productDeliveryCheckout(Request $request)
+    {
+
+        $delivery = Product::find($request->id);
+        $delivery->is_active = 4;
+
+        $id = Session::get('loginId');
+        $delivery->deliveryman_id = $id;
+
+        $delivery->update();
+
+        // return redirect('deliveryman/product/table');
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
+
     public function productDeliveryDelivered(Request $request)
     {
 
@@ -387,7 +404,7 @@ class DeliveryManController extends Controller
                 if ($customer->is_active == 1 || $customer->is_active == 2 || $customer->is_active === '8' || $customer->is_active == 5 || $customer->is_active == 6 || $customer->is_active == 7) {
                     $tableHtml .= '<span class="badge bg-label-success me-1 text-dark">You have no action</span>';
                 } elseif ($customer->is_active == 3) {
-                    $tableHtml .= '<form id="productCheckout" action="' . route('admin.product.delivery_checkout') . '" method="post">';
+                    $tableHtml .= '<form id="productcheckout" action="' . route('deliveryman.product.checkout') . '" method="post">';
                     $tableHtml .= csrf_field();
                     $tableHtml .= '<input type="hidden" name="id" value="' . $customer->id . '">';
                     $tableHtml .= '<button class="btn btn-sm btn-success" type="submit"><i class="fa-solid fa-cart-shopping"></i></button>';

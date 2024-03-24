@@ -15,28 +15,28 @@
                 </div>
                 <div class="row gy-3 gx-5">
                     <div class="col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <i class="fa fa-map-marker-alt fa-3x text-warning mb-3"></i>
+                        <i class="fa fa-map-marker-alt fa-3x text-danger mb-3"></i>
                         {{-- <h5 class="fw-bold">Tracking Facilities</h5> --}}
                         <h5 class="fw-bold">{{ __('text.content32') }}</h5>
                         {{-- <p>Track Status of your Products.</p> --}}
                         <p>{{ __('text.content33') }}</p>
                     </div>
                     <div class="col-sm-6 wow fadeIn" data-wow-delay="0.3s">
-                        <i class="fa fa-shield-alt fa-3x text-warning mb-3"></i>
+                        <i class="fa fa-shield-alt fa-3x text-danger mb-3"></i>
                         {{-- <h5 class="fw-bold">100% Secured</h5> --}}
                         <h5 class="fw-bold">{{ __('text.content34') }}</h5>
                         {{-- <p>Your security is our responsibility</p> --}}
                         <p>{{ __('text.content35') }}</p>
                     </div>
                     <div class="col-sm-6 wow fadeIn" data-wow-delay="0.5s">
-                        <i class="fa fa-cog fa-3x text-warning mb-3"></i>
+                        <i class="fa fa-cog fa-3x text-danger mb-3"></i>
                         {{-- <h5 class="fw-bold">Control Panel</h5> --}}
                         <h5 class="fw-bold">{{ __('text.content36') }}</h5>
                         {{-- <p>Individual Dashborad Facilities</p> --}}
                         <p>{{ __('text.content37') }}</p>
                     </div>
                     <div class="col-sm-6 wow fadeIn" data-wow-delay="0.7s">
-                        <i class="fa fa-headset fa-3x text-warning mb-3"></i>
+                        <i class="fa fa-headset fa-3x text-danger mb-3"></i>
                         {{-- <h5 class="fw-bold">24/7 Support</h5> --}}
                         <h5 class="fw-bold">{{ __('text.content38') }}</h5>
                         {{-- <p>Live support at any time.</p> --}}

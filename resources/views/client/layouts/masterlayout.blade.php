@@ -57,24 +57,31 @@
         <!-- Navbar & Hero Start -->
         <div class="top-header">
             {{-- <span class="d-block"><i class="l-icon fa-solid fa-phone-volume"></i>+880-1723-456789</span> --}}
+
             <span class="d-block text-white fw-bold"><i
                     class="l-icon fa-solid fa-phone-volume"></i>{{ __('text.content00') }}</span>
             {{-- <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>fastmovebd@gmail.com</span> --}}
-            <select class="lang-change">
-                <option value="Select Language bg-dark">Select Language</option>
-                <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>English
-                {{-- </option>
-                <option value="ar" {{ session()->get('lang_code') == 'ar' ? 'selected' : '' }}>عربي
-                </option> --}}
-                <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>বাংলা
-                </option>
-            </select>
-            <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>{{ __('text.content01') }}</span>
+
+            <div class="d-flex gap-2">
+                <select class="lang-change lang-select">
+                    <option value="Select Language bg-dark">Select Language</option>
+                    <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>English
+                        {{-- </option>
+                    <option value="ar" {{ session()->get('lang_code') == 'ar' ? 'selected' : '' }}>عربي
+                    </option> --}}
+                    <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>বাংলা
+                    </option>
+                </select>
+                <span class="d-block"><i class="l-icon fa-solid fa-envelope"></i>{{ __('text.content01') }}</span>
+            </div>
+
         </div>
+
+
         <div class="header">
             <div class="logo">
                 <div class="img">
-                    <img src="/frontend/img/delivery-bike.png" style="width: 160px; height:60px;"  alt="logo" />
+                    <img src="/frontend/img/delivery-bike.png" style="width: 160px; height:60px;" alt="logo" />
                 </div>
                 <div class="text">
                     {{-- <span class="d-block head">Fast Move</span> --}}
@@ -148,7 +155,7 @@
                                                 class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a> --}}
                                         <a href="{{ route('pickupman.login') }}"><i
                                                 class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a>
-                                                
+
                                         {{-- <a href="{{ route('deliveryman.login') }}"><i
                                                 class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a> --}}
                                         <a href="{{ route('deliveryman.login') }}"><i
@@ -163,11 +170,14 @@
 
                                     <div class="sub-button">
                                         {{-- <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Merchant</a> --}}
-                                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
+                                        <a href="{{ route('register') }}"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
                                         {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a> --}}
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
+                                        <a href="#"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
                                         {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a> --}}
-                                        <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
+                                        <a href="#"><i
+                                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
                                     </div>
                                 </button>
                             </li>
@@ -178,30 +188,38 @@
 
             <div class="button-part">
                 <button class="btn-grp orange-color">
-                    <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i class="ms-2 fa-solid fa-caret-down"></i>
+                    <i class="me-2 fa-solid fa-user-lock"></i>{{ __('text.content7') }}<i
+                        class="ms-2 fa-solid fa-caret-down"></i>
                     {{-- <i class="me-2 fa-solid fa-user-lock"></i>Login<i class="ms-2 fa-solid fa-caret-down"></i> --}}
 
                     <div class="sub-button">
                         {{-- <a href="{{ route('admin.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Admin Login</a> --}}
                         {{-- <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Merchant Login</a> --}}
-                        <a href="{{ route('login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a>
+                        <a href="{{ route('login') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content10') }}</a>
                         {{-- <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Pickupman Login</a> --}}
-                        <a href="{{ route('pickupman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a>
+                        <a href="{{ route('pickupman.login') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content11') }}</a>
                         {{-- <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>Deliveryman Login</a> --}}
-                        <a href="{{ route('deliveryman.login') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a>
+                        <a href="{{ route('deliveryman.login') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content12') }}</a>
                     </div>
                 </button>
 
                 <button class="btn-grp black-color">
                     {{-- <i class="me-2 fa-solid fa-user-pen"></i>Register<i class="ms-2 fa-solid fa-caret-down"></i> --}}
-                    <i class="me-2 fa-solid fa-user-pen"></i>{{ __('text.content8') }}<i class="ms-2 fa-solid fa-caret-down"></i>
+                    <i class="me-2 fa-solid fa-user-pen"></i>{{ __('text.content8') }}<i
+                        class="ms-2 fa-solid fa-caret-down"></i>
                     <div class="sub-button">
                         {{-- <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Merchant</a> --}}
-                        <a href="{{ route('register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
+                        <a href="{{ route('register') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
                         {{-- <a href="{{ route('pickupman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a> --}}
-                        <a href="{{ route('pickupman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
+                        <a href="{{ route('pickupman.register') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
                         {{-- <a href="{{ route('deliveryman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a> --}}
-                        <a href="{{ route('deliveryman.register') }}"><i class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
+                        <a href="{{ route('deliveryman.register') }}"><i
+                                class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
                     </div>
                 </button>
             </div>
@@ -238,7 +256,7 @@
 
 
         <!-- Footer Start -->
-        <div class="container-fluid bg-warning text-white footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container-fluid text-white footer mt-5 pt-5 wow fadeIn bg-danger" data-wow-delay="0.1s">
             <div class="container py-5 px-lg-5">
                 <div class="row gy-5 gx-4 pt-5">
                     <div class="col-12">
@@ -246,9 +264,11 @@
                         <h5 class="fw-bold text-white mb-4">{{ __('text.content41') }}</h5>
                         <div class="position-relative" style="max-width: 400px;">
                             {{-- <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Enter your email"> --}}
-                            <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="{{ __('text.content42') }}">
+                            <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text"
+                                placeholder="{{ __('text.content42') }}">
                             {{-- <button type="button" class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Submit</button> --}}
-                            <button type="button" class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">{{ __('text.content43') }}</button>
+                            <button type="button"
+                                class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">{{ __('text.content43') }}</button>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-12">
@@ -306,9 +326,11 @@
                     <div class="col-md-6 col-lg-4 mt-lg-n5">
                         <div class="bg-light rounded" style="padding: 30px;">
                             {{-- <input type="text" class="form-control border-0 py-2 mb-2" placeholder="Name"> --}}
-                            <input type="text" class="form-control border-0 py-2 mb-2" placeholder="{{ __('text.content44') }}">
+                            <input type="text" class="form-control border-0 py-2 mb-2"
+                                placeholder="{{ __('text.content44') }}">
                             {{-- <input type="email" class="form-control border-0 py-2 mb-2" placeholder="Email"> --}}
-                            <input type="email" class="form-control border-0 py-2 mb-2" placeholder="{{ __('text.content45') }}">
+                            <input type="email" class="form-control border-0 py-2 mb-2"
+                                placeholder="{{ __('text.content45') }}">
                             {{-- <textarea class="form-control border-0 mb-2" rows="2" placeholder="Message"></textarea> --}}
                             <textarea class="form-control border-0 mb-2" rows="2" placeholder="{{ __('text.content46') }}"></textarea>
                             {{-- <button class="btn btn-dark w-100 py-2">Send Message</button> --}}

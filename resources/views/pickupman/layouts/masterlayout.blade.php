@@ -21,7 +21,7 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo" href="{{ route('pickupman.dashboard') }}"><img
-                        src="/frontend/img/delivery-bike.png" style="width: 100px; height:50px;"  alt="logo" /></a>
+                        src="/frontend/img/delivery-bike.png" style="width: 120px; height:50px;"  alt="logo" /></a>
                 {{-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="marchant/assets/images/logo-mini.svg"
                             alt="logo" /></a> --}}
             </div>
@@ -29,7 +29,7 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="mdi mdi-menu"></span>
                 </button>
-                <div class="search-field d-none d-md-block">
+                {{-- <div class="search-field d-none d-md-block">
                     <form class="d-flex align-items-center h-100" action="#">
                         <div class="input-group">
                             <div class="input-group-prepend bg-transparent">
@@ -39,7 +39,7 @@
                                 placeholder="Search projects">
                         </div>
                     </form>
-                </div>
+                </div> --}}
 
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
@@ -51,18 +51,18 @@
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
-                                <p class="mb-1 text-black">{{ $pickupman->pickupmen_name }}</p>
+                                <p class="mb-1 text-black">{{ $pickupman->pickupman_name }}</p>
                             </div>
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
 
-                            <a class="dropdown-item" href="{{ route('pickupman.edit') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('pickupman.edit') }}">
                                 <i class="mdi mdi-account-card-details me-2 text-success"></i> Update Profile </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('pickupman.change.password') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('pickupman.change.password') }}">
                                 <i class="mdi mdi-account-key me-2 text-primary"></i> Change Password </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('pickupman.delete') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('pickupman.delete') }}">
                                 <i class="mdi mdi-account-key me-2 text-primary"></i> Delete Account </a>
                             {{-- <form action="{{ route('admin.delete') }}" method="get">
                                 @csrf
@@ -74,14 +74,14 @@
 
                             <form action="{{ route('pickupman.logout') }}" method="post">
                                 @csrf
-                                <button type="submit" class="dropdown-item"> <i
+                                <button type="submit" class="dropdown-item text-dark"> <i
                                         class="mdi mdi-logout me-2 text-primary"></i> Signout </button>
                             </form>
 
                         </div>
                     </li>
 
-                    <li class="nav-item d-none d-lg-block full-screen-link">
+                    {{-- <li class="nav-item d-none d-lg-block full-screen-link">
                         <a class="nav-link">
                             <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
                         </a>
@@ -200,7 +200,7 @@
                         <a class="nav-link" href="#">
                             <i class="mdi mdi-format-line-spacing"></i>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
 
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
@@ -236,29 +236,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                            aria-controls="ui-basic">
-                            <span class="menu-title">View Table</span>
-                            <i class="menu-arrow"></i>
-                            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                        <a class="nav-link" href="{{ route('pickupman.product.table') }}">
+                            <span class="menu-title">Parcel Table</span>
+                            <i class="mdi mdi-shopping menu-icon"></i>
                         </a>
-                        <div class="collapse" id="ui-basic">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="{{ route('pickupman.product.table') }}">Delivery Product</a></li>
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('pickup.index') }}">Pickup
-                                        Man</a></li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="{{ route('deliverycharge.index') }}">Delivery Charge</a></li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="{{ route('admin.marchant') }}">Merchant</a></li>
-                                @if ($admin->role == 'super admin')
-                                    <li class="nav-item"> <a class="nav-link"
-                                            href="{{ route('admin.table') }}">Admin</a></li>
-                                @endif --}}
-                            </ul>
-                        </div>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pickupman.fraud_check') }}">
                             <span class="menu-title">Fraud Check</span>
@@ -340,23 +323,7 @@
                             </ul>
                         </div>
                     </li> --}}
-                    <li class="nav-item sidebar-actions">
-                        <span class="nav-link">
-                            <div class="border-bottom">
-                                <h6 class="font-weight-normal mb-3">Projects</h6>
-                            </div>
-                            <button class="btn btn-block btn-lg btn-gradient-primary mt-4">+ Add a project</button>
-                            <div class="mt-4">
-                                <div class="border-bottom">
-                                    <p class="text-secondary">Categories</p>
-                                </div>
-                                <ul class="gradient-bullet-list mt-4">
-                                    <li>Free</li>
-                                    <li>Pro</li>
-                                </ul>
-                            </div>
-                        </span>
-                    </li>
+
                 </ul>
             </nav>
             <!-- partial -->

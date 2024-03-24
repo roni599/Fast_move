@@ -25,7 +25,7 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo" href="{{ route('admin.dashboard') }}"><img
-                        src="/frontend/img/delivery-bike.png" style="width: 100px; height:50px;" alt="logo" /></a>
+                        src="/frontend/img/delivery-bike.png" style="width: 130px; height:50px;" alt="logo" /></a>
                 {{-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="marchant/assets/images/logo-mini.svg"
                             alt="logo" /></a> --}}
             </div>
@@ -33,7 +33,7 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="mdi mdi-menu"></span>
                 </button>
-                <div class="search-field d-none d-md-block">
+                {{-- <div class="search-field d-none d-md-block">
                     <form class="d-flex align-items-center h-100" action="#">
                         <div class="input-group">
                             <div class="input-group-prepend bg-transparent">
@@ -43,7 +43,7 @@
                                 placeholder="Search projects">
                         </div>
                     </form>
-                </div>
+                </div> --}}
 
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
@@ -86,7 +86,7 @@
                         </div>
                     </li>
 
-                    <li class="nav-item d-none d-lg-block full-screen-link">
+                    {{-- <li class="nav-item d-none d-lg-block full-screen-link">
                         <a class="nav-link">
                             <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
                         </a>
@@ -205,7 +205,7 @@
                         <a class="nav-link" href="#">
                             <i class="mdi mdi-format-line-spacing"></i>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
 
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
@@ -286,38 +286,6 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false"
-                            aria-controls="general-pages">
-                            <span class="menu-title">Create</span>
-                            <i class="menu-arrow"></i>
-                            <i class="mdi mdi-import menu-icon"></i>
-                        </a>
-                        
-                        <div class="collapse" id="general-pages">
-                            <ul class="nav flex-column sub-menu">
-                                @if ($admin->role == 'super admin')
-                                    <li class="nav-item"> <a class="nav-link" href="{{ route('admin.register') }}">
-                                            Admin </a></li>
-                                @endif
-                                <li class="nav-item"> <a class="nav-link" href="{{ route('addDeliveryCharge') }}">
-                                        Delivery Charge </a>
-                                </li>
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('pickup.create') }}">
-                                        Pickup Man</a>
-                                </li> --}}
-                                {{-- <li class="nav-item"> <a class="nav-link"
-                                        href="marchant/pages/samples/register.html">
-                                        Register </a></li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="marchant/pages/samples/error-404.html"> 404
-                                    </a></li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="marchant/pages/samples/error-500.html"> 500
-                                    </a></li> --}}
-                            </ul>
-                        </div>
-                    </li>
 
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="marchant/pages/icons/mdi.html">

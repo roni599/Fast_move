@@ -380,6 +380,8 @@
                                             <td>{{ "Deliverd" }}</td>
                                             @elseif ($allConsignment->is_active==='6')
                                             <td>{{ "Return" }}</td>
+                                            @elseif ($allConsignment->is_active==='8')
+                                            <td>{{ "cancel by admin" }}</td>
                                             @elseif ($allConsignment->is_active==='7')
                                             <td>{{ "Canceled" }}</td>
                                             @endif

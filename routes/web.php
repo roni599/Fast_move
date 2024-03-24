@@ -202,6 +202,7 @@ Route::controller(DeliveryManController::class)->group(function () {
     Route::get('deliveryman/delete', 'deliverymanDelete')->name('deliveryman.delete')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/delete', 'deliverymanDeleteAccount')->name('deliveryman.delete.account')->middleware('deliverymanIsLoggedIn');
     Route::get('deliveryman/product/table', 'productTable')->name('deliveryman.product.table')->middleware('deliverymanIsLoggedIn');
+    Route::post('deliveryman/product/checkout', 'productDeliveryCheckout')->name('deliveryman.product.checkout')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/product/delivered', 'productDeliveryDelivered')->name('deliveryman.product.delivered')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/product/cancel', 'productDeliveryCancel')->name('deliveryman.product.cancel')->middleware('deliverymanIsLoggedIn');
     Route::post('deliveryman/product/return', 'productDeliveryReturn')->name('deliveryman.product.return')->middleware('deliverymanIsLoggedIn');

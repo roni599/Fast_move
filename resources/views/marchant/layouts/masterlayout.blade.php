@@ -22,7 +22,7 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo" href="#"><img src="/frontend/img/delivery-bike.png"
-                    style="width: 100px; height:50px;"  alt="logo" /></a>
+                    style="width: 120px; height:50px;"  alt="logo" /></a>
                 {{-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="marchant/assets/images/logo-mini.svg"
                             alt="logo" /></a> --}}
             </div>
@@ -30,7 +30,7 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="mdi mdi-menu"></span>
                 </button>
-                <div class="search-field d-none d-md-block">
+                {{-- <div class="search-field d-none d-md-block">
                     <form class="d-flex align-items-center h-100" action="#">
                         <div class="input-group">
                             <div class="input-group-prepend bg-transparent">
@@ -40,7 +40,7 @@
                                 placeholder="Search projects">
                         </div>
                     </form>
-                </div>
+                </div> --}}
                 <ul class="navbar-nav navbar-nav-right">
 
                     <li class="nav-item nav-profile dropdown">
@@ -58,24 +58,24 @@
                         
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
 
-                            <a class="dropdown-item" href="{{ route('profile.update') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('profile.update') }}">
                                 <i class="mdi mdi-account-card-details me-2 text-success"></i> Update Profile </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('auth.password') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('auth.password') }}">
                                 <i class="mdi mdi-account-key me-2 text-primary"></i> Change Password </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('account.delete') }}">
+                            <a class="dropdown-item text-dark" href="{{ route('account.delete') }}">
                                 <i class="mdi mdi-account-remove me-2 text-primary"></i> Delete Account </a>
                             <div class="dropdown-divider"></div>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
-                                <button type="submit" class="dropdown-item"> <i
+                                <button type="submit" class="dropdown-item text-dark"> <i
                                         class="mdi mdi-logout me-2 text-primary"></i> Signout </button>
                             </form>
                         </div>
                     </li>
 
-                    <li class="nav-item d-none d-lg-block full-screen-link">
+                    {{-- <li class="nav-item d-none d-lg-block full-screen-link">
                         <a class="nav-link">
                             <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
                         </a>
@@ -194,7 +194,7 @@
                         <a class="nav-link" href="#">
                             <i class="mdi mdi-format-line-spacing"></i>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
                     data-toggle="offcanvas">
@@ -237,66 +237,42 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                            aria-controls="ui-basic">
+                        <a class="nav-link" href="{{ route('product.create') }}">
                             <span class="menu-title">Add Parcel</span>
-                            <i class="menu-arrow"></i>
-                            <i class="mdi mdi-import menu-icon"></i>
-                        </a>
-                        <div class="collapse" id="ui-basic">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="{{ route('product.create') }}">Delivery Product</a></li>
-                                {{-- <li class="nav-item"> <a class="nav-link"
-                                        href="{{ route('pickup.create') }}">Pickup</a></li> --}}
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('merchant.all_consignment') }}">
-                            <span class="menu-title">All Consignments</span>
-                            <i class="mdi mdi-emoticon-devil menu-icon"></i>
+                            <i class="mdi mdi-shopping menu-icon"></i>
                             {{-- <i class="mdi mdi-contacts menu-icon"></i> --}}
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false"
-                            aria-controls="general-pages">
-                            <span class="menu-title">View Tables</span>
-                            <i class="menu-arrow"></i>
-                            <i class="mdi mdi-medical-bag menu-icon"></i>
+                        <a class="nav-link" href="{{ route('product.index') }}">
+                            <span class="menu-title">Parcel List</span>
+                            <i class="mdi mdi-cart-arrow-down menu-icon"></i>
+                            {{-- <i class="mdi mdi-contacts menu-icon"></i> --}}
                         </a>
-                        <div class="collapse" id="general-pages">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">
-                                        Delivery Product </a></li>
-                                {{-- <li class="nav-item"> <a class="nav-link" href="/marchant/pages/samples/login.html">
-                                        Login </a>
-                                </li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="marchant/pages/samples/register.html">
-                                        Register </a></li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="marchant/pages/samples/error-404.html"> 404
-                                    </a></li>
-                                <li class="nav-item"> <a class="nav-link"
-                                        href="marchant/pages/samples/error-500.html"> 500
-                                    </a></li> --}}
-                            </ul>
-                        </div>
                     </li>
+
+
+
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('merchant.all_consignment') }}">
+                            <span class="menu-title">All Consignments</span>
+                            <i class="mdi mdi-chart-bar menu-icon"></i>
+                            {{-- <i class="mdi mdi-contacts menu-icon"></i> --}}
+                        </a>
+                    </li>
+
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{route('merchant.coverage.area')}}">
                             <span class="menu-title">Coverage Area</span>
                             <i class="mdi mdi-map-marker-radius menu-icon"></i>
                         </a>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{route('merchant.pricing')}}">
                             <span class="menu-title">Pricing</span>
                             <i class="mdi mdi-openid menu-icon"></i>
                         </a>
-                    </li>
+                    </li> --}}
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="marchant/pages/forms/basic_elements.html">
                             <span class="menu-title">Forms</span>

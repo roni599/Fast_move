@@ -8,7 +8,7 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <nav class="navbar navbar-light bg-light">
+            <nav class="navbar navbar-light bg-white">
                 <form id="searchForm">
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">
@@ -132,7 +132,8 @@
                                             </form> --}}
 
                                             <form id="productcheckout"
-                                                action="{{ route('admin.product.delivery_checkout') }}" method="post">
+                                                {{-- action="{{ route('admin.product.delivery_checkout') }}" method="post"> --}}
+                                                action="{{ route('deliveryman.product.checkout') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                 <button class="btn btn-sm btn-success text-white" type="submit">
@@ -341,6 +342,22 @@
     {{-- delivered,return,cancel perform using ajax --}}
     <script>
         $(document).ready(function() {
+
+            $(document).on('submit', '#productcheckout', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#table').load(location.href + ' #table')
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                    }
+                });
+            });
             $(document).on('submit', '#deliverymanproductcheckout', function(event) {
                 event.preventDefault();
                 var formData = $(this).serialize();

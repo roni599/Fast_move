@@ -45,12 +45,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        background-image: url('/frontend/info/w-3.png');
+        background-size: 100% auto;
 
     }
 
     .form-box {
         /* height: 450px; */
         background-color: white;
+        width: 40%;
         padding: 10px;
         border-radius: 10px;
         position: absolute;
@@ -63,62 +66,42 @@
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
     }
+
+    @media only screen and (min-width:240px) and (max-width: 800px) {
+
+        .form-box {
+            /* height: 450px; */
+            background-color: white;
+            width: 90%;
+        }
+
+        body {
+            background: #f5f5f3;
+            background-image: url('/frontend/info/w-3.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+
+    }
 </style>
 
 
 
 <body>
 
-    <!-- Navbar & Hero Start -->
-    <div class="container-xxl position-relative p-0 bg-light">
-        <nav class="navbar navbar-expand-lg px-4 px-lg-5 py-3 ">
-            <a href="" class="navbar-brand p-0">
-                <h2 class="m-0"><img src="/frontend/img/delivery-bike.png" style="width: 170px; height:80px;" ></h2>
-                <!-- <img src="img/logo.png" alt="Logo"> -->
-            </a>
-            {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto py-0">
-                    <a href="/" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="domain.html" class="nav-item nav-link">Domain</a>
-                    <a href="hosting.html" class="nav-item nav-link">Hosting</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="team.html" class="dropdown-item">Our Team</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="comparison.html" class="dropdown-item">Comparison</a>
-                        </div>
-                    </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
-                </div>
-                <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
-                    data-bs-target="#searchModal"><i class="fa fa-search"></i></button> --}}
-
-                {{-- <a href="{{ route('register') }}" class="btn btn-dark py-2 px-4 ms-3">Register</a>
-                <a href="{{ route('login') }}" class="btn btn-dark py-2 px-4 ms-3">Login</a> --}}
 
 
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar & Hero End -->
-
-
-
-    <div class="form-box w-50">
+    <div class="form-box ">
         <div class="text-center mt-3">
-            <img src="/frontend/img/delivery-bike.png" style="width: 170px; height:8px;"  alt="logo" />
+            <img src="/frontend/img/delivery-bike.png" style="width: 120px; height:50px;" alt="logo" />
         </div>
 
         @if (Session::has('fail'))
             <div class="alert alert-danger">{{ Session::get('fail') }}</div>
         @endif
 
-        <h2 class="text-center mb-3">Admin Login Here</h2>
+        <h4 class="text-center mb-0 mt-3">Admin Login Here</h4>
 
 
 
@@ -147,7 +130,7 @@
                     {{ $message }}
                 @enderror
 
-                <button class="btn btn-success" type="submit">Login</button>
+                <button class="btn btn-dark" type="submit">Login</button>
 
                 <a class="text-decoration-none d-block mt-2" href="{{ route('password.request') }}">Forgot
                     password?</a>

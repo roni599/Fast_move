@@ -11,7 +11,8 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <nav class="navbar navbar-light bg-light">
+            <a href="{{ route('admin.register') }}" class="btn btn-sm btn-primary mb-2">Add Admin</a>
+            <nav class="navbar navbar-light bg-white">
                 <form id="searchForm">
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">
@@ -42,8 +43,11 @@
 
                 <a href="{{ route('admin.excel.export') }}" class="btn btn-dark my-2 my-sm-0">Export Excel</a>
             </nav>
+           
         </div>
     </div>
+
+    
 
     <div class="col-lg-12 stretch-card" id="existingTable">
         <div class="card">

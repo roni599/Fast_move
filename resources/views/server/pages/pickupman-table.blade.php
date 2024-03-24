@@ -22,7 +22,7 @@
                 </form>
 
 
-                <form id="excel" action="{{ route('admin.pickupman.excel.import') }}" method="post"
+                {{-- <form id="excel" action="{{ route('admin.pickupman.excel.import') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="input-group mb-0">
@@ -33,7 +33,7 @@
                             <button type="submit" class="btn btn-dark my-2 my-sm-0">Import Excel</button>
                         </div>
                     </div>
-                </form>
+                </form> --}}
 
                 <a href="{{ route('admin.pickupman.excel.export') }}" class="btn btn-dark my-2 my-sm-0">Export Excel</a>
             </nav>

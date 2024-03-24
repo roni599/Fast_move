@@ -8,7 +8,7 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <nav class="navbar navbar-light bg-light">
+            <nav class="navbar navbar-light bg-white">
                 <form id="searchForm">
                     <div class="input-group mb-0">
                         <div class="form-group-feedback form-group-feedback-left">

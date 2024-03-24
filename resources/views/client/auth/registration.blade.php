@@ -37,41 +37,65 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
 
+    <style>
+        body {
+        /* background: hsl(96, 68%, 88%); */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-image: url('/frontend/info/w-3.png');
+        background-size: 100% auto;
+
+    }
+
+    .form-box {
+        /* height: 450px; */
+        background-color: white;
+        width: 40%;
+        padding: 10px;
+        border-radius: 10px;
+        position: absolute;
+        margin: 150px 0;
+        /* top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto; */
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+    }
+
+    @media only screen and (min-width:240px) and (max-width: 800px) {
+
+        .form-box {
+            /* height: 450px; */
+            background-color: white;
+            width: 90%;
+        }
+
+        body {
+            background: #f5f5f3;
+            background-image: url('/frontend/info/w-3.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+
+    }
+
+    </style>
+
 </head>
 
 <body>
-    <!-- Navbar & Hero Start -->
-    <div class="container-xxl position-relative p-0 bg-light">
-        <nav class="navbar navbar-expand-lg px-4 px-lg-5 py-3 ">
-            <a href="" class="navbar-brand p-0">
-                <h2 class="m-0"><img src="frontend/img/delivery-bike.png" width="60">Fast Move</h2>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto py-0">
-                    <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-                    <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
-                    <a href="{{ route('service') }}" class="nav-item nav-link">Services</a>
-                    <a href="{{ route('tracking') }}" class="nav-item nav-link">Tracking</a>
-                    <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
-                </div>
-                <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
-                    data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
 
-                <a href="{{ route('register') }}" class="btn btn-dark py-2 px-4 ms-3">Register</a>
-                <a href="{{ route('login') }}" class="btn btn-dark py-2 px-4 ms-3">Login</a>
-            </div>
-        </nav>
-    </div>
 
-    <div class="form-box  w-50">
+    <div class="form-box ">
         <div class="text-center mt-0">
-            <img src="/frontend/img/delivery-bike.png" style="width: 70px" alt="logo" />
+            <img src="/frontend/img/delivery-bike.png" style="width: 120px;height:50px;" alt="logo" />
         </div>
 
-        <h2 class="text-center mb-1">Become a Merchant</h2>
+        <h4 class="text-center mb-1 mt-3">Become a Merchant</h4>
         <form action="{{ route('register') }}" method="post" class="text-center" enctype="multipart/form-data">
             @csrf
             <div class="input_content d-flex justify-content-center align-items-center">

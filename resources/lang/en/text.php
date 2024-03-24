@@ -31,8 +31,8 @@ return [
     'content22' => 'Destination',
     'content23' => 'Delivery Type',
 
-    'content24' => 'Welcome to Fast Move Express',
-    'content25' => 'Welcome to Fast move Express Delivery Service, where speed meets reliability! 
+    'content24' => 'Welcome to Fast Move Logistics',
+    'content25' => 'Welcome to Fast Move Logistics Delivery Service, where speed meets reliability! 
                     We take pride in our lightning-fast delivery solutions that ensure your packages
                     reach their destination with unmatched efficiency. Our dedicated team is committed
                     to providing a seamless and secure delivery experience, backed by cutting-edge technology
