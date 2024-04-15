@@ -8,14 +8,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Deliveryman;
 use App\Models\Product;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 class AllConsignmentController extends Controller
 {
         public function all_consignment()
         {
-
-                $allConsignment = Product::all();
+                // $user_id=Auth::id();
+                // $allConsignment = Product::all();
+                $user_id = Auth::id();
+                $allConsignment = Product::where('user_id', $user_id)->get();
                 return view('marchant.pages.all_consignment', compact('allConsignment'));
         }
         public function list_byDate()

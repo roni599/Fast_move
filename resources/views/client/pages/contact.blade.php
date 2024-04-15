@@ -1,6 +1,6 @@
 @extends('client.layouts.masterlayout')
 @section('content')
-<div class="container-xxl py-5 bg-warning hero-header mb-5">
+<div class="container-xxl py-5 bg-danger hero-header mb-5">
     <div class="container my-5 py-5 px-lg-5">
         <div class="row g-5 pt-5">
             <div class="col-12 text-center text-lg-start">
@@ -43,7 +43,7 @@
             <p class="mb-1">Fast Move Logistics support you 24/7</p>
         </div>
         <div class="row g-5">
-            <div class="col-lg-7 col-md-6">
+            {{-- <div class="col-lg-7 col-md-6">
                 <div class="wow fadeInUp" data-wow-delay="0.2s">
                     <form>
                         <div class="row g-3">
@@ -77,18 +77,18 @@
                         </div>
                     </form>
                 </div>
-            </div>
-            <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+            </div> --}}
+            <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
                 <div class="section-title position-relative mx-auto mb-4 pb-4">
                     <h3 class="fw-bold mb-0">Customer Support</h3>
                 </div>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, Dhaka, Bangladesh</p>
-                <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+880 1517 808431</p>
-                <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+880 1978 000888</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>fastmoveinfo@gmail.com</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-danger me-3"></i>123 Street, Dhaka, Bangladesh</p>
+                <p class="mb-2"><i class="fa fa-phone-alt text-danger me-3"></i>+880 1517 808431</p>
+                <p class="mb-2"><i class="fa fa-phone-alt text-danger me-3"></i>+880 1978 000888</p>
+                <p class="mb-2"><i class="fa fa-envelope text-danger me-3"></i>fastmoveinfo@gmail.com</p>
                 <div class="border rounded text-center p-4 mt-4">
                     <h3 class="fw-bold mb-4">Need Any Help?</h3>
-                    <a class="btn btn-warning py-3 px-5" href="">Let's Chat</a>
+                    <a class="btn btn-danger py-3 px-5" href="">Contact Us</a>
                 </div>
             </div>
         </div>

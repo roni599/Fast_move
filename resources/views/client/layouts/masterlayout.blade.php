@@ -94,15 +94,15 @@
             <div class="nav-bar">
                 <ul>
                     {{-- <li><a href="#">Home</a></li> --}}
-                    <li><a href="#">{{ __('text.content2') }}</a></li>
+                    <li><a href="{{ route('home') }}">{{ __('text.content2') }}</a></li>
                     {{-- <li><a href="#">About</a></li> --}}
-                    <li><a href="#">{{ __('text.content3') }}</a></li>
+                    <li><a href="{{ route('about') }}">{{ __('text.content3') }}</a></li>
                     {{-- <li><a href="#">Services</a></li> --}}
-                    <li><a href="#">{{ __('text.content4') }}</a></li>
+                    <li><a href="{{ route('service') }}">{{ __('text.content4') }}</a></li>
                     {{-- <li><a href="#">Tracking</a></li> --}}
-                    <li><a href="#">{{ __('text.content5') }}</a></li>
+                    <li><a href="{{ route('tracking') }}">{{ __('text.content5') }}</a></li>
                     {{-- <li><a href="#">Contact</a></li> --}}
-                    <li><a href="#">{{ __('text.content6') }}</a></li>
+                    <li><a href="{{ route('contact') }}">{{ __('text.content6') }}</a></li>
 
                     {{-- <li>
                         <div id="google_translate_element"></div>
@@ -127,15 +127,15 @@
                     <div class="mobile-nav">
                         <ul>
                             {{-- <li><a href="#">Home</a></li> --}}
-                            <li><a href="#">{{ __('text.content2') }}</a></li>
+                            <li><a href="{{ route('home') }}">{{ __('text.content2') }}</a></li>
                             {{-- <li><a href="#">About</a></li> --}}
-                            <li><a href="#">{{ __('text.content3') }}</a></li>
+                            <li><a href="{{ route('about') }}">{{ __('text.content3') }}</a></li>
                             {{-- <li><a href="#">Services</a></li> --}}
-                            <li><a href="#">{{ __('text.content4') }}</a></li>
+                            <li><a href="{{ route('service') }}">{{ __('text.content4') }}</a></li>
                             {{-- <li><a href="#">Tracking</a></li> --}}
-                            <li><a href="#">{{ __('text.content5') }}</a></li>
+                            <li><a href="{{ route('tracking') }}">{{ __('text.content5') }}</a></li>
                             {{-- <li><a href="#">Contact</a></li> --}}
-                            <li><a href="#">{{ __('text.content6') }}</a></li>
+                            <li><a href="{{ route('contact') }}">{{ __('text.content6') }}</a></li>
                             <li>
                                 <button class="btn-grp orange-color">
                                     {{-- <i class="me-2 fa-solid fa-user-lock"></i>Login<i
@@ -173,10 +173,10 @@
                                         <a href="{{ route('register') }}"><i
                                                 class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content13') }}</a>
                                         {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a Pickupman</a> --}}
-                                        <a href="#"><i
+                                        <a href="{{ route('pickupman.register') }}"><i
                                                 class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content14') }}</a>
                                         {{-- <a href="#"><i class="fa-solid fa-chevron-right me-2"></i>Become a Deliveryman</a> --}}
-                                        <a href="#"><i
+                                        <a href="{{ route('deliveryman.register') }}"><i
                                                 class="fa-solid fa-chevron-right me-2"></i>{{ __('text.content15') }}</a>
                                     </div>
                                 </button>
@@ -261,15 +261,7 @@
                 <div class="row gy-5 gx-4 pt-5">
                     <div class="col-12">
                         {{-- <h5 class="fw-bold text-white mb-4">Subscribe Our Newsletter</h5> --}}
-                        <h5 class="fw-bold text-white mb-4">{{ __('text.content41') }}</h5>
-                        <div class="position-relative" style="max-width: 400px;">
-                            {{-- <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Enter your email"> --}}
-                            <input class="form-control bg-white border-0 w-100 py-3 ps-4 pe-5" type="text"
-                                placeholder="{{ __('text.content42') }}">
-                            {{-- <button type="button" class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Submit</button> --}}
-                            <button type="button"
-                                class="btn btn-dark py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">{{ __('text.content43') }}</button>
-                        </div>
+                        <h3 class="fw-bold text-white mb-2">{{ __('text.content41') }}</h3>
                     </div>
                     <div class="col-lg-5 col-md-12">
                         <div class="row gy-5 g-4">
@@ -323,20 +315,7 @@
                                     class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 mt-lg-n5">
-                        <div class="bg-light rounded" style="padding: 30px;">
-                            {{-- <input type="text" class="form-control border-0 py-2 mb-2" placeholder="Name"> --}}
-                            <input type="text" class="form-control border-0 py-2 mb-2"
-                                placeholder="{{ __('text.content44') }}">
-                            {{-- <input type="email" class="form-control border-0 py-2 mb-2" placeholder="Email"> --}}
-                            <input type="email" class="form-control border-0 py-2 mb-2"
-                                placeholder="{{ __('text.content45') }}">
-                            {{-- <textarea class="form-control border-0 mb-2" rows="2" placeholder="Message"></textarea> --}}
-                            <textarea class="form-control border-0 mb-2" rows="2" placeholder="{{ __('text.content46') }}"></textarea>
-                            {{-- <button class="btn btn-dark w-100 py-2">Send Message</button> --}}
-                            <button class="btn btn-dark w-100 py-2">{{ __('text.content47') }}</button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div class="container px-lg-5">

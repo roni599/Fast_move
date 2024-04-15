@@ -59,7 +59,7 @@ return [
 
     'content40'   =>   'Express Delivery',
 
-    'content41'   =>   'Subscribe Our Newsletter',
+    'content41'   =>   'Fast Move Logistics Ltd.',
     'content42'   =>   'Enter your email',
     'content43'   =>   'Submit',
 

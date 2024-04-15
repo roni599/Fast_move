@@ -311,7 +311,13 @@ h1,h2,h3,h4,h6,p,span{
 }
 
 
+.tracking-img {
+    text-align: center;
+}
 
+.track-bg{
+    background:linear-gradient(45deg,#E01F27, orangered);
+}
 
 
 @media only screen and (min-width:240px) and (max-width: 800px) {
